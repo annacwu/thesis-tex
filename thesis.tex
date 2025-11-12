@@ -3,66 +3,48 @@
 %%
 \documentclass[12pt,twoside]{reedthesis}
 
-\usepackage{graphicx,latexsym} 
-\usepackage{amssymb,amsthm,amsmath}
-\usepackage{longtable,booktabs,setspace}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage[hyphens]{url}
-\usepackage{rotating}
-\usepackage[backend=biber,
-            style=numeric, sorting=none
-            ]{biblatex}
+\usepackage{graphicx,latexsym} \usepackage{amssymb,amsthm,amsmath}
+\usepackage{longtable,booktabs,setspace} \usepackage{algorithm}
+\usepackage{algpseudocode} \usepackage[hyphens]{url} \usepackage{rotating}
+\usepackage[backend=biber, style=numeric, sorting=none ]{biblatex}
 \bibliography{thesis}
 
-\title{My Final College Paper}
-\author{Anna Wu}
-\date{May 2026}
-\division{Mathematical and Natural Sciences}
-\advisor{Harper Knittel}
+\title{My Final College Paper} \author{Anna Wu} \date{May 2026}
+\division{Mathematical and Natural Sciences} \advisor{Harper Knittel}
 \department{Computer Science}
 
 \setlength{\parskip}{0pt}
 
 % Fix fancyhdr warnings about headheight
-\setlength{\headheight}{14.5pt}
-\addtolength{\topmargin}{-2.5pt}
+\setlength{\headheight}{14.5pt} \addtolength{\topmargin}{-2.5pt}
 %%
 %% End Preamble
 %%
 \begin{document}
 
-%   \maketitle
-%   \frontmatter % this stuff will be roman-numbered
+%   \maketitle \frontmatter % this stuff will be roman-numbered
 %   \pagestyle{empty} % this removes page numbers from the frontmatter
 
-% % Acknowledgements (Acceptable American spelling) are optional
-% % So are Acknowledgments (proper English spelling)
-%     \chapter*{Acknowledgements}
-% 	I want to thank a few people.
+% % Acknowledgements (Acceptable American spelling) are optional % So are
+% Acknowledgments (proper English spelling) \chapter*{Acknowledgements} I want
+% to thank a few people.
 
 
-%     \chapter*{List of Abbreviations}
-% 	\begin{table}[h]
-% 	\centering % You could remove this to move table to the left
-% 	\begin{tabular}{ll}
-%             \textbf{P}  	&  Polynomial \\
-%             \textbf{NP}  	&  Nondeterministic Polynomial \\
-% 		\textbf{GA}  	&  Greedy Algorithm \\
+%     \chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
+%     remove this to move table to the left \begin{tabular}{ll} \textbf{P}  	&
+%     Polynomial \\ \textbf{NP}  	&  Nondeterministic Polynomial \\ \textbf{GA}
+%     &  Greedy Algorithm \\
 
-% 	\end{tabular}
-% 	\end{table}
-	
+% 	\end{tabular} \end{table}
+
 %     \tableofcontents
 
 %   \mainmatter % here the regular arabic numbering starts
 %   \pagestyle{fancyplain} % turns page numbering back on
 
-%   \include{intro}
-  \include{background}
-  % \include{chap2}
-  % \include{proof_drafts}
+%   \include{intro} \include{background} \include{chap2}
+\include{proof_drafts}
 
-\printbibliography{}
+% \printbibliography{}
 
 \end{document}

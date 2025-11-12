@@ -1,0 +1,65 @@
+# LaTeX indentation configuration for thesis
+# This file controls how latexindent formats your LaTeX files
+
+# General settings
+defaultIndent: '  '  # Use 2 spaces for indentation
+onlyOneBackUp: 1     # Keep only one backup file
+
+# Remove trailing whitespace
+removeTrailingWhitespace:
+  beforeProcessing: 0
+  afterProcessing: 1
+
+# Indentation rules for environments
+indentRules:
+  document: 0        # Don't indent inside \begin{document}
+  abstract: 1
+  theorem: 1
+  proof: 1
+  algorithm: 1
+  algorithmic: 1
+  enumerate: 1
+  itemize: 1
+  tabular: 1
+  table: 1
+  figure: 1
+
+# Respect paragraph line breaks
+modifyLineBreaks:
+  preserveBlankLines: 1
+  condenseMultipleBlankLinesInto: 1
+
+  # Paragraph handling
+  paragraphs:
+    beforeTextWrap: 1
+    BeginStartsOnOwnLine: 0
+    BodyStartsOnOwnLine: 0
+    EndStartsOnOwnLine: 0
+    EndFinishesWithLineBreak: 1
+
+  # Environments
+  environments:
+    BeginStartsOnOwnLine: 1
+    BodyStartsOnOwnLine: 1
+    EndStartsOnOwnLine: 1
+    EndFinishesWithLineBreak: 1
+
+  # Commands
+  commands:
+    BeginStartsOnOwnLine: 0
+    BodyStartsOnOwnLine: 0
+    EndStartsOnOwnLine: 0
+    EndFinishesWithLineBreak: 0
+
+# Don't modify verbatim environments
+verbatimEnvironments:
+  verbatim: 1
+  lstlisting: 1
+  minted: 1
+
+# File extensions to look for
+fileExtensionPreference:
+  .tex: 1
+  .sty: 2
+  .cls: 3
+  .bib: 4

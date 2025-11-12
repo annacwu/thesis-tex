@@ -27,7 +27,7 @@
 % want to typeset, there is probably a package out there for it.
 % Check out CTAN to see: http://www.ctan.org/
 %%
-\usepackage{graphicx,latexsym} 
+\usepackage{graphicx,latexsym}
 \usepackage{amssymb,amsthm,amsmath}
 \usepackage{longtable,booktabs,setspace}
 
@@ -51,55 +51,54 @@
 
 % Acknowledgements (Acceptable American spelling) are optional
 % So are Acknowledgments (proper English spelling)
-    \chapter*{Acknowledgements}
-	I want to thank a few people.
+\chapter*{Acknowledgements}
+I want to thank a few people.
 
 % The preface is optional
 % To remove it, comment it out or delete it.
-    \chapter*{Preface}
-	This is an example of a thesis setup to use the reed thesis document class.
-	
-	
+\chapter*{Preface}
+This is an example of a thesis setup to use the reed thesis document class.
 
-    \chapter*{List of Abbreviations}
-		% You can always change the way your abbreviations are formatted. Play around with it yourself, use tables, or come to CUS if you'd like to change the way it looks. You can also completely remove this chapter if you have no need for a list of abbreviations. Here is an example of what this could look like:
 
-	\begin{table}[h]
+
+\chapter*{List of Abbreviations}
+% You can always change the way your abbreviations are formatted. Play around with it yourself, use tables, or come to CUS if you'd like to change the way it looks. You can also completely remove this chapter if you have no need for a list of abbreviations. Here is an example of what this could look like:
+
+\begin{table}[h]
 	\centering % You could remove this to move table to the left
 	\begin{tabular}{ll}
-            \textbf{P}  	&  Polynomial \\
-            \textbf{NP}  	&  Nondeterministic Polynomial \\
-		\textbf{GA}  	&  Greedy Algorithm \\
-
+		\textbf{P}  & Polynomial                  \\
+		\textbf{NP} & Nondeterministic Polynomial \\
+		\textbf{GA} & Greedy Algorithm            \\
 	\end{tabular}
-	\end{table}
-	
+\end{table}
 
-    \tableofcontents
+
+\tableofcontents
 % if you want a list of tables, optional
-    \listoftables
+\listoftables
 % if you want a list of figures, also optional
-    \listoffigures
+\listoffigures
 
 % The abstract is not required if you're writing a creative thesis (but aren't they all?)
 % If your abstract is longer than a page, there may be a formatting issue.
-    \chapter*{Abstract}
-	The preface pretty much says it all.
-	
-	\chapter*{Dedication}
-	You can have a dedication here if you wish.
+\chapter*{Abstract}
+The preface pretty much says it all.
 
-  \mainmatter % here the regular arabic numbering starts
-  \pagestyle{fancyplain} % turns page numbering back on
+\chapter*{Dedication}
+You can have a dedication here if you wish.
+
+\mainmatter % here the regular arabic numbering starts
+\pagestyle{fancyplain} % turns page numbering back on
 
 %The \introduction command is provided as a convenience.
 %if you want special chapter formatting, you'll probably want to avoid using it altogether
 
-    \chapter*{Introduction}
-         \addcontentsline{toc}{chapter}{Introduction}
-	\chaptermark{Introduction}
-	\markboth{Introduction}{Introduction}
-	% The three lines above are to make sure that the headers are right, that the intro gets included in the table of contents, and that it doesn't get numbered 1 so that chapter one is 1.
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+\chaptermark{Introduction}
+\markboth{Introduction}{Introduction}
+% The three lines above are to make sure that the headers are right, that the intro gets included in the table of contents, and that it doesn't get numbered 1 so that chapter one is 1.
 
 % Double spacing: if you want to double space, or one and a half 
 % space, uncomment one of the following lines. You can go back to 
@@ -110,7 +109,7 @@
 % 	Welcome to the \LaTeX\ thesis template. If you've never used \TeX\ or \LaTeX\ before, you'll have an initial learning period to go through, but the results of a nicely formatted thesis are worth it for more than the aesthetic benefit: markup like \LaTeX\ is more consistent than the output of a word processor, much less prone to corruption or crashing and the resulting file is smaller than a Word file. While you may have never had problems using Word in the past, your thesis is going to be about twice as large and complex as anything you've written before, taxing Word's capabilities. If you're still on the fence about  using \LaTeX, read the Introduction to LaTeX on the CUS site as well as skim the following template and give it a few weeks. Pretty soon all the markup gibberish will become second nature.
 
 % \section{Why use it?}
-	
+
 % \LaTeX\ does a great job of formatting tables and paragraphs. Its line-breaking algorithm was the subject of a PhD.\thinspace thesis. It does a fine job of automatically inserting ligatures, and to top it all off it is the only way to typeset good-looking mathematics.
 
 % \section{Who should use it?}
@@ -120,7 +119,7 @@
 
 %     \chapter{The First}
 %     	This is the first page of the first chapter. You may delete the contents of this chapter so you can add your own text; it's just here to show you some examples. 
-	
+
 % \section{References, Labels, Custom Commands and Footnotes}
 % It is easy to refer to anything within your document using the \texttt{label} and \texttt{ref} tags.  Labels must be unique and shouldn't use any odd characters; generally sticking to letters and numbers (no spaces) should be fine. Put the label on whatever you want to refer to, and put the reference where you want the reference. \LaTeX\ will keep track of the chapter, section, and figure or table numbers for you. 
 
@@ -128,7 +127,7 @@
 % Sometimes you'd like to refer to a table or figure, e.g. you can see in Figure \ref{subd2} that you can rotate figures . Start by labeling your figure or table with the label command (\verb=\label{labelvariable}=) below the caption (see the chapter on graphics and tables for examples). Then when you would like to refer to the table or figure, use the ref command (\verb=\ref{labelvariable}=). Make sure your label variables are unique; you can't have two elements named ``default." Also, since the reference command only puts the figure or table number, you will have to put  ``Table" or ``Figure" as appropriate, as seen in the following examples:
 
 %  As I showed in Table \ref{inheritance} many factors can be assumed to follow from inheritance. Also see the Figure \ref{subd} for an illustration.
- 
+
 % \subsection{Custom Commands}\label{commands}
 % Are you sick of writing the same complex equation or phrase over and over? 
 
@@ -141,10 +140,10 @@
 
 % \subsection{Footnotes and Endnotes}
 %   You might want to footnote something.\footnote{footnote text} Be sure to leave no spaces between the word immediately preceding the footnote command and the command itself. The footnote will be in a smaller font and placed appropriately. Endnotes work in much the same way. More information can be found about both on the CUS site.
-	
+
 % \section{Bibliographies}
 % 	Of course you will need to cite things, and you will probably accumulate an armful of sources. This is why BibTeX was created. For more information about BibTeX and bibliographies, see our CUS site (\url{web.reed.edu/cis/help/latex/index.html})\footnote{\cite{reedweb:2007}}. There are three pages on this topic: {\it bibtex} (which talks about using BibTeX, at \url{/latex/bibtex.html}), {\it bibtexstyles} (about how to find and use the bibliography style that best suits your needs, at \url{/latex/bibtexstyles.html}) and {\it bibman} (which covers how to make and maintain a bibliography by hand, without BibTeX, at at \url{/latex/bibman.html}). The last page will not be useful unless you have only a few sources. There used to be APA stuff here, but we don't need it since I've fixed this with my apa-good natbib style file.
-	
+
 % \subsection{Tips for Bibliographies}
 % \begin{enumerate}
 % \item Like with thesis formatting, the sooner you start compiling your bibliography for something as large as thesis, the better. Typing in source after source is mind-numbing enough; do you really want to do it for hours on end in late April? Think of it as procrastination.
@@ -161,7 +160,7 @@
 % \chapter{Mathematics and Science}	
 % \section{Math}
 % 	\TeX\ is the best way to typeset mathematics. Donald Knuth designed \TeX\ when he got frustrated at how long it was taking the typesetters to finish his book, which contained a lot of mathematics. 
-	
+
 % 	If you are doing a thesis that will involve lots of math, you will want to read the following section which has been commented out. If you're not going to use math, skip over this next big red section. (It's red in the .tex file but does not show up in the .pdf.)
 %	
 %% MATH and PHYSICS majors: Uncomment the following section	
@@ -377,24 +376,24 @@
 
 % 		\end{longtable}
 
-   
+
 %    \section{Figures}
-   
+
 % 	If your thesis has a lot of figures, \LaTeX\ might behave better for you than that other word processor.  One thing that may be annoying is the way it handles ``floats'' like tables and figures. \LaTeX\ will try to find the best place to put your object based on the text around it and until you're really, truly done writing you should just leave it where it lies.   There are some optional arguments to the figure and table environments to specify where you want it to appear; see the comments in the first figure.
 
 % 	If you need a graphic or tabular material to be part of the text, you can just put it inline. If you need it to appear in the list of figures or tables, it should be placed in the floating environment. 
-	
+
 % 	To get a figure from StatView, JMP, SPSS or other statistics program into a figure, you can print to pdf or save the image as a jpg or png. Precisely how you will do this depends on the program: you may need to copy-paste figures into Photoshop or other graphic program, then save in the appropriate format.
-	
+
 % 	Below we have put a few examples of figures. For more help using graphics and the float environment, see our online documentation.
-	
+
 % 	And this is how you add a figure with a graphic:
 % 	\begin{figure}[h]
 % 	% the options are h = here, t = top, b = bottom, p = page of figures.
 % 	% you can add an exclamation mark to make it try harder, and multiple
 % 	% options if you have an order of preference, e.g.
 % 	% \begin{figure}[h!tbp]
-	   
+
 % 	       \centering
 % 	    % DO NOT ADD A FILENAME EXTENSION TO THE GRAPHIC FILE
 % 	    \includegraphics{subdivision}
@@ -407,7 +406,7 @@
 % \section{More Figure Stuff}
 % You can also scale and rotate figures.
 %  	\begin{figure}[h!]
-	   
+
 % 	       \centering
 % 	    % DO NOT ADD A FILENAME EXTENSION TO THE GRAPHIC FILE
 % 	    \includegraphics[scale=0.5,angle=180]{subdivision}
@@ -426,7 +425,7 @@
 % 	    \caption{A Cropped Figure}
 % 	 \label{subd3}
 % 	\end{figure}
-	
+
 %       \subsection{Common Modifications}
 %       The following figure features the more popular changes thesis students want to their figures. This information is also on the web at \url{web.reed.edu/cis/help/latex/graphics.html}.
 %     %\renewcommand{\thefigure}{0.\arabic{figure}} 	% Renumbers the figure to the type 0.x
@@ -445,7 +444,7 @@
 % 	\markboth{Conclusion}{Conclusion}
 % 	\setcounter{chapter}{4}
 % 	\setcounter{section}{0}
-	
+
 % Here's a conclusion, demonstrating the use of all that manual incrementing and table of contents adding that has to happen if you use the starred form of the chapter command. The deal is, the chapter command in \LaTeX\ does a lot of things: it increments the chapter counter, it resets the section counter to zero, it puts the name of the chapter into the table of contents and the running headers, and probably some other stuff. 
 
 % So, if you remove all that stuff because you don't like it to say ``Chapter 4: Conclusion'', then you have to manually add all the things \LaTeX\ would normally do for you. Maybe someday we'll write a new chapter macro that doesn't add ``Chapter X'' to the beginning of every chapter title.
@@ -477,8 +476,8 @@
 % % replace ``plainnat'' with the style of choice. You can refer to files in the bsts or APA 
 % % subfolder, e.g. 
 \printbibliography{}
- % Comment the above two lines and uncomment the next line to use biblatex-chicago.
- %\printbibliography[heading=bibintoc]
+% Comment the above two lines and uncomment the next line to use biblatex-chicago.
+%\printbibliography[heading=bibintoc]
 
 % Finally, an index would go here... but it is also optional.
 \end{document}

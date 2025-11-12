@@ -32,5 +32,16 @@
 *.alg
 *.loa
 
+# Backup files
+*.bak0
+*.bak
+*~
+
+# Error files
+*-SAVE-ERROR
+
+# Editor/formatter config (uncomment if you don't want to track this)
+# .latexindent.yaml
+
 # Other
 .DS_Store
