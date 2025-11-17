@@ -8,12 +8,12 @@
 \usepackage{algpseudocode} \usepackage[hyphens]{url} \usepackage{rotating}
 \usepackage[backend=biber, style=numeric, sorting=none ]{biblatex}
 \bibliography{thesis}
+% i added parskip here instead bc i wanted spaces
+\usepackage{parskip} \setlength{\parindent}{15pt}  
 
 \title{My Final College Paper} \author{Anna Wu} \date{May 2026}
 \division{Mathematical and Natural Sciences} \advisor{Harper Knittel}
 \department{Computer Science}
-
-\setlength{\parskip}{0pt}
 
 % Fix fancyhdr warnings about headheight
 \setlength{\headheight}{14.5pt} \addtolength{\topmargin}{-2.5pt}
@@ -33,7 +33,7 @@
 %     \chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
 %     remove this to move table to the left \begin{tabular}{ll} \textbf{P}  	&
 %     Polynomial \\ \textbf{NP}  	&  Nondeterministic Polynomial \\ \textbf{GA}
-%     &  Greedy Algorithm \\
+%     &  Greedy Algorithm & \textbf{TTC} &  Top Trading Cycles  \\
 
 % 	\end{tabular} \end{table}
 
@@ -42,9 +42,10 @@
 %   \mainmatter % here the regular arabic numbering starts
 %   \pagestyle{fancyplain} % turns page numbering back on
 
-%   \include{intro} \include{background} \include{chap2}
-\include{proof_drafts}
+% \include{intro} 
+\include{background} 
+% \include{chap2} \include{proof_drafts}
 
-% \printbibliography{}
+\printbibliography{}
 
-\end{document}
+  \end{document}

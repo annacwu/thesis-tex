@@ -1,7 +1,7 @@
 % !TEX root = thesis.tex
 \chapter{Background} \section{Mechanism Design}
 
-Traditionally, economists and game theorists most deeply engage with the set of
+Traditionally, economists and game theorists most vigorously study the set of
 problems involving the construction of systems that ``fairly" (under various
 definitions of the word) address scenarios involving a host of participants with
 adverse or overlapping goals. Some examples of problems that fall under this
@@ -150,7 +150,11 @@ time. Constant time, $O(1)$, can be abstractly thought of as any operation that
 can be completed instantly. Constant time is the fastest running time an
 algorithm can have. Most algorithms need to do more complicated operations than
 those that can be done in constant time, however, so our next category of time
-analysis is polynomial time. If I have cookie dough and I need to bake the
+analysis is polynomial time. Recall that a polynomial is a mathematical
+expression that combines terms of variables and constants with various
+operations (e.g. $x^4 + 2x^3 + 7$ or $x^2 + y^2$). When we think about
+polynomial time, we think about how many operations must be completed per input
+to the algorithm. For instance, if  I have cookie dough and I need to bake the
 cookies, my algorithm might be for every tablespoon of cookie dough roll the
 dough into a ball and then sprinkle cinnamon on top. That is 2 actions to
 complete for every tablespoon of cookie dough. So, if we have $n$ tablespoons,
@@ -161,9 +165,194 @@ category is exponential time, which is very slow in the world of running time
 and defines what we mean by ``unfeasible”. We consider an algorithm inefficient
 if it takes exponential time, such as $O(2^n)$. As $n$ grows larger in this
 case, the running time increases rapidly. If we let $n = 1000$, $n^2 =
-	1,000,000$ which is indeed large, but not compared to $2^n$, which becomes “a
+1,000,000$ which is indeed large, but not compared to $2^n$, which becomes “a
 number much larger than the number of atoms in the universe” \cite{Sipser_2006}.
 
-\subsection{P vs NP} \subsection{Optimization} \section{Related Works}
-\subsection{Two-sided matching} \subsection{One-sided matching}
+\subsection{P vs NP} 
+
+In time complexity theory, the field of mathematical analysis centered on the
+running time of algorithms, we give names to the aforementioned categories.
+Specifically, the most important complexity category for our purposes is P,
+which denotes the class of problems that can be solved with polynomial time
+algorithms. That means we can think of P as a collection of problems where every
+problem in the collection has an algorithm that will find a solution in
+polynomial time. Perhaps intuitively, one would assume that there exist many
+problems that necessitate algorithms that take longer than polynomial time (such
+as those that take exponential time, or belong to the class E). What becomes
+less intuitive is that there also exist problems that we cannot prove do or do
+not belong in P. 
+
+To understand what I mean by this, we need to discuss another important
+complexity class called NP: the class of problems solved by
+\textit{nondeterministic polynomial} time algorithms. In very simplified terms,
+one could think of “nondeterministic” as brute force, where an algorithm that
+does a polynomial number of operations for each input goes through every
+possible input to a problem sequentially and carries out every operation on each
+input until a solution is discovered. If the first input happens to be the
+solution, then a polynomial number of operations have been performed, and
+therefore the algorithm terminated in polynomial time. It is not possible to
+guarantee that the first input to an algorithm would always yield a solution,
+but we can imagine that if there were $n$ possible inputs to an algorithm and we
+happened to have $n$ computers that can all run the algorithm on a distinct
+input, one of those computers would give a solution in polynomial time (if a
+solution exists). We could not \textit{determine} which computer it would be,
+but we would know it exists. In real life, we do not have $n$ computers for
+every $n$-input problem we wish to solve. However, if we were somehow given the
+solution output by that lucky computer, we could \textit{verify} that it is
+correct by running the lucky computer’s input on the real computer we do have in
+polynomial time. All of this is to say that NP is the class of problems that
+have algorithms for which we can verify a solution exists in polynomial time. We
+cannot necessarily find that solution in polynomial time, but if it was given to
+us we can prove it solves the problem in polynomial time. 
+
+Generally, we consider the class of problems in NP to be very difficult to
+solve, as it means no one has ever found an algorithm that can find a solution
+efficiently in polynomial time (if they had, the problem would be in P rather
+than np). the hardest NP problems are known as \textit{NP-complete} problems,
+“complete” meaning the problem can be generalized to take the form of every
+other problem in NP. So, if a polynomial time algorithm was discovered for an
+NP-complete problem, it would mean that every np problem could be solved in
+polynomial time, and therefore all of those problems would actually just be in P
+\cite{Sipser_2006}.
+
+
+\subsection{Optimization}
+
+When we work with an NP or especially an NP-complete problem, we generally do
+not attempt to find an algorithm that gives an exact solution; the fact that the
+problem is in NP means we don’t know if it is even possible to do that
+efficiently. However, many problems with relevant real-world applications are in
+NP—does that mean we simply give up trying to find a solution? Maybe we have to
+let go of the idea of an exact solution, but that doesn’t have to stop us from
+trying to find a solution we deem \textit{good enough}.
+
+“Good enough” can mean many things depending on the problem, which is the
+driving force behind \textit{optimization} Optimization problems attempt to find
+a near-optimal (if not optimal) solution under given constraints.  Often, these
+will take the form of \textit{approximation} algorithms, which will relax some
+of the constraints or allow violation of the constraints up to some upper bound
+to guarantee a solution that is as close to the optimal solution as
+mathematically possible. We can clarify “near-optimal” based on the value of the
+optimal solution: if an optimal solution has some value, we want to find a
+solution that maximizes (or minimizes) how close we get to that value. Another
+optimization approach is with \textit{heuristic} algorithms, which leans more
+into the “good enough” mentality by focusing on the empirical results. Rather
+than making mathematical guarantees about the solution, the algorithm will be
+studied for its performance on actual data, and usually the performance is
+adequate to be considered a reasonable solution. The goal of both approximation
+and heuristic algorithms is to find an adequate solution quickly when the
+optimal solution cannot be reasonably found. There are other approaches to
+solving optimization problems, but these approaches are the most relevant to
+this paper. 
+
+\section{Graph Theory}
+
+In discrete mathematics, a graph is a collection of nodes called
+\textit{vertices} connected by \textit{edges} (denoted $G = (V, E)$ where $G$ is
+the graph, and it is composed of a set of vertices $V$ and a set of edges $E$).
+Mathematicians like graphs because their structure makes them very effective for
+modeling a variety of real-world situations such as social networks (where
+vertices are individuals, and edges connect people to their acquaintances) or
+even the spread of disease (where vertices are people and edges represent an
+infection from one person to another). 
+
+
+Graphs can famously be used to model scheduling problems as well by adjusting
+the structure slightly. A basic graph problem has vertices and edges, but we can
+add factors such as \textit{directional} edges that denote going from one vertex
+to another and not back, or some number of \textit{colors} where we want to
+color vertices such that no two adjacent vertices (vertices connected by an
+edge) are the same color. The latter example is actually one of the most studied
+NP-complete problems: is it possible to color a graph $G$ using $k$ colors? It
+is also the structure under which scheduling has been extensively studied, where
+vertices represent events, edges encode overlapping time conflicts between
+events, and the number of colors is the number of available time slots into
+which those events can be scheduled \cite{graphs}.
+
+Another relevant construction of graphs is to add \textit{weights} to edges. A
+weight in this context is some value derived based on the constraints of the
+problem, and this form of graph often lends itself to optimization. As in, the
+weighted graph can be used to model problems where we want to maximize or
+minimize the weights. For instance, we can construct a graph where each vertex
+represents a city and each edge represents a highway from one city to another.
+If we were planning a roadtrip, we could add a weight to each edge to signify
+the travel time of that highway from one city to another. Then, if we were
+planning a road trip to all the cities on the graph, we could find the fastest
+route by finding the path with the smallest weight.
+
+
+\section{Related Work}
+
+The problem we discuss in this thesis is related to the extensively-studied
+problems of school choice and course allocation, both of which harbor a pool of
+significant mechanism design work in the field of economics. School choice in
+mechanism design is the problem of assigning high school students to high
+schools such that parents are satisfied, each student has a school to attend,
+and no school admits more students than they can accommodate. Course allocation
+in mechanism design is the problem of constructing a system to assign students
+to classes based on which classes they prefer to take.
+
+\subsection{Two-sided matching} 
+
+In 2003, Abdulkadiroğlu and Sonmez published a seminal paper on school choice,
+in which they view the problem through the bipartite lens of schools and
+students each with distinct preferences.  This lens allows them to apply the
+Gale-Shapley DA algorithm as a solution as well as their own algorithm, which
+they called Top Trading Cycles (TTC) \cite{school-choice}. In Top Trading
+Cycles, if the matching has a cycle of students in which each student prefers
+the next student’s school, each assignment is given to the next student until
+the cycle is broken. 
+
+Six years later, in 2009, Abdulkadiroğlu, Pathak, and Roth amended the 2003
+paper with a case study into the New York City high school allocation mechanism,
+scrutinizing the DA algorithm under strategy-proofness and stability. They show
+empirically that there is a loss of efficiency in the algorithm when adding
+strategy-proofness and stability to the environment \cite{abu-2009}. 
+
+Many papers, including some outside of school choice specifically, extend one or
+both of Abdulkadiroğlu’s papers in further research. In 2010, Biró et al studied
+school choice in a college setting with upper and lower quotas, constraining the
+environment in a new way. They determined that stable matchings do not always
+exist with those quotas, and in fact determining whether a stable matching
+exists at all is NP-complete \cite{quotas}. Three years later, Hafalir et al
+analyzed the DA algorithm for school choice under quotas for diversity, where
+they found that using upper quotas produced a matching that was pareto-dominated
+by a matching with lower quotas for minority students \cite{affirmative-action}.
+There has since been much more research into the stability effects of quotas on
+the two-sided school choice problem, including papers that implicate stability
+with diverse students of multiple types \cite{kurata}.
+
+
+\subsection{One-sided matching}
+
+Since 2003, research also branched from two-sided school choice into one-sided
+matching, where only one side of the market has preferences. This was often
+studied under the framework of course allocation, a mechanism design problem
+which arose from the existing school choice literature. In 2011, Budish and
+Cantillon published the seminal paper on course allocation at Harvard (which
+cites Abdulkadiroğlu’s 2003 and 2009 papers) in which they evaluate Harvard’s
+mechanism under strategyproofness and pareto-optimality \cite{budish}. There
+have been slight alterations to their framework since then, such as the effects
+of incomplete preferences on participant welfare. 
+
+Only in recent years have scholars started studying one-sided matching with
+quotas and other diversity constraints. In fact, the constraints closest to that
+in this paper (groups of students as well as sub-types within the groups) only
+seem to exist in literature from recent months of 2025. Specifically, Santhini
+et al researched the empirical effects of both soft quotas \cite{santhini} and
+group fairness \cite{santhini-group-fairness} on the mechanism using convex
+optimization (also done similarly by Panda et al \cite{pandagroupfairness}).
+There is not readily as much theory-based research on one-sided matching with
+constraints as two-sided matching, and those that do study it under a
+theoretical framework use more of a fair division analysis than stability.
+
+As far as we can tell, the closest paper to our construction of stability in
+this thesis is an unpublished 2011 paper by Abdulkadiroğlu, who generalizes the
+two-sided and one-sided settings to one environment where the TTC algorithm can
+be reduced to work for both kinds of preferences. In the paper, he frames
+stability to be “if, whenever a student prefers a school to her assignment, that
+school is enrolled up to its capacity by students who have higher priority at
+that school” \cite{abdu2011generalized}. The paper does not consider the effect
+of adding diversity constraints. 
+
 
