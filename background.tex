@@ -1,4 +1,4 @@
-% !TEX root = thesis.tex
+% !TEX root = thesis.tex !TEX root = thesis.tex
 \chapter{Background} 
 
 \section{Analyzing Algorithms}
@@ -23,55 +23,64 @@ To analyze efficiency, we have to define what we mean for an algorithm to be
 “efficient.” For the sake of this thesis, we will focus on the time aspect of
 efficiency. The amount of time an algorithm takes to execute from start to
 finish is known as the \textit{running time} of an algorithm. We can
-mathematically formalize running time withwhat’s known as \textit{Big-O}
+mathematically formalize running time with what’s known as \textit{Big-O}
 notation.
 
-Big-O notation is a form of time analysis that takes place
-\textit{asymptotically},  or as the size of the input becomes infinitely large.
-It is important to analyze algorithms asymptotically so we can guarantee that an
-algorithm fully solves all scenarios of a problem efficiently, as it is less
-helpful if the algorithm only works well on small inputs. For instance, if I am
-following an algorithm to bake cookies and the steps involve rolling out the
-dough, mixing, and measuring ingredients by hand, the algorithm works well for
-me to make a batch of 24 cookies. However, if I start a popular cookie franchise
-and suddenly I need 2,400 cookies a day, my original algorithm is not going to
-be the most efficient way to make that many cookies. While it may make sense
-when baking cookies to handle these two cases differently, it is more helpful in
-computer science to know our algorithms will efficiently solve our problem no
-matter the use case because data commonly scales to very large sizes. 
-
+Big-O notation is a form of \textit{asymptotic} analysis, or analysis that takes
+place as the size of the input becomes infinitely large. It is important to
+analyze algorithms asymptotically so that we know the algorithm is still
+effective in the worst case scenario. This allows us to guarantee an algorithm
+scales well for arbitrarily large inputs. For instance, if I am following an
+algorithm to bake cookies and the steps involve rolling out the dough, mixing,
+and measuring ingredients by hand, the algorithm works well for me to make a
+batch of 24 cookies. However, if I start a popular cookie franchise and suddenly
+I need 2,400 cookies a day, my original algorithm is not going to be the most
+efficient way to make that many cookies. While it may make sense when baking
+cookies to handle these two cases differently, in many computer science problems
+data commonly scales to very large sizes, so it is helpful to know our
+algorithms will still be efficient in those cases. 
 
 We \textit{estimate} running time through asymptotic analysis. In Big-O
-notation, we write $f(n) = O(g(n))$, where some algorithm, $f(n)$, will take
-\textbf{at most} $g(n)$ time to run. The $O$ signifies the “at most” in that
-statement, or more formally it denotes an \textit{upper bound} on the asymptotic
-running time.
+notation, we write that for some algorithm called $f$, $f(n) = O(g(n))$. This is
+read “$f(n)$ is big $O$ of $g(n)$,” where $f$ on input $n$ will take \textbf{at
+most} $g(n)$ time to run. The big $O$ signifies the “at most” in that statement,
+or more formally it denotes an \textit{upper bound} on the asymptotic running
+time. Running time can be classified into different categories. The most
+relevant categories to this thesis are constant time, polynomial time, and
+exponential time. Constant time, $O(1)$, can be abstractly thought of as any
+operation that takes the same fixed amount of time regardless of the input size.
+Constant time is the fastest running time an algorithm can have. Most algorithms
+involve more complicated operations than those that can be done in constant
+time, however, so our next category of time analysis is polynomial time. 
 
-Running time can be classified into different categories. The most relevant
-categories to this thesis are constant time, polynomial time, and exponential
-time. Constant time, $O(1)$, can be abstractly thought of as any operation that
-can be completed instantly. Constant time is the fastest running time an
-algorithm can have. Most algorithms involve more complicated operations than
-those that can be done in constant time, however, so our next category of time
-analysis is polynomial time. Recall that a polynomial is a mathematical
-expression that combines terms of variables and constants using various
-operations (e.g. $x^4 + 2x^3 + 7$ or $x^2 + y^2$). When we think about
-polynomial time, we think about how many actions must be completed per input to
-the algorithm. For instance, if I already have cookie dough and I need to bake
-the cookies, my algorithm might be: for every tablespoon of cookie dough, roll
-the dough into a ball and then sprinkle cinnamon on top. That is 2 actions to
-complete for every tablespoon of cookie dough. So, if we have $n$ tablespoons,
-we could say this step takes $O(n^2)$ time (note this would be more specifically
-quadratic time, but quadratic time is a subset of polynomial time). For our
-purposes, we can consider polynomial time to be sufficiently “efficient.” Our
-last category is exponential time, which is very slow compared to our other two
-categories. We consider an algorithm “inefficient” if it takes exponential time.
-An example of exponential time in Big-O is $O(2^n)$. As $n$ grows larger in this
-case, the running time increases extremely rapidly. To compare polynomial time
-and exponential time, imagine we have some number $n = 1000$. If we square $n$,
-we get a polynomial expression: $n^2 = 1,000,000$. That is indeed large, but not
-compared to $2^n$, which is “a number much larger than the number of atoms in
-the universe” \cite{Sipser_2006}.
+Recall that a polynomial is a mathematical expression that combines terms of
+variables and constants using various operations (e.g. $x^4 + 2x^3 + 7$ or $x^2
++ y^2$). In time analysis, we simplify to the largest term in a polynomial and
+we disregard coefficients due to the fact that they become irrelevant as the
+input scales. For instance, say we have a number $x^{100}$ versus $3x^{100}$. If
+$x = 1,000$, then both of these numbers are extremely large regardless of if we
+multiply it by 3. So in big-O notation, we would say $f(x) = 3x^{100} =
+x^{100}$. Similarly for multiple terms, in $x^{100} + x^5$ the larger $x^{100}$
+term will be the part that grows bigger, so when analyzing time, it overshadows
+the $x^5$ term. When we think about polynomial time, we think about how many
+actions must be completed per input to the algorithm. For instance, if I already
+have cookie dough and I need to bake the cookies, my algorithm might be: for
+every tablespoon of cookie dough, roll the dough into a ball and then sprinkle
+cinnamon on top. That is 2 actions to complete for every tablespoon of cookie
+dough. So, if we have $n$ tablespoons, we could say this step takes $O(2n) =
+O(n)$ time  (note this would be more specifically linear time, but linear time
+is a subset of polynomial time). For our purposes, we can consider polynomial
+time to be sufficiently “efficient,” with the consideration that we would hope
+for our algorithm to be much closer to $O(n)$ time than $O(n^{100})$, as the
+former is much more efficient than the latter. Our last category is exponential
+time, which is very slow compared to our other two categories. We consider an
+algorithm “inefficient” if it takes exponential time. An example of exponential
+time in Big-O is $O(2^n)$. As $n$ grows larger in this case, the running time
+increases extremely rapidly. To compare polynomial time and exponential time,
+imagine we have some number $n = 1000$. If we square $n$, we get a polynomial
+expression: $n^2 = 1,000,000$. That is indeed large, but not compared to $2^n$,
+which is “a number much larger than the number of atoms in the universe”
+\cite{Sipser_2006}.
 
 \subsection{P vs NP} 
 
@@ -84,41 +93,102 @@ problem in the collection has an algorithm that will find a solution in
 polynomial time. Perhaps intuitively, we know there exist many complex problems
 that take longer than polynomial time to solve (such as those that take
 exponential time and belong to the class E). A less intuitive fact is that there
-also exist problems that we cannot prove do or do not belong in P. 
+also exist problems that we think do not belong in P, but we don't know how to
+prove it at this time nor do we believe we will know how to prove it anytime
+soon. 
 
 To understand what I mean by this, we need to discuss another important
 complexity class called NP: the class of problems solved by
 \textit{nondeterministic polynomial} time algorithms. In very simplified terms,
-one could think of “nondeterministic” as a brute force approach: an algorithm
-that takes polynomial time for each input goes through every possible input to a
-problem sequentially until it finds a solution. If the first input happens to be
-the solution, then the algorithm has been carried out once, so a polynomial
-number of operations have been performed. Therefore, the algorithm terminated in
-polynomial time. It is not possible to guarantee that the first input to an
-algorithm will always yield a solution, but we can imagine that if there were
-$n$ possible inputs to an algorithm and we happened to have $n$ computers that
-can all run the algorithm on a distinct input, one of those computers would run
-the lucky input and give a solution in polynomial time (if a solution exists).
-We could not \textit{determine} which computer it would be, but we would know it
-exists. In real life, we do not have $n$ computers for every $n$-input problem
-we wish to solve. However, if we were somehow given the solution output by that
-lucky computer, we could \textit{verify} that it is correct by running the lucky
-computer’s input on the real computer we do have in polynomial time. All of this
-is to say that NP is the class of problems that have algorithms for which we can
-verify a solution exists in polynomial time. We cannot necessarily find that
-solution in polynomial time, but if it was given to us we can prove it solves
-the problem in polynomial time. 
+one could think of “nondeterministic” as a brute force approach: we take all
+possible solutions to a problem, and we have an algorithm that takes polynomial
+time to determine whether each solution actually solves the problem by going
+through them sequentially until it finds a solution that works. If the first
+solution happens to solve the problem, then the algorithm has been carried out
+once, so a polynomial number of operations have been performed. Therefore, the
+algorithm terminated in polynomial time. As an example, lets think about the
+classic 52-card game of solitaire. It is hard to know whether a starting
+configuration of cards will lead to a win in solitaire, but we can figure out if
+it is a winnable configuration by go through every single subsequent set of
+moves that leads to a terminating position and see if that final position is a
+win. If the first set of moves happens to lead to a win, we have moved a
+polynomial number of cards, and therefore we determined that the configuration
+is winnable in polynomial time \cite{solitaire}.
 
-Generally, we consider the class of problems in NP to be very difficult to
-solve, as it means no one has ever found an algorithm that can find an efficient
-polynomial time solution (if they had, the problem would be in P rather than
-NP). The hardest NP problems are known as \textit{NP-complete} problems, where
-“complete” means the problem can be generalized to take the form of every other
-problem in NP. So, if a polynomial time algorithm was discovered for an
-NP-complete problem, it would mean that every NP problem could be solved in
-polynomial time, and therefore all of those problems would actually just be in P
-\cite{Sipser_2006}.
+It is not possible to guarantee that the first evaluated solution to an
+algorithm will always solve the problem, but we can imagine that if there were
+$n$ possible solutions to an algorithm and we happened to have $n$ computers
+that can all run the algorithm on a distinct solution, one of those computers
+would run the lucky input and solve the problem in polynomial time (if a valid
+solution exists). We could not determine which computer it would be, but we
+would know it exists. In real life, we do not have $n$ computers for every
+problem we wish to solve with $n$ possible solutions. However, if we were
+somehow given the solution output by that lucky computer, we could
+\textit{verify} that it is correct by running the lucky computer’s input on the
+real computer we do have in polynomial time. All of this is to say that NP is
+the class of problems that have algorithms for which we can verify a given
+solution is correct in polynomial time. We cannot necessarily find that solution
+in polynomial time, but if it was given to us we can prove it solves the problem
+in polynomial time. 
 
+Keep in mind that problems we know are in P are also in NP, because we can
+verify that their solutions (which we can find in polynomial time) are correct
+in polynomial time. We will denote the problems that we cannot prove are or are
+not in P denote as $NP\setminus{P}$, which means the set difference of $NP$ and
+$P$, or all problems in $NP$ that are not known to be in $P$. Generally, we
+consider the class of problems in $NP\setminus{P}$ to be very difficult to
+solve, as it means no one has ever discovered an algorithm that can find a
+correct solution in polynomial time. The hardest NP problems are known as
+\textit{NP-complete} problems, where “complete” means the problem can be
+generalized to take the form of every other problem in NP. So, if a polynomial
+time algorithm was discovered for an NP-complete problem, it would mean that
+every NP problem could be solved in polynomial time, and therefore all of those
+problems would actually just be in P \cite{Sipser_2006}.
+
+\section{Graph Theory}
+
+In discrete mathematics, a graph is a collection of nodes called
+\textit{vertices} connected by \textit{edges} (denoted $G = (V, E)$ where $G$ is
+the graph, and it is composed of a set of vertices $V$ and a set of edges $E$).
+Mathematicians like graphs because their structure makes them very effective for
+modeling a variety of real-world situations such as social networks (where
+vertices are individuals, and edges connect people to their acquaintances) or
+even the spread of disease (where vertices are people and edges represent an
+infection from one person to another). \setlength{\belowcaptionskip}{-10pt}
+\begin{figure}[H] \centering
+  \includegraphics[width=0.6\linewidth]{graph.jpeg}\caption{Simple graph with 6
+vertices and 5 edges} \label{fig:placeholder} \end{figure}
+\setlength{\belowcaptionskip}{12pt}
+
+Graphs can famously be used to model scheduling problems by adjusting their
+structure slightly. A basic graph problem has vertices and edges, but we can add
+factors such as \textit{direction} going from one vertex to another, or some
+number of \textit{colors} with which we want to color vertices such that no two
+adjacent vertices (vertices connected by an edge) are the same color. The latter
+example is actually one of the most studied NP-complete problems: is it possible
+to color a graph $G$ using $k$ colors? It is also the structure of graph under
+which scheduling has been extensively studied, where vertices represent events,
+edges encode overlapping time conflicts between events, and the number of colors
+is the number of available time slots into which those events can be scheduled
+\cite{graphs}. \setlength{\belowcaptionskip}{-10pt} \begin{figure}[H] \centering
+  \includegraphics[width=0.7\linewidth]{graph-color.jpeg}\caption{Graph from
+Figure 1.1 colored with 3 colors} \label{fig:placeholder} \end{figure}
+\setlength{\belowcaptionskip}{12pt}
+
+Another way to construct graphs is to add \textit{weights} to edges. A weight in
+this context is some value derived based on the constraints of the problem, and
+this form of graph often lends itself to optimization. As in, the weighted graph
+can be used to model problems where we want to maximize or minimize the weights.
+For instance, we can construct a graph where each vertex represents a city and
+each edge represents a highway from one city to another. If we were planning a
+roadtrip, we could add a weight to each edge to signify the travel time of that
+highway from one city to another. Then, if we were planning a road trip to all
+the cities on the graph, we could find the fastest route by finding the path
+with the smallest weight. 
+
+\begin{figure}[H] \centering
+\includegraphics[width=0.7\linewidth]{weighted-graph.jpeg}\caption{Graph from
+Figure 1.1 with weights } \label{fig:placeholder} \end{figure}
 
 \section{Mechanism Design}
 
@@ -166,7 +236,10 @@ This couple would be known as a \textit{blocking pair}, because their elopement
 stable matching: we wish to find an algorithm that outputs a complete matching
 of couples with no blocking pairs. 
 
-[FIGURE HERE ILLUSTRATING STABLE MARRIAGE]
+\begin{figure}[H] \centering
+\includegraphics[width=0.9\linewidth]{stable-marriage.jpeg}\caption{Bipartite
+directional graph illustrating the Stable Marriage problem}
+\label{fig:placeholder} \end{figure}
 
 In 1962, David Gale and Lloyd Shapley published a seminal paper for the field in
 which they proposed the \textbf{deferred acceptance} (DA) algorithm, a solution
@@ -189,13 +262,13 @@ than between two distinct categories. Stability in a one-sided market retains
 the same meaning as in a bipartite setting. Over 20 years after Gale and
 Shapley’s paper, Robert Irving published a paper with a solution to the Stables
 Roommates problem, in which he proved his algorithm outputs a stable matching of
-roommates in polynomial time \cite{irving}. Irving’s algorithm, similarly to the
-DA algorithm in bipartite markets, provides the groundwork for the majority of
-research on one-sided matching problems. 
+roommates in polynomial time if one exists \cite{irving}. Irving’s algorithm,
+similarly to the DA algorithm in bipartite markets, provides the groundwork for
+the majority of research on one-sided matching problems. 
 
 \subsection{Fair Division}
 
-The difference between matching and fair division (also known as fair
+The difference between bipartite matching and fair division (also known as fair
 allocation) is most often \textit{one-sided} preferences. “One-sided”
 preferences has a different meaning than a “one-sided” market: one-sided
 preferences still means a bipartite market, but only one side cares what they
@@ -209,7 +282,10 @@ participants and maximize the amount of \textit{welfare}, where welfare is the
 benefit participants yield from the goods they receive (such as feeling
 significantly more joy from vanilla over chocolate). 
 
-[CAKE CUTTING FIGURE HERE]
+\begin{figure}[H] \centering
+\includegraphics[width=0.9\linewidth]{cake-cutting.jpeg}\caption{cake cutting
+example where $c_1$ and $v_3$ would envy each other} \label{fig:placeholder}
+\end{figure}
 
 The cake-cutting example is the canon example for divisible goods
 \cite{genesis}, but there is also a lot of study into the allocation of
@@ -219,14 +295,14 @@ food) to different food banks based on preferences they provide, involves
 indivisible goods \cite{foodbank}.
 
 In addition to envy and welfare, fair division will often be evaluated under
-pareto-optimality. An allocation is considered \textit{pareto-optimal} if there
+Pareto-optimality. An allocation is considered \textit{Pareto-optimal} if there
 is no other allocation that is strictly better for at least one participant
 while retaining the same welfare for the other participants \cite{pareto}.  So,
-we say allocation $A$ \textit{pareto-dominates} allocation $B$ if allocation $A$
-is better or the same than allocation $B$ for every participant. As more factors
+we say allocation $A$ \textit{Pareto-dominates} allocation $B$ if allocation $A$
+is better or the same as allocation $B$ for every participant. As more factors
 are added to fair allocation problems—such as considering the order in which
 goods arrive for distribution, scaling the number of participants, and more
-specific definitions of welfare—envy-freeness and pareto-optimality become more
+specific definitions of welfare—envy-freeness and Pareto-optimality become more
 difficult to achieve. 
 
 
@@ -251,9 +327,10 @@ $n$ applicants can admit up to $q$ students, is traditionally studied with these
 capacity constraints (where $q$ is for quota). Lower bound quotas in something
 like the College Admissions would encode in the mechanism that schools need to
 accept at least $m$ students of some type \cite{quotas}. Strict quotas are one
-such constraint that can cause finding a stable matching to be NP-complete, so
-quotas are often studied under “soft” constraints as well: for example, allowing
-a quota to be a target range rather than a specific number \cite{santhini}.
+such constraint that can cause finding a stable matching in a bipartite setting
+to be NP-hard\cite{santhini}, so quotas are often studied under “soft”
+constraints as well: for example, allowing a quota to be a target range rather
+than a specific number.
 
 This quota-based extension of the College Admissions problem more accurately
 reflects reality by acting as diversity constraints. The goal of diversity
@@ -275,11 +352,11 @@ constraints, the constraints make the problems NP-complete.
 
 \subsection{Optimization}
 
-When we work with an NP or especially an NP-complete problem, we generally do
-not attempt to find an algorithm that gives an exact solution; the fact that the
-problem is in NP means we don’t know if it is even possible to find an exact
-solution efficiently. However, as we have seen with quotas and diversity, many
-problems with relevant real-world applications are in NP. Does that mean we
+When we work with an NP-hard or especially an NP-complete problem, we generally
+do not attempt to find an algorithm that gives an exact solution; the fact that
+the problem is NP-hard means we don’t know if it is even possible to find an
+exact solution efficiently. However, as we have seen with quotas and diversity,
+many problems with relevant real-world applications are in NP. Does that mean we
 simply give up trying to find a solution? 
 
 Maybe we have to let go of the idea of an exact solution, but that doesn’t have
@@ -291,62 +368,22 @@ will take the form of \textit{approximation} algorithms, which will relax some
 of the constraints or allow a violation of the constraints up to some upper
 bound to guarantee a solution that is as close to the optimal solution as
 mathematically possible. We can clarify what we mean by “near-optimal” based on
-the optimal solution: if an optimal solution has some value, we want to find a
-solution that maximizes (or minimizes) how close we get to that value. Another
-optimization approach is with \textit{heuristic} algorithms, which leans even
-more into the “good enough” mentality by focusing on the empirical results.
-Rather than making mathematical guarantees about the optimality of the solution,
-a heuristic algorithm will be evaluated for its performance on actual data.
-Usually, despite the worst-case scenario being mathematically unfeasible, the
-algorithm is able to output a solution when given real scenarios, and therefore
-we consider it to be a reasonable solution. The goal of both approximation and
-heuristic algorithms is to find an adequate solution quickly when the optimal
-solution cannot be reasonably found. There are other approaches to solving
-optimization problems, but these approaches are the most relevant to this
-thesis. 
+the optimal solution: if an optimal solution has some value (such as a stabile
+matching with no blocking pairs), we want to find a solution that
+maximizes/minimizes how close we get to that value (such as a matching that
+guarantees a maximum one blocking pair). Another optimization approach is with
+\textit{heuristic} algorithms, which leans even more into the “good enough”
+mentality by focusing on the empirical results. Rather than making mathematical
+guarantees about the optimality of the solution, a heuristic algorithm will be
+evaluated for its performance on actual data. Usually, despite the worst-case
+scenario being mathematically infeasible, the algorithm is able to output a
+solution when given real scenarios, and therefore we consider it to be a
+reasonable solution. The goal of both approximation and heuristic algorithms is
+to find an adequate solution quickly when the optimal solution cannot be
+reasonably found. There are other approaches to solving optimization problems,
+but these approaches are the most relevant to this thesis. 
 
 
-\section{Graph Theory}
-
-In discrete mathematics, a graph is a collection of nodes called
-\textit{vertices} connected by \textit{edges} (denoted $G = (V, E)$ where $G$ is
-the graph, and it is composed of a set of vertices $V$ and a set of edges $E$).
-Mathematicians like graphs because their structure makes them very effective for
-modeling a variety of real-world situations such as social networks (where
-vertices are individuals, and edges connect people to their acquaintances) or
-even the spread of disease (where vertices are people and edges represent an
-infection from one person to another). Many matching and allocations problems
-can even be modelled as graphs. 
-
-[BASIC GRAPH FIGURE HERE]
-
-
-Graphs can famously be used to model scheduling problems by adjusting their
-structure slightly. A basic graph problem has vertices and edges, but we can add
-factors such as \textit{directional} going from one vertex to another, or some
-number of \textit{colors} with which we want to color vertices such that no two
-adjacent vertices (vertices connected by an edge) are the same color. The latter
-example is actually one of the most studied NP-complete problems: is it possible
-to color a graph $G$ using $k$ colors? It is also the structure of graph under
-which scheduling has been extensively studied, where vertices represent events,
-edges encode overlapping time conflicts between events, and the number of colors
-is the number of available time slots into which those events can be scheduled
-\cite{graphs}.
-
-[GRAPH COLORING FIGURE]
-
-Another way to construct graphs is to add \textit{weights} to edges. A weight in
-this context is some value derived based on the constraints of the problem, and
-this form of graph often lends itself to optimization. As in, the weighted graph
-can be used to model problems where we want to maximize or minimize the weights.
-For instance, we can construct a graph where each vertex represents a city and
-each edge represents a highway from one city to another. If we were planning a
-roadtrip, we could add a weight to each edge to signify the travel time of that
-highway from one city to another. Then, if we were planning a road trip to all
-the cities on the graph, we could find the fastest route by finding the path
-with the smallest weight. 
-
-[WEIGHTED GRAPH FIGURE]
 
 
 \section{Related Work}
@@ -374,21 +411,22 @@ the cycle is broken.
 Six years later, in 2009, Abdulkadiroğlu, Pathak, and Roth amended the 2003
 paper with a case study into the New York City high school allocation mechanism,
 scrutinizing the DA algorithm under strategy-proofness and stability. They show
-empirically that there is a loss of efficiency in the algorithm when adding
-strategy-proofness and stability to the environment \cite{abu-2009}. 
+empirically that there is a loss of Pareto efficiency in the algorithm when
+adding strategy-proofness and stability to the environment \cite{abu-2009}. 
 
 Many papers, including some outside of school choice specifically, extend one or
-both of Abdulkadiroğlu’s papers in further research. In 2010, Biró et al studied
-school choice in a college setting with upper and lower quotas, constraining the
-environment in a new way. They determined that stable matchings do not always
-exist with those quotas, and in fact determining whether a stable matching
-exists at all is NP-complete \cite{quotas}. Three years later, Hafalir et al
-analyzed the DA algorithm for school choice under quotas for diversity, where
-they found that using upper quotas produced a matching that was pareto-dominated
-by a matching with lower quotas for minority students \cite{affirmative-action}.
-There has since been much more research into the stability effects of quotas on
-the two-sided school choice problem, including papers that implicate stability
-with diverse students of multiple types \cite{kurata}.
+both of Abdulkadiroğlu’s papers in further research. In 2010, Biró et al.
+studied school choice in a college setting with upper and lower quotas,
+constraining the environment in a new way. They determined that stable matchings
+do not always exist with those quotas, and in fact determining whether a stable
+matching exists at all is NP-complete \cite{quotas}. Three years later, Hafalir
+et al. analyzed the DA algorithm for school choice under quotas for diversity,
+where they found that using upper quotas produced a matching that was
+Pareto-dominated by a matching with lower quotas for minority students
+\cite{affirmative-action}. There has since been much more research into the
+stability effects of quotas on the two-sided school choice problem, including
+papers that implicate stability with diverse students of multiple types
+\cite{kurata}.
 
 
 \subsection{One-sided matching}
@@ -406,13 +444,14 @@ of incomplete preferences on participant welfare.
 Only in recent years have scholars started studying one-sided matching with
 quotas and other diversity constraints. In fact, the constraints closest to that
 in this paper (groups of students as well as sub-types within the groups) only
-seem to exist in literature from recent months of 2025. Specifically, Santhini
-et al researched the empirical effects of both soft quotas \cite{santhini} and
-group fairness \cite{santhini-group-fairness} on the mechanism using convex
-optimization (also done similarly by Panda et al \cite{pandagroupfairness}).
-There is not readily as much theory-based research on one-sided matching with
-constraints as two-sided matching, and those that do study it under a
-theoretical framework use more of a fair division analysis than stability.
+seem to exist in literature published as recently as 2025. Specifically,
+Santhini et al. researched the empirical effects of both soft quotas
+\cite{santhini} and group fairness \cite{santhini-group-fairness} on the
+mechanism using convex optimization (also done similarly by Panda et al.
+\cite{pandagroupfairness}). There is not readily as much theory-based research
+on one-sided matching with constraints as two-sided matching, and those that do
+study it under a theoretical framework use more of a fair division analysis than
+stability.
 
 As far as we can tell, the closest paper to our construction of stability in
 this thesis is an unpublished 2011 paper by Abdulkadiroğlu, who generalizes the
@@ -420,7 +459,8 @@ two-sided and one-sided settings to one environment where the TTC algorithm can
 be reduced to work for both kinds of preferences. In the paper, he frames
 stability to be “if, whenever a student prefers a school to her assignment, that
 school is enrolled up to its capacity by students who have higher priority at
-that school” \cite{abdu2011generalized}. The paper does not consider the effect
-of adding diversity constraints. 
+that school” \cite{abdu2011generalized}, where “higher priority” in the
+one-sided setting only considers how strongly the other students prefer that
+school. The paper does not consider the effect of adding diversity constraints. 
 
 

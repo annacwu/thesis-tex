@@ -3,11 +3,14 @@
 %%
 \documentclass[12pt,twoside]{reedthesis}
 
+\makeatletter \def\FloatBarrier{% \par\begingroup \@floatplacement
+\global\setbox\@currbox\box\voidb@x \endgroup } \makeatother
+
 \usepackage{graphicx,latexsym} \usepackage{amssymb,amsthm,amsmath}
 \usepackage{longtable,booktabs,setspace} \usepackage{algorithm}
-\usepackage{algpseudocode} \usepackage[hyphens]{url} \usepackage{rotating}
-\usepackage[backend=biber, style=numeric, sorting=none ]{biblatex}
-\bibliography{thesis}
+\usepackage{float} \usepackage{algpseudocode} \usepackage[hyphens]{url}
+\usepackage{rotating} \usepackage[backend=biber, style=numeric, sorting=none
+]{biblatex} \bibliography{thesis}
 % i added parskip here instead bc i wanted spaces
 \usepackage{parskip} \setlength{\parindent}{15pt}  
 
@@ -37,13 +40,14 @@
 
 % 	\end{tabular} \end{table}
 
-% \tableofcontents
+\tableofcontents
 
 %   \mainmatter % here the regular arabic numbering starts
 %   \pagestyle{fancyplain} % turns page numbering back on
 
-% \include{intro} \include{background} \include{chap2} 
-\include{proof_drafts}
+% \include{intro} 
+\include{background} 
+% \include{chap2} \include{proof_drafts}
 
 % \printbibliography{}
 
