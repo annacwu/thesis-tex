@@ -76,52 +76,47 @@ incomplete preferences.
       $B$ students can then switch into on their own, respectively. \newpage
 
 
-      Clearly, our problem as it stands is too constrained. We want to work in
-      an environment where a matching is always possible. We need to start from
-      a more basic constraint environment, where instead of ranked preferences
-      we have 0/1 preferences and therefore no notion of stability (for now). In
-      this case, it becomes a weighted graph matching problem. Let $C$ denote
+      Let's look at a more basic constraint environment, where we have 0/1
+      preferences and therefore no notion of stability (for now). Let $C$ denote
       the set of seats over all classes, and $S$ the set of students. We will
       put lower bounds on the seats, such that the number of seats in each class
       will be reserved evenly among each type of student, with an extra group of
-      seats that is free to any student. Say that we graph this scenario with a
-      graph, $G = (V, E)$, where an edge $e \in E$ exists between a seat and a
-      student (which are different types of $v \in V$) if the student prefers
-      that class, and each $e_i$ has a weight $w(e_i)$. Let $w(e_i) = w(e_i) +
-      1$ if the seat is reserved for that student, and $w(e_i) = w(e_i) + 1$ if
-      the student prefers that class. So, every edge will have at least $w(e) =
-      1$ and at most $w(e) = 2$, because we only draw edges between classes
-      students prefer.
+      seats that is free to any student. We will let $C_r$ be the set of
+      reserved seats. In this case, we have a weighted graph matching problem,
+      where $G = (V, E)$ such that $V = S \cup C$ and each edge goes from some
+      $s$ to some $c$ if and only if $c \in P_s$, where $P_s$ is the preference
+      list of $s$. Each edge has a weight $w(e)$. Let the weight be as follows:
+      \[ w(e) = \mathbf{1}\{\text{if seat $c$ is reserved for $s$'s type}\} +
+      \mathbf{1}\{\text{if student $s$ prefers class $c$}\}. \]  
 
       \textbf{Theorem} If a matching that respects student preferences and seat
       reservations exists, it will be the max-weight graph where $w(\mu) = |S| +
-      |C|$.
+      |C_r|$.
 
-      \textbf{Proof} Let $G = (V, E)$ be a bipartite graph where $V = S \cup C$
-      such that $S$ is the set of students and $C$ the set of seats. For each
-      edge $e \in E$ connecting student $s$ to seat $c$, let the weight be as
-      follows: \[ w(e) = \mathbf{1}\{\text{if seat $c$ is reserved for $s$'s
-      type}\} + \mathbf{1}\{\text{if student $s$ prefers class of $c$}\}. \]
-      Note that there only exists an edge between an $s$ and $c$ if $c \in P_s$,
-      where $P_s$ is the preference list of $s$. 
-      
-      Let $\mu$ be a matching that assigns every student to a seat they prefer
-      while respecting seat reservations. By construction of the weights, we can
-      determine a lower and upper bound for $w(\mu)$. 
+      \textbf{Proof} Let $\mu$ be a matching that assigns every student to a
+      seat they prefer while also respecting seat reservations. By construction
+      of the weights, we can determine a lower and upper bound for $w(\mu)$. 
 
       \begin{enumerate} \item \textbf{Lower bound of $\mu$ }  Each edge exists
         only if the student prefers that seat, so every edge in $\mu$
-        contributes at least 1. Every student in $\mu$ got a seat they prefer,
-        so summing over all students gives a contribution of at least $|S|$.
-        Each seat assigned to a student in $\mu$ was reserved, which adds an
-        extra +1 to the weight for the edge from that seat. Summing over all
-        seats gives an additional contribution of $|C|$. Therefore, we can bound
-        $\mu$: \[ w(\mu) \geq |S| + |C|. \]
+        contributes at least 1. By our assumption of characteristics of $\mu$,
+        every student in $\mu$ got a seat they prefer, so summing over all
+        students contributes at least $|S|$ to $w(\mu)$. We also assumed each
+        seat assigned to a student in $\mu$ was reserved, which adds an extra +1
+        to the weight for the edge from that seat. Summing over all seats gives
+        an additional contribution of $|C_r|$. Therefore, we can bound $\mu$: \[
+        w(\mu) \geq |S| + |C_r|. \]
 
-    \item \textbf{Upper bound of $\mu$} From our definition, we know each edge
-  weight is at most 2. We know $\mu$ has $|S|$ edges because each student was
-matched to one of their preferences.  \end{enumerate}
+        \item \textbf{Upper bound of $\mu$} From our definition, we know each
+          edge weight is at most 2. Similarly to the lower bound, we know $\mu$
+          has $|S|$ edges because each student was matched to one of their
+          preferences. If each edge has a maximum-weight of 2, then we know the
+          upper bound must be $2|S|$. Note that $2|S| = |S| + |C_r|$, as we know
+          each student is matched to a reserved seat in $\mu$, so $|S| = |C_r|$.
+          Therefore, we can bound $\mu$: \[ w(\mu) \leq |S| + |C_r|. \]
+      \end{enumerate}
 
-So, $\mu$ is a maximum-weight graph with a lower bound of $|S| + |C|$ and an
-upper bound of $|S| + |C|$, so it must be that the maximum-weight matching that
-fully respects student preferences and seat reservations equals $|S| + |C|$. 
+      So, $\mu$ is a maximum-weight graph with a lower bound of $|S| + |C_r|$
+      and an upper bound of $|S| + |C_r|$, so it must be that a matching that
+      fully respects student preferences and seat reservations has a weight
+      $w(\mu) = |S| + |C_r|$. 

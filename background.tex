@@ -134,16 +134,16 @@ in polynomial time.
 Keep in mind that problems we know are in P are also in NP, because we can
 verify that their solutions (which we can find in polynomial time) are correct
 in polynomial time. We will denote the problems that we cannot prove are or are
-not in P denote as $NP\setminus{P}$, which means the set difference of $NP$ and
-$P$, or all problems in $NP$ that are not known to be in $P$. Generally, we
-consider the class of problems in $NP\setminus{P}$ to be very difficult to
-solve, as it means no one has ever discovered an algorithm that can find a
-correct solution in polynomial time. The hardest NP problems are known as
-\textit{NP-complete} problems, where “complete” means the problem can be
-generalized to take the form of every other problem in NP. So, if a polynomial
-time algorithm was discovered for an NP-complete problem, it would mean that
-every NP problem could be solved in polynomial time, and therefore all of those
-problems would actually just be in P \cite{Sipser_2006}.
+not in P as $NP\setminus{P}$, which means the set difference of $NP$ and $P$, or
+all problems in $NP$ that are not known to be in $P$. Generally, we consider the
+class of problems in $NP\setminus{P}$ to be very difficult to solve, as it means
+no one has ever discovered an algorithm that can find a correct solution in
+polynomial time. The hardest NP problems are known as \textit{NP-complete}
+problems, where “complete” means the problem can be generalized to take the form
+of every other problem in NP. So, if a polynomial time algorithm was discovered
+for an NP-complete problem, it would mean that every NP problem could be solved
+in polynomial time, and therefore all of those problems would actually just be
+in P \cite{Sipser_2006}.
 
 \section{Graph Theory}
 
@@ -268,7 +268,7 @@ the majority of research on one-sided matching problems.
 
 \subsection{Fair Division}
 
-The difference between bipartite matching and fair division (also known as fair
+The difference between two-sided matching and fair division (also known as fair
 allocation) is most often \textit{one-sided} preferences. “One-sided”
 preferences has a different meaning than a “one-sided” market: one-sided
 preferences still means a bipartite market, but only one side cares what they
@@ -368,11 +368,11 @@ will take the form of \textit{approximation} algorithms, which will relax some
 of the constraints or allow a violation of the constraints up to some upper
 bound to guarantee a solution that is as close to the optimal solution as
 mathematically possible. We can clarify what we mean by “near-optimal” based on
-the optimal solution: if an optimal solution has some value (such as a stabile
+the optimal solution: if an optimal solution has some value (such as a stable
 matching with no blocking pairs), we want to find a solution that
 maximizes/minimizes how close we get to that value (such as a matching that
-guarantees a maximum one blocking pair). Another optimization approach is with
-\textit{heuristic} algorithms, which leans even more into the “good enough”
+guarantees a maximum of one blocking pair). Another optimization approach is
+with \textit{heuristic} algorithms, which leans even more into the “good enough”
 mentality by focusing on the empirical results. Rather than making mathematical
 guarantees about the optimality of the solution, a heuristic algorithm will be
 evaluated for its performance on actual data. Usually, despite the worst-case
@@ -437,7 +437,7 @@ studied under the framework of course allocation, a mechanism design problem
 which arose from the existing school choice literature. In 2011, Budish and
 Cantillon published the seminal paper on course allocation at Harvard (which
 cites Abdulkadiroğlu’s 2003 and 2009 papers) in which they evaluate Harvard’s
-mechanism under strategyproofness and pareto-optimality \cite{budish}. There
+mechanism under strategyproofness and Pareto-optimality \cite{budish}. There
 have been slight alterations to their framework since then, such as the effects
 of incomplete preferences on participant welfare. 
 
