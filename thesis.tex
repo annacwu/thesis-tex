@@ -12,7 +12,15 @@
 \usepackage{rotating} \usepackage[backend=biber, style=numeric, sorting=none
 ]{biblatex} \bibliography{thesis}
 % i added parskip here instead bc i wanted spaces
-\usepackage{parskip} \setlength{\parindent}{15pt}  
+\usepackage{parskip} \setlength{\parindent}{15pt}
+\newtheorem{theorem}{Theorem}[chapter] \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition} \newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark} \newtheorem{remark}[theorem]{Remark}
 
 \title{My Final College Paper} \author{Anna Wu} \date{May 2026}
 \division{Mathematical and Natural Sciences} \advisor{Harper Knittel}
