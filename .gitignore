@@ -43,5 +43,8 @@
 # Editor/formatter config (uncomment if you don't want to track this)
 # .latexindent.yaml
 
+# Build output directory
+build/
+
 # Other
 .DS_Store
