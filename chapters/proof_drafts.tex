@@ -1,4 +1,4 @@
-% !TEX root = ../thesis.tex
+%!TEX root = thesis.tex
 
 \textbf{Greedy alg proofs}
 
@@ -144,45 +144,45 @@ blocking pairs involving students of different types, does not interfere with
 our notion of stability.
 
 Formally, a matching $\mu$ is stable if, for any two students $a_1$ and $a_2$ of
-type $A \subset S$, \\ $\mu(a_1) >_{a_1} \mu(a_2)$  such that there exist no
-intra-group blocking pairs. 
+type $A \subset S$, \\ $\mu(a_1) >_{a_1} \mu(a_2)$  or $\mu(a_2) >_{a_2}
+\mu(a_1)$ such that there exist no intra-group blocking pairs. 
 
-\begin{algorithm} \caption{Weighted-Trading Algorithm \textit{WT}}
-  \begin{algorithmic}[1] \State $w(\mu) \gets 0$ \While{$w(\mu) \neq |S| +
-    |C_r|$} \State $\mu \gets \text{Max-Weight}(S, C)$ \Comment{with reduced
-    $|C_r|$} \EndWhile \State i = 1 \For{each student $a$ in $S_a$} \If{$\mu(a)
-  <_a \mu(a_i)$ and $\mu(a_i) <_{a_i} \mu(a)$} \State $\mu(a) \gets \mu(a_i)$,
-$\mu(a_i) \gets \mu(a)$ \EndIf \State i += 1\EndFor \State \Return matching
-$\mu$ \end{algorithmic} \end{algorithm}
+\begin{algorithm}  \caption{Weighted-Trading Algorithm \textit{WT}}
+  \label{WT-alg} \begin{algorithmic}[1] \State $w(\mu) \gets 0$ \While{$w(\mu)
+    \neq |S| + |C_r|$} \State $\mu \gets \text{Max-Weight}(S, C)$ \Comment{with
+    reduced $|C_r|$ (after the first time)} \EndWhile \For{each $A \subset S$}
+  \While{$\exists$ blocking pair $a, a_i$} \State $\mu(a) \gets \mu(a_i)$,
+$\mu(a_i) \gets \mu(a)$ \EndWhile \EndFor \State \Return matching $\mu$
+\end{algorithmic} \end{algorithm}
 
 \begin{theorem} For a matching $\mu$ output by the WT algorithm, $w(\mu) = |S| +
 |C_r|$. \end{theorem}
 
-\begin{proof} At line 5 of the WT algorithm, $w(\mu) = |S| + |C_r|$ because it
-  was just output by the max-weight algorithm. So, we have to evaluate the for
-  loop that compares each student of some type to each other student of that
-  same type. In the for loop, the students swap seats if they both prefer each
-  other's match in $\mu$. This means that each student still prefers their new
-  match, so the weight of the edge retains weight at least 1 from that student.
-  Then, if either student was in a seat reserved for that type, we replaced them
-with a student of the same type, so the edge retains the additional weight of
-the reserved seat. Therefore, swapping any two students of the same type does
-not change the weight of $\mu$. \end{proof}
+\begin{proof} At line 5 of Algorithm \ref{WT-alg}, $w(\mu) = |S| + |C_r|$
+  because it was just output by the max-weight algorithm. So, we have to
+  evaluate the for loop that compares each student of some type to each other
+  student of that same type. In the for loop, the students swap seats if they
+  both prefer each other's match in $\mu$. This means that each student still
+  prefers their new match, so the weight of the edge retains weight at least 1
+  from that student. Then, if either student was in a seat reserved for that
+type, we replaced them with a student of the same type, so the edge retains the
+additional weight of the reserved seat. Therefore, swapping any two students of
+the same type does not change the weight of $\mu$. \end{proof}
 
-\newpage
-
-\begin{theorem} The WT algorithm will output a stable matching. \end{theorem}
+\newpage \begin{theorem} The WT algorithm will output a stable matching.
+\end{theorem}
 
 \begin{proof} Let $\mu$ be the matching output by the Max-Weight algorithm at
-  line 4. Assume there exists a blocking pair between students $a_1$ and $a_2$,
-  where $a_1$, $a_2 \in A \subset S$. Then it must be the case that $\mu(a_2)
-  >_{a_1} \mu(a_1)$ and $\mu(a_1) >_{a_2} \mu(a_2)$. Observe lines 7 and 8 of
-  the WT algorithm. Those lines state that for any $a$, if they prefer the match
-  of another $a_i$ and that $a_i$ prefers the match of $a$, then swap their
-  match. So, $a_1$ and $a_2$ would be identified in that if statement, and line
-  8 would alter the matching such that $\mu'(a_1) = \mu(a_2)$ and $\mu'(a_2) =
-  \mu(a_1)$, where $\mu'(a_1) >_{a_1} \mu'(a_2)$ and $\mu'(a_2) >_{a_2}
-  \mu'(a_1)$. Therefore, $a_1$ and $a_2$ cannot form a blocking pair, so $\mu'$
-must have intra-group stability. WT outputs $\mu'$, therefore WT outputs a
-stable matching. \end{proof}
+  line 4 of Algorithm \ref{WT-alg}. Observe lines 5 and 6 of Algorithm
+  \ref{WT-alg}, which outline that within each student group, we must swap the
+  assignments of blocking pairs until no more remain. We know this loop will
+  terminate because of our assumption that preference lists are finite, so
+  students will eventually reach their highest possible preference and no longer
+  be able to form blocking pairs. The maximum length of a preference list is
+  equivalent to the number of classes, $|C|$. So, the maximum number of times
+  the while loop can execute per for loop is as follows: \[ |C| \times |S|\]
+  because at most we can traverse each student's entire preference list once. If
+we terminate this loop for each type of student $A \subset S$, then we must have
+intra-group stability because no more blocking pairs remain in each group.
+Therefore, the WT algorithm outputs a stable matching. \end{proof}
 
