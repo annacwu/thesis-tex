@@ -35,6 +35,7 @@
 # Backup files
 *.bak0
 *.bak
+*.bak*
 *~
 
 # Error files

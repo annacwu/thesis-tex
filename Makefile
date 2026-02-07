@@ -30,7 +30,7 @@ format:
 	@echo "Formatting LaTeX files..."
 	@for file in $(TEXFILES); do \
 		echo "  Formatting $$file"; \
-		$(LATEXINDENT) -w $$file; \
+		$(LATEXINDENT) -l=.latexindent.yaml -m -w $$file; \
 	done
 	@echo "Done! Backup files saved as .bak0"
 
@@ -40,7 +40,7 @@ format-file:
 		echo "Usage: make format-file FILE=filename.tex"; \
 		exit 1; \
 	fi
-	$(LATEXINDENT) -w $(FILE)
+	$(LATEXINDENT) -l=.latexindent.yaml -m -w $(FILE)
 
 # Remove backup files created by latexindent
 clean-backups:
