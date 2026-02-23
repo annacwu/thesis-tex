@@ -1,4 +1,4 @@
-%!TEX root = thesis.tex
+% !TEX root = ../thesis.tex
 
 \textbf{Greedy alg proofs}
 
@@ -6,66 +6,85 @@ Where $S$ is the ordered set of students, $C_s$ is the preference list of $s$,
 $X$ is a set of unmatched students in the first round, $C$ is the set of classes
 and ``available" means it has open seats:
 
-\begin{algorithm} \caption{Greedy Algorithm (\textit{GA})}
+\begin{algorithm}
+  \caption{Greedy Algorithm (\textit{GA})}
   \begin{algorithmic}[1] \For{each student $s$ in $S$} \Comment{start of round
-    1} \For{each class $c$ in $C_s$} \If{$c$ is available} \State $\mu(s) \gets
-    c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor
+      1} \For{each class $c$ in $C_s$} \If{$c$ is available} \State $\mu(s) \gets
+      c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor
     \State append $s$ to $X$ \EndFor
 
     \For{each student $s$ in $X$} \Comment{start of round 2} \State choose
     random available $c$ from $C$ \State $\mu(s) \gets c$ \EndFor
 
-  \State \Return matching $\mu$ \end{algorithmic} \end{algorithm}
+    \State \Return matching $\mu$
+  \end{algorithmic}
+\end{algorithm}
 
-  \begin{theorem} \textit{GA} outputs a stable matching in a vanilla
-  environment. \end{theorem}
+\begin{theorem}
+  \textit{GA} outputs a stable matching in a vanilla
+  environment.
+\end{theorem}
 
-  \begin{proof} Let $\mu$ denote the outputted matching over an ordered set of
-    students, $S$. Let $a, b \in S$, where $a$ comes before $b$ in the order.
-    Assume for the sake of a contradiction that $a$ and $b$ form a blocking
-    pair, such that $\mu(b) >_a \mu(a)$ and $\mu(a) >_b \mu(b)$.
+\begin{proof}
+  Let $\mu$ denote the outputted matching over an ordered set of
+  students, $S$. Let $a, b \in S$, where $a$ comes before $b$ in the order.
+  Assume for the sake of a contradiction that $a$ and $b$ form a blocking
+  pair, such that $\mu(b) >_a \mu(a)$ and $\mu(a) >_b \mu(b)$.
 
+  By lines 3 and 11 of \textit{GA}, we know $\mu(a)$ was either $a$'s top
+  available choice or  a random assignment. So, if $\mu(b) >_a \mu(a)$, then
+  $\mu(b)$ must not be available when $a$ is matched, which means $b$ was
+  matched first. However, this is a contradiction of our assumption that $a$
+  comes before $b$ in the input to the algorithm. Thus, $\mu(b)$ is available
+  when $a$ is matched, so it must be the case that $\mu(a) >_a \mu(b)$.
+  Therefore, $a$ and $b$ do not form a blocking pair, and we can conclude that
+  $\mu$ is stable.
+\end{proof}
 
-    By lines 3 and 11 of \textit{GA}, we know $\mu(a)$ was either $a$'s top
-    available choice or  a random assignment. So, if $\mu(b) >_a \mu(a)$, then
-    $\mu(b)$ must not be available when $a$ is matched, which means $b$ was
-    matched first. However, this is a contradiction of our assumption that $a$
-    comes before $b$ in the input to the algorithm. Thus, $\mu(b)$ is available
-    when $a$ is matched, so it must be the case that $\mu(a) >_a \mu(b)$.
-    Therefore, $a$ and $b$ do not form a blocking pair, and we can conclude that
-  $\mu$ is stable. \end{proof}
+\begin{theorem}
+  \textit{GA} does not always output a stable matching with
+  quotas (caps).
+\end{theorem}
 
-  \begin{theorem} \textit{GA} does not always output a stable matching with
-  quotas (caps). \end{theorem}
+\begin{proof}
+  Let $\mu$ denote \textit{GA}'s outputted matching over a set of
+  students, $S$. We will prove by counter example that $\mu$ is not stable.
 
-  \begin{proof} Let $\mu$ denote \textit{GA}'s outputted matching over a set of
-    students, $S$. We will prove by counter example that $\mu$ is not stable.
-
-    Let $C = \{ c_1, c_2, c_3 \}$, where there are two types of student $\alpha$
-    and $\beta$ such that each $c \in C$ can have at most one student of each
-    type. Let $S = \{ A1, B1, A2, B2 \}$ where students $A1, A2$ are of type
-    $\alpha$ and $B1, B2$ are of type $\beta$. Let the preference lists of the
-    students be as follows: \[ \begin{array}{ll} A1: & c_1 \succ c_3 \\ B1: &
-    c_2 \succ c_3                \\ A2: & c_1 \succ c_2\\ B2: & c_2 \succ
-  c_1\end{array} \] Observe that in $\mu$, $\mu(A1) = c_1$ and $\mu(B1) = c_2$,
+  Let $C = \{ c_1, c_2, c_3 \}$, where there are two groups of student $\alpha$
+  and $\beta$ such that each $c \in C$ can have at most one student from each
+  group. Let $S = \{ A1, B1, A2, B2 \}$ where students $A1, A2$ are in group
+  $\alpha$ and $B1, B2$ are in group $\beta$. Let the preference lists of the
+  students be as follows: \[
+    \begin{array}{ll} A1: & c_1 \succ c_3 \\ B1: &
+             c_2 \succ c_3            \\ A2: & c_1 \succ c_2\\ B2: & c_2 \succ
+                c_1
+    \end{array}
+  \] Observe that in $\mu$, $\mu(A1) = c_1$ and $\mu(B1) = c_2$,
   because they are the first two students to be matched and their first choices
   are different, so they receive their top choices. Next, $\mu(A2) = c_2$
-  because $c_1$ already has a student of type $\alpha$ so $c_1$ is no longer
+  because $c_1$ already has a student in group $\alpha$ so $c_1$ is no longer
   available when matching $c_\alpha$, and similarly $\mu(B2) = c_1$ because
-  $c_2$ already has a student of type $\beta$. Notice that $\mu(B2) >_A2
-  \mu(A2)$ and $\mu(A2) >_B2 \mu(B2)$, forming a blocking pair in which $A2$ and
-$B2$ are incentivized to switch classes with each other. So, it must be the case
-that $\mu$ is not a stable matching and therefore \textit{GA} cannot guarantee a
-stable matching under quota/cap constraints. \end{proof}
+  $c_2$ already has a student in group $\beta$. Notice that $\mu(B2) >_A2
+    \mu(A2)$ and $\mu(A2) >_B2 \mu(B2)$, forming a blocking pair in which $A2$ and
+  $B2$ are incentivized to switch classes with each other. So, it must be the case
+  that $\mu$ is not a stable matching and therefore \textit{GA} cannot guarantee a
+  stable matching under quota/cap constraints.
+\end{proof}
 
-\begin{theorem} There is not always a stable matching with quotas (caps) and
-incomplete preferences. \end{theorem}
+\begin{theorem}
+  There is not always a stable matching with quotas (caps) and
+  incomplete preferences.
+\end{theorem}
 
-\begin{proof} Take the above instance, and note that if we alter the environment
+\begin{proof}
+  Take the above instance, and note that if we alter the environment
   slightly there is no stable matching. Remove $c_3$ from $C$ so that $C = \{
-  c_1, c_2\}$ and let the preference lists be as follows: \[ \begin{array}{ll}
-    A1: & c_1 \\ B1: & c_2 \\ A2: & c_1 \succ c_2\\ B2: & c_2 \succ
-  c_1\end{array} \]
+    c_1, c_2\}$ and let the preference lists be as follows: \[
+    \begin{array}{ll}
+      A1: & c_1 \\ B1: & c_2 \\ A2: & c_1 \succ c_2\\ B2: & c_2 \succ
+         c_1
+    \end{array}
+  \]
 
   In this case, regardless of the order of matching or algorithm, there is no
   stable matching. The $A$ students will both wish to be matched to $c_1$, which
@@ -75,104 +94,134 @@ incomplete preferences. \end{theorem}
   $\alpha$ spot for $c_2$, which the unhappy $A$ and $B$ students can then
   switch into on their own, respectively. \newpage
 
-
   Let's look at a more basic constraint environment, where we have 0/1
   preferences and therefore no notion of stability (for now). Let $C$ denote the
   set of seats over all classes, and $S$ the set of students. We will put lower
   bounds on the seats, such that the number of seats in each class will be
-  reserved evenly among each type of student, with an extra group of seats that
+  reserved evenly among each group of student, with an extra group of seats that
   is free to any student. We will let $C_r$ be the set of reserved seats. In
   this case, we have a weighted graph matching problem, where $G = (V, E)$ such
   that $V = S \cup C$ and each edge goes from some $s$ to some $c$ if and only
   if $c \in P_s$, where $P_s$ is the preference list of $s$. Each edge has a
   weight $w(e)$. Let the weight be as follows: \[ w(e) = \mathbf{1}\{\text{if
-  seat $c$ is reserved for $s$'s type}\} + \mathbf{1}\{\text{if student $s$
-prefers class $c$}\}. \]  \end{proof}
-
-\begin{theorem} If a matching that respects student preferences and seat
-reservations exists, it will be the max-weight graph where $w(\mu) = |S| +
-|C_r|$. \end{theorem}
-
-\begin{proof} Let $\mu$ be a matching that assigns every student to a seat they
-  prefer while also filling reserved seats first, such that all reserved seats
-  are filled before the overflow seats. By construction of the weights, we can
-  determine a lower and upper bound for $w(\mu)$. 
-
-  \begin{enumerate} \item \textbf{Lower bound of $\mu$ }  Each edge exists only
-    if the student prefers that seat, so every edge in $\mu$ contributes at
-    least 1. By our assumption of characteristics of $\mu$, every student in
-    $\mu$ got a seat they prefer, so summing over all students contributes at
-    least $|S|$ to $w(\mu)$. We also assumed each reserved seat was assigned to
-    a student in $\mu$, which adds an extra +1 to the weight for the edge from
-    each of those reserved seats. Summing over all reserved seats gives an
-    additional contribution of $|C_r|$, because the rest of the seats are still
-    1-weight edges. Therefore, we can bound $\mu$: \[ w(\mu) \geq |S| + |C_r|.
-    \]
-
-    \item \textbf{Upper bound of $\mu$} From our definition, we know each edge
-      weight is at most 2. Similarly to the lower bound, we know $\mu$ has $|S|$
-      edges because each student was matched to one of their preferences.
-      However, because only the reserved seats contribute an additional weight
-      to an edge, we know that the number of 2-weight edges $\leq |C_r|$. So,
-      the maximum summed weight of all edges must be $2|C_r| + |S| - |C_r|$,
-      representing the maximum number of 2-weight edges plus all students
-    assigned to an overflow seat. Note that is equivalent to $|S| + |C_r|$.
-  Therefore, we can bound $\mu$: \[ w(\mu) \leq |S| + |C_r|. \] \end{enumerate}
-
-So, $\mu$ is a maximum-weight graph with a lower bound of $|S| + |C_r|$ and an
-upper bound of $|S| + |C_r|$, so it must be that a matching that fully respects
-student preferences and seat reservations has a weight $w(\mu) = |S| + |C_r|$.
+      seat $c$ is reserved for $s$'s group}\} + \mathbf{1}\{\text{if student $s$
+      prefers class $c$}\}. \]
 \end{proof}
 
-\newpage We will define a new algorithm called the \textbf{Weighted-Trading}
+\begin{theorem}
+  A matching fills all reserved seats while only assigning students to classes they prefer if and only if it is the maximum-weight matching
+  where $w(\mu) = |S| + |C_r|$.
+\end{theorem}
+
+\begin{proof}
+  First we will prove the forward direction. Let $\mu$ be a matching that
+  assigns every student to a seat they
+  prefer while also filling reserved seats first, such that all reserved seats
+  are filled before free seats. By construction of the weights, we can
+  determine a lower and upper bound for $w(\mu)$.
+
+  \begin{enumerate}
+    \item
+          \textbf{Lower bound of $\mu$ }  Each edge exists only
+          if the student prefers that seat, so every edge in $\mu$ contributes at
+          least 1. By our assumption of characteristics of $\mu$, every student in
+          $\mu$ got a seat they prefer, so summing over all students contributes at
+          least $|S|$ to $w(\mu)$. We also assumed each reserved seat was assigned to
+          a student in $\mu$, which adds an extra +1 to the weight for the edge from
+          each of those reserved seats. Summing over all reserved seats gives an
+          additional contribution of $|C_r|$, because the rest of the seats are still
+          1-weight edges. Therefore, we can bound $\mu$: \[ w(\mu) \geq |S| + |C_r|.
+          \]
+
+    \item
+          \textbf{Upper bound of $\mu$} From our definition, we know each edge
+          weight is at most 2. Similarly to the lower bound, we know $\mu$ has $|S|$
+          edges because each student was matched to one of their preferences.
+          However, because only the reserved seats contribute an additional weight
+          to an edge, we know that the number of 2-weight edges $\leq |C_r|$. So,
+          the maximum summed weight of all edges must be $2|C_r| + |S| - |C_r|$,
+          representing the maximum number of 2-weight edges plus all students
+          assigned to an overflow seat. Note that is equivalent to $|S| + |C_r|$.
+          Therefore, we can bound $\mu$: \[ w(\mu) \leq |S| + |C_r|. \]
+  \end{enumerate}
+
+  So, $\mu$ is a maximum-weight graph with a lower bound of $|S| + |C_r|$ and an
+  upper bound of $|S| + |C_r|$, so it must be that a matching that fully respects
+  student preferences and seat reservations has a weight $w(\mu) = |S| + |C_r|$.
+
+  Now, we prove the backwards direction. Let $\mu$ be a maximum-weight matching
+  where $w(\mu) = |S| + |C_r|$. The term $|S|$ implies each student was assigned
+  to a class. By our construction of $G$ such that an edge between a student and a
+  class only exists if the student prefers that class, the fact that each student
+  is assigned to a class must mean it is on their preference list. Additionally,
+  the $|C_r|$ term implies every reserved seat is assigned, because by our weight
+  function each edge only has additional weight $+1$ if the edge is between a
+  student of the same group as the seat. So, a maximum-weight matching where
+  $w(\mu) = |S| + |C_r|$ is a matching that fills all reserved seats while only
+  assigning students to classes they prefer.
+\end{proof}
+
+We will define a new algorithm called the \textbf{Weighted-Trading}
 algorithm, where we first construct a graph $G$ based on 0/1 preferences as
 represented by the environment from theorem []. We will then run the max-weight
 algorithm. If this algorithm outputs a matching $\mu$ such that $w(\mu) = |S| +
-|C_r|$, we will then run a trading algorithm on it to reintroduce some notion of
+  |C_r|$, we will then run a trading algorithm on it to reintroduce some notion of
 stability. If $w(\mu) < |S| + |C_r|$, we will relax the constraints by reducing
-the number of reserved seats per class and re-run the max-weight algorithm until
+the number of reserved seats per class by one per group, converting them to free seats,
+and re-run the max-weight algorithm until
 we get a matching where $w(\mu) = |S| + |C_r|$. The trading involves going
 through the students in each group sequentially and determining whether they
 form a blocking pair with another student in their group, and if so, swapping
-them until there are no more blocking pairs. 
+them until there are no more blocking pairs.
 
 We are introducing a new notion of stability here, where we will consider a
 matching stable for our purposes if it exhibits \textit{intra-group} stability.
-This means that for any type of student, that student does not form a blocking
-pair with another student of the same type. For now, inter-group instability, or
-blocking pairs involving students of different types, does not interfere with
+This means that for any group of student, that student does not form a blocking
+pair with another student of the same group. For now, inter-group instability, or
+blocking pairs involving students of different groups, does not interfere with
 our notion of stability.
 
 Formally, a matching $\mu$ is stable if, for any two students $a_1$ and $a_2$ of
-type $A \subset S$, \\ $\mu(a_1) >_{a_1} \mu(a_2)$  or $\mu(a_2) >_{a_2}
-\mu(a_1)$ such that there exist no intra-group blocking pairs. 
+group $A \subset S$, \\ $\mu(a_1) >_{a_1} \mu(a_2)$  or $\mu(a_2) >_{a_2}
+  \mu(a_1)$ such that there exist no intra-group blocking pairs.
 
-\begin{algorithm}  \caption{Weighted-Trading Algorithm \textit{WT}}
-  \label{WT-alg} \begin{algorithmic}[1] \State $w(\mu) \gets 0$ \While{$w(\mu)
-    \neq |S| + |C_r|$} \State $\mu \gets \text{Max-Weight}(S, C)$ \Comment{with
-    reduced $|C_r|$ (after the first time)} \EndWhile \For{each $A \subset S$}
-  \While{$\exists$ blocking pair $a, a_i$} \State $\mu(a) \gets \mu(a_i)$,
-$\mu(a_i) \gets \mu(a)$ \EndWhile \EndFor \State \Return matching $\mu$
-\end{algorithmic} \end{algorithm}
+\begin{algorithm}
+  \caption{Weighted-Trading Algorithm \textit{WT}}
+  \label{WT-alg}
+  \begin{algorithmic}[1] \State $w(\mu) \gets 0$ \While{$w(\mu)
+        \neq |S| + |C_r|$} \State $\mu \gets \text{Max-Weight}(S, C)$ \Comment{with
+      reduced $|C_r|$ (after the first time)} \EndWhile \For{each $A \subset S$}
+    \While{$\exists$ blocking pair $a, a_i$} \State $\mu(a) \gets \mu(a_i)$,
+    $\mu(a_i) \gets \mu(a)$ \EndWhile \EndFor \State \Return matching $\mu$
+  \end{algorithmic}
+\end{algorithm}
 
-\begin{theorem} For a matching $\mu$ output by the WT algorithm, $w(\mu) = |S| +
-|C_r|$. \end{theorem}
+\begin{theorem}
+  For a matching $\mu$ output by the WT algorithm, $w(\mu) = |S| +
+    |C_r|$.
+\end{theorem}
 
-\begin{proof} At line 5 of Algorithm \ref{WT-alg}, $w(\mu) = |S| + |C_r|$
-  because it was just output by the max-weight algorithm. So, we have to
-  evaluate the for loop that compares each student of some type to each other
-  student of that same type. In the for loop, the students swap seats if they
+\begin{proof}
+  At line 5 of Algorithm \ref{WT-alg}, $w(\mu) = |S| + |C_r|$
+  because it was just output by the max-weight algorithm, assuming such a
+  matching exists. So, we have to
+  evaluate the for loop that compares each student of some group to each other
+  student of that same group. In the for loop, the students swap seats if they
   both prefer each other's match in $\mu$. This means that each student still
   prefers their new match, so the weight of the edge retains weight at least 1
   from that student. Then, if either student was in a seat reserved for that
-type, we replaced them with a student of the same type, so the edge retains the
-additional weight of the reserved seat. Therefore, swapping any two students of
-the same type does not change the weight of $\mu$. \end{proof}
+  group, we replaced them with a student of the same group, so the edge retains the
+  additional weight of the reserved seat. Therefore, swapping any two students of
+  the same group does not change the weight of $\mu$.
+\end{proof}
 
-\newpage \begin{theorem} The WT algorithm will output a stable matching.
+\begin{theorem}
+  The WT algorithm will output a stable matching in
+  polynomial time.
 \end{theorem}
 
-\begin{proof} Let $\mu$ be the matching output by the Max-Weight algorithm at
+\begin{proof}
+  Let $\mu$ be the matching output by the Max-Weight algorithm at
   line 4 of Algorithm \ref{WT-alg}. Observe lines 5 and 6 of Algorithm
   \ref{WT-alg}, which outline that within each student group, we must swap the
   assignments of blocking pairs until no more remain. We know this loop will
@@ -182,7 +231,9 @@ the same type does not change the weight of $\mu$. \end{proof}
   equivalent to the number of classes, $|C|$. So, the maximum number of times
   the while loop can execute per for loop is as follows: \[ |C| \times |S|\]
   because at most we can traverse each student's entire preference list once. If
-we terminate this loop for each type of student $A \subset S$, then we must have
-intra-group stability because no more blocking pairs remain in each group.
-Therefore, the WT algorithm outputs a stable matching. \end{proof}
+  we terminate this loop for each group of student $A \subset S$, then we must have
+  intra-group stability because no more blocking pairs remain in each group. This
+  part of the algorithm is $O(|C| \cdot |S|)$.
+  Therefore, the WT algorithm outputs a stable matching in polynomial time.
+\end{proof}
 
