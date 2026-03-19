@@ -10,7 +10,7 @@
 \usepackage{longtable,booktabs,setspace} \usepackage{algorithm}
 \usepackage{float} \usepackage{algpseudocode} \usepackage[hyphens]{url}
 \usepackage{rotating} \usepackage[backend=biber, style=numeric, sorting=none
-]{biblatex} \bibliography{thesis}
+]{biblatex} \addbibresource{thesis.bib}
 % i added parskip here instead bc i wanted spaces
 \usepackage{parskip} \setlength{\parindent}{15pt}
 \newtheorem{theorem}{Theorem}[chapter] \newtheorem{lemma}[theorem]{Lemma}
@@ -31,31 +31,34 @@
 %%
 %% End Preamble
 %%
-\includeonly{chapters/proof_drafts}
+\includeonly{chapters/chap3}
 \begin{document}
 
-%   \maketitle \frontmatter % this stuff will be roman-numbered
-%   \pagestyle{empty} % this removes page numbers from the frontmatter
+% \maketitle \frontmatter % this stuff will be roman-numbered
+% \pagestyle{empty} % this removes page numbers from the frontmatter
 
-% % Acknowledgements (Acceptable American spelling) are optional % So are
-% Acknowledgments (proper English spelling) \chapter*{Acknowledgements} I want
-% to thank a few people.
+% Acknowledgements (Acceptable American spelling) are optional % So are
+% Acknowledgments (proper English spelling) 
+% \chapter*{Acknowledgements} I want to thank a few people.
 
+% \chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
+%     remove this to move table to the left
+%   \begin{tabular}{ll} \textbf{P}  	&
+% Polynomial \\ \textbf{NP}  	&  Nondeterministic Polynomial \\ \textbf{GA}
+% &  Greedy Algorithm & \textbf{TTC} &  Top Trading Cycles  \\
 
-%     \chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
-%     remove this to move table to the left \begin{tabular}{ll} \textbf{P}  	&
-%     Polynomial \\ \textbf{NP}  	&  Nondeterministic Polynomial \\ \textbf{GA}
-%     &  Greedy Algorithm & \textbf{TTC} &  Top Trading Cycles  \\
-
-% 	\end{tabular} \end{table}
+% \end{tabular} \end{table}
 
 % \tableofcontents
 
-%   \mainmatter % here the regular arabic numbering starts
-%   \pagestyle{fancyplain} % turns page numbering back on
-
-\include{chapters/intro} \include{chapters/background} \include{chapters/chap2}
-\include{chapters/proof_drafts}
+  % \mainmatter % here the regular arabic numbering starts
+  % \pagestyle{fancyplain} % turns page numbering back on
+%
+\include{chapters/intro}
+\include{chapters/background}
+\include{chapters/chap2}
+\include{chapters/chap3}
+% \include{chapters/proof_drafts}
 
 % \printbibliography{}
 

@@ -9,9 +9,8 @@ and ``available" means it has open seats:
 \begin{algorithm}
   \caption{Greedy Algorithm (\textit{GA})}
   \begin{algorithmic}[1] \For{each student $s$ in $S$} \Comment{start of round
-      1} \For{each class $c$ in $C_s$} \If{$c$ is available} \State $\mu(s) \gets
-      c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor
-    \State append $s$ to $X$ \EndFor
+      1} \For{each class $c$ in $C_s$} \If{# students assigned to $c$ < $q_c$} \State $\mu(s) \gets
+      c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor  \State append $s$ to $X$ \EndFor
 
     \For{each student $s$ in $X$} \Comment{start of round 2} \State choose
     random available $c$ from $C$ \State $\mu(s) \gets c$ \EndFor
@@ -19,6 +18,7 @@ and ``available" means it has open seats:
     \State \Return matching $\mu$
   \end{algorithmic}
 \end{algorithm}
+
 
 \begin{theorem}
   \textit{GA} outputs a stable matching in a vanilla
@@ -232,8 +232,17 @@ group $A \subset S$, \\ $\mu(a_1) >_{a_1} \mu(a_2)$  or $\mu(a_2) >_{a_2}
   the while loop can execute per for loop is as follows: \[ |C| \times |S|\]
   because at most we can traverse each student's entire preference list once. If
   we terminate this loop for each group of student $A \subset S$, then we must have
-  intra-group stability because no more blocking pairs remain in each group. This
-  part of the algorithm is $O(|C| \cdot |S|)$.
-  Therefore, the WT algorithm outputs a stable matching in polynomial time.
+  intra-group stability because no more blocking pairs remain in each group. 
+
+  We can analyze the runtime of this algorithm. If the while loop executes at
+  most $(|C| < |S|) \times |S|$ times, we can bound the execution of the while
+  loop to $O(S^2)$. Additionally, we run the while loop for each group of
+  student. There can be at most $|S|$ groups of students, such that each student
+  is in a distinct group, so that gives us $O(S^3)$. Therefore, the trading
+  section of the algorithm will run in at most cubic time. Note that before
+  that, we run the Max-Weight algorithm at least once, which runs in $O(V^3)$
+  time where $V$ is the set of vertices [cite hungarian alg]. So, our total runtime for the algorithm
+  is $O(V^3 + S^3)$. 
+  Therefore, the WT algorithm outputs a stable matching in cubic time.
 \end{proof}
 

@@ -26,7 +26,7 @@ their other selected courses. So, preference lists will be incomplete, with
 those that students have a conflict with not being included in their ranking.
 \newpage
 
-\begin{definition}
+\begin{definition} \label{def:overview}
   The \emph{HUM-assignment} problem consists of a finite set of
   students, $S$, and a finite set of class sections $C$. Each class section $c
     \in C$ has a capacity $q_c$ representing the number of available seats in the
@@ -194,7 +194,7 @@ back at our definition of the HUM-assignment problem with class capacities and
 incomplete preferences, we will find that in some instances it is possible there
 may not even exist a stable matching to find.
 
-\begin{theorem}
+\begin{theorem} \label{thm:unstable}
   There is not always a stable matching with quotas and
   incomplete preferences.
 \end{theorem}
@@ -307,7 +307,7 @@ stable if it exhibits \textbf{intra-group stability}. This
 means that for any group of student, that student does not form a blocking pair
 with another student \textbf{of the same group}.
 
-\begin{definition}
+\begin{definition} \label{def:intra}
   A matching $\mu$ is \emph{intra-group stable} if, for any two students $t_1$
   and $t_2$ for all
   groups $T \subset S$, $\mu(t_1) >_{t_1} \mu(t_2)$  or $\mu(t_2) >_{t_2}
@@ -317,7 +317,7 @@ with another student \textbf{of the same group}.
 With our new notion of intra-group stability, we can now add to our
 understanding of what makes a viable solution to our HUM-assignment problem.
 
-\begin{definition}
+\begin{definition} \label{def:ispim}
   An \emph{intra-group stable proportional 1-sided matching (ISP1M)} is a function $\mu :
     S \rightarrow C$ such that
   \begin{itemize}
