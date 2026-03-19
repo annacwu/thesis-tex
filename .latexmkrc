@@ -4,22 +4,15 @@
 # Put all build artifacts in build/ folder
 $out_dir = 'build';
 
-# Copy PDF to root after successful build
-$success_cmd = 'cp %D %R.pdf';
-
 # Use pdflatex
 $pdf_mode = 1;
 
-# Use biber for bibliography
-$biber = 'biber %O %S';
-
-# Continuous preview mode
-$preview_continuous_mode = 1;
+# Use biber for bibliography (hardcoded Homebrew path)
+$biber = '/opt/homebrew/bin/biber %O %S';
 
 # File extensions to clean
 $clean_ext = 'bbl run.xml bcf synctex.gz';
 
-# PDF viewer (macOS)
+# PDF viewer (macOS) — Skim auto-refreshes on file change; no need to call open after every compile
 $pdf_previewer = 'open -a Skim';
-$pdf_update_method = 4;
-$pdf_update_command = "open -a Skim %S";
+$pdf_update_method = 0;
