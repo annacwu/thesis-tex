@@ -5,7 +5,7 @@ As it currently stands, the sign-up process for HUM 110 classes takes place duri
 freshman class registration. The registration software, SOLAR, opens to incoming
 freshmen at a certain time, and at that time (or later) all freshmen log on to
 the platform and choose their own academic year schedule in whatever order they
-desire. This includes their HUM 100 class (or, as is the driving force behind this
+desire. This includes their HUM 110 class (or, as is the driving force behind this
 project, classes plural). Though this process may not inherently seem like an
 algorithm, it can actually be modelled as the algorithm commonly known as
 \textit{First Come First Served} (\textsc{fcfs}).
@@ -204,7 +204,7 @@ While it would be nice to guarantee inter-group stability, recall that the only
 known algorithms for assignment problems that consider inter-group stability and
 group fairness are NP-complete  \cite{santhini}. With the \textsc{wt} algorithm, we can guarantee that if an ISP1M exists, we can find it in an efficient amount of time. 
 
-\begin{theorem}
+\begin{theorem} \label{thm:polywt}
   The \textsc{wt} algorithm will output a stable matching in
   polynomial time.
 \end{theorem}

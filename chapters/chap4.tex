@@ -1,0 +1,110 @@
+% !TEX root = ../thesis.tex
+\chapter{Analysis}
+\section{Data}
+
+In collaboration with the Reed College Registrar, we obtained three years of
+anonymized student and class schedule data for the purpose of evaluating our
+algorithms. The student data compiles the fall and spring class schedules chosen
+by every student registered as a freshman for that year, de-identified by
+representing each student with a randomly generated ID number. We use this
+information to ensure students are not matched to a section with a time
+conflict. The data also includes the students’ top prospective major from their
+application to Reed, which we use for sorting students into groups. While the
+prospective major may not accurately reflect each student’s chosen major by the
+time they are in class, it provides a good baseline for what discipline a
+student is interested in, which is sufficient for our group fairness purposes.
+The Registrar also provided us with the master class schedules for each year
+corresponding to the student data, so we can match students to the actual
+sections that were available for their year. 
+
+\section{Implementation}
+
+To perform experiments, we implemented each algorithm in Python. We chose Python
+for the fact that it is a popular higher-level programming language, which means
+it will be easier for others to read and understand should this algorithm
+actually be implemented after this thesis is complete. It is also an
+object-oriented language, which means we could represent the components of our
+model as classes with properties, such as a \texttt{Student} class, which holds each
+student’s provided data,  and a \texttt{Class} class, which can hold information such as
+capacity, enrolled students, and meeting times. The object-oriented approach
+helps the implementation more intuitively represent our actual scenario.
+Additionally, Python has a very accessible csv library that allows us to parse
+our data into these objects. While Python may not be as fast as other languages
+with some similar features, we decided that because the WT algorithm performs in
+polynomial time (see Theorem \ref{thm:polywt}) and Reed has relatively small class sizes,
+the impact on the performance of the algorithms was less essential than the
+readability of the code. 
+
+\subsection{Synthesizing Preferences}
+
+While we did have access to the student schedule and major data, we were still
+missing a key component of a matching problem: rankings. Because there was no
+feasible way of acquiring each student’s actual preferences from class
+registration years ago, we needed to synthesize student rankings over the HUM
+sections to effectively simulate our stable assignment problem. 
+
+According to conversations with The Registrar throughout this process, Reed
+College students are generally less inclined to wake up early and take longer
+classes—which means that 50-minute classes held later than 10am tend to be the
+most popular choices. To simulate this preference distribution, we used an
+implementation of Mallows’ Ranking Model \cite{mallows} from the python library
+PrefSampling \cite{prefsampling}. This model is a popular way of generating ranking data for
+simulating elections, and is one of the more effective methods of doing so
+\cite{boehmer}. The Mallows algorithm takes a “central vote” representing the most
+popular real-life choices and deviates the outputted rankings from this
+according to some dispersion coefficient $\phi = [0, 1]$. A $\phi$ closer to 1 means
+rankings that differ significantly from the central vote are more likely to be
+generated. We found a good $\phi$ value for our purposes was 0.4, which allows for
+some deviation but overall keeps the rankings more central. 
+
+In $\texttt{synthesize\_preferences}$, we iterate through each student’s schedule and find
+all of the HUM sections that do not conflict with their other chosen classes
+(including the HUM they actually chose that year). Then, we turn those available
+sections into a central vote by weighting them by their time and class period
+length, where later and 50 minutes is weighted higher. We run that vote through
+Mallows to generate the student’s preferences, and then we truncate the list to
+some length to simulate other unknown time conflicts, as well as the fact that
+students may not have preference over every individual section. These are the
+preferences used when running each algorithm. 
+
+\subsection{Notes on the Algorithms}
+
+FCFS and Greedy both involve an ordering of students; in real-life, this is in the form of whichever students are fastest to sign up for HUM. In our implementation, we randomly shuffle the list of students and then iterate through to represent this ordering.
+
+For the WT algorithm, we represent the graph of students to seats as an
+adjacency matrix. The rows represent students, and the columns represent seats
+in each section, so the adjacency matrix is of size $|S| \times |T|$. At each
+index we calculate the weight of the edge between the student and that seat
+according to the algorithm. For instance, in
+Figure \ref{fig:adj_matrix}, student 0 has weight 0 for seat 0, so we place a 0
+at 0,0 in the matrix. A 0 means there is no edge between that student and seat.
+Similarly, student 0 has weight 2 for seat 1, so we have a 2 at 0,1. 
+
+\begin{figure}[h]
+  \centering
+  \begin{equation*}
+    \begin{bmatrix}
+      0 & 2 & 0 \\
+      1 & 1 & 1 \\
+      0 & 0 & 1
+    \end{bmatrix}
+  \end{equation*}
+  \caption{Adjacency matrix representing 3 students and 3 seats}
+  \label{fig:adj_matrix}
+\end{figure}
+
+This adjacency matrix is the input to the maximum-weight algorithm. In Section
+3.3, we discuss maximum-weight algorithms and reference the Hungarian
+algorithm. In practice, we actually use an algorithm called \textit{LAPJVsp}, implemented
+in the SciPy library \cite{scipy}. LAPJVsp also performs in $O(n^3)$ time
+theoretically, but in practice is usually much faster \cite{Jonker}, which is helpful when repeatedly running trials of the algorithm in our experiments. 
+
+The matching returned for all algorithms is a Python dictionary with student IDs as the keys, and the ID of the class they were assigned to as values. 
+
+\section{Experiments}
+
+Because of the level of randomness in our preference synthesis, in that Mallows does not necessarily output the same preferences each time, as well as the randomness involved in the ordering of FCFS and Greedy, we ran many trials to accurately evaluate the algorithms’ performances. The length of the preference lists was another variable that could affect whether students got a class they preferred, so we vary the trials by preference list length as well. 
+
+We ran 10 trials each on preference lists of lengths at most 5, 10, and full (not truncated) for all three years of data. Performing these trials for each algorithm gives 90 trials per algorithm. 
+
+\section{Results}
