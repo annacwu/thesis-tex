@@ -1,5 +1,5 @@
 % !TEX root = ../thesis.tex
-\chapter{Analysis}
+\chapter{Experiments}
 \section{Data}
 
 In collaboration with the Reed College Registrar, we obtained three years of
@@ -101,20 +101,155 @@ theoretically, but in practice is usually much faster \cite{Jonker}, which is he
 
 The matching returned for all algorithms is a Python dictionary with student IDs as the keys, and the ID of the class they were assigned to as values. 
 
-\section{Experiments and Results}
+\section{Results}
 
-Because of the level of randomness in our preference synthesis, in that Mallows
+Because of the randomness in our preference synthesis, being that Mallows
 does not necessarily output the same preferences each time, as well as the
 randomness involved in the ordering of \textsc{fcfs} and \textsc{greedy}, we ran many trials to accurately evaluate the algorithms’ performances. The length of the preference lists was another variable that could affect whether students got a class they preferred, so we vary the trials by preference list length as well. 
 
 We ran 10 trials each on preference lists of lengths at most 5, 10, and full (not truncated) for all three years of data. Performing these trials for each algorithm gives 90 trials per algorithm. 
 
-Recall our original goal for this project: assign students to classes under group fairness constraints. So, we evaluate how well each algorithm accomplishes this task. We can measure group fairness by looking at minimums and maximums: for each trial, what is the minimum number of students of each type in each section and what is the maximum? These metrics will indicate to us how well they are distributed. We can also look at the standard deviation of the number of students in each section for each group. 
+Recall our original goal for this project: assign students to classes under
+group fairness constraints. So, we evaluate how well each algorithm accomplishes
+this task. We can measure group fairness by looking at minimums and maximums:
+for each trial, what is the minimum number of students of each type in each
+section and what is the maximum? These metrics will indicate to us how well they
+are distributed. 
 
-We also are interested in stability, which means we want to check how many
-intergroup and intragroup blocking pairs there are for each algorithm.
-Relatedly, we calculate the average rank each student gave their assigned
-section and we check how many students remain unmatched in the final matching. 
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/min_students.png}
+    \caption{}
+    \label{fig:min_students}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/max_students.png}
+    \caption{}
+    \label{fig:max_students}
+  \end{subfigure}
+  \caption{Comparison of minimum and maximum number of students of each group
+  over classes in all trials.}
+  \label{fig:min_max}
+\end{figure}
 
-Finally, though it was not part of the design of the algorithms, we are interested in how well the sections are balanced regardless of student groups. Generally, we would hope all the sections are similarly sized. We can analyze section sizes through minimums, maximums, and the standard deviation as well. 
+Figure \ref{fig:min_max} illustrates how students are distributed within groups.
+Notably, in each sampled year, the set of students was approximately composed of
+$17\%$ group A, $28\%$ group B, and $53\%$ group C, with the rest of the students undeclared. This
+distribution in students is reflected in the minimums and maximums. For
+instance, in \ref{fig:max_students}, the greatest difference can be seen in the
+plot for group C students: \textsc{fcfs} and \textsc{greedy} did not
+proportionally assign students of group C as successfully as \textsc{wt} in
+comparison to the other groups. It is also notable that in
+\ref{fig:min_students}, \textsc{fcfs} and \textsc{greedy} frequently assigned
+students such that many classes had 0 students of some group, whereas in nearly
+all of the \textsc{wt} trials there was some representation of each group in every class, thus
+accomplishing the group fairness goal much more successfully.
 
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/mins_by_prefs.png}
+    \caption{}
+    \label{fig:min_students_prefs}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/maxes_by_prefs.png}
+    \caption{}
+    \label{fig:max_students_prefs}
+  \end{subfigure}
+  \caption{Comparison of minimum and maximum number of students of each group in
+  trials with different maximum length preference lists.}
+  \label{fig:min_max_prefs}
+\end{figure}
+
+Furthermore, we can explore how the preference list truncation affects the
+distribution of each group. Observe in Figure \ref{fig:min_students_prefs}, we can
+see that the few trials where the \textsc{wt} algorithm had classes with 0 group
+A or B students occurred with length 5 preference lists. When the lists were
+truncated at a longer length, \textsc{wt} always put at least 2 students of each
+group in each class. Additionally, both plots in Figure \ref{fig:min_max_prefs}
+demonstrate that there is not a meaningful difference between preference lists
+of length at most 10 and lists that have not been truncated at all. 
+
+\begin{figure}[H]
+  \centering    
+  \includegraphics[width=0.65\linewidth]{figures/group_size.png}
+    \caption{Comparison between groups of number of students assigned to each class over all
+    trials.}
+    \label{fig:group_size}
+\end{figure}
+
+We also observe the overall visualization of the distribution of groups
+amidst classes for all trials in Figure \ref{fig:group_size}, which shows that
+\textsc{wt} creates a much less variable distribution of students, where most of
+the classes have a difference of 2 between each group. Compared to
+\textsc{fcfs}, where the number of students ranges much more (for instance, from
+0-18 rather than 3-12 for group C), we can conclude better group fairness from
+the \textsc{wt} algorithm.
+
+
+
+\begin{figure}[H]
+  \centering    
+  \includegraphics[width=0.65\linewidth]{figures/blocking_pairs.png}
+    \caption{Inter-group blocking pairs present in each trial, compared
+    between maximum preference list length and algorithm.}
+    \label{fig:blocking_pairs}
+\end{figure}
+
+We also are interested in our original conception of stability, which means we want to check how many
+inter-group blocking pairs are present in the final matching output by each
+algorithm. Figure \ref{fig:blocking_pairs} illustrates that there are 0 blocking
+pairs in any matching output by \textsc{fcfs}, which is to be expected by the
+results of Theorem \ref{thm:greedyvanilla}. We can also observe that
+\textsc{greedy} and \textsc{wt} both tend to have blocking pairs, with
+\textsc{wt} consistently having the most, which is also
+consistent with Theorem \ref{thm:greedyunstable} and our problem framework
+for \textsc{wt} in Definition \ref{def:ispim}.
+
+\begin{figure}[H]
+  \centering    
+  \includegraphics[width=0.65\linewidth]{figures/unmatched.png}
+    \caption{Number of unmatched students in each trial, compared
+    between maximum preference list length and algorithm.}
+    \label{fig:unmatched}
+\end{figure}
+
+Relatedly, we check how many students remain unmatched in the outputted matching
+in each trial. While \textsc{wt} may produce the most blocking pairs as seen in
+Figure \ref{fig:blocking_pairs}, Figure \ref{fig:unmatched} shows that it also
+successfully matches every student to a year-long HUM section in all trials. We
+can also observe that \textsc{greedy} often leaves between 50-100 students
+unmatched, and \textsc{fcfs} always has unmatched students with preference list
+length less than 10.
+
+\begin{figure}[H]
+  \centering    
+  \includegraphics[width=0.65\linewidth]{figures/class_size_years.png}
+    \caption{Comparison between sample years of number of students assigned to each class over all
+    trials.}
+    \label{fig:class_size}
+\end{figure}
+
+Finally, though it was not part of the design of the algorithms, we are
+interested in how well the sections are balanced regardless of student groups.
+Generally, we would hope all the sections are similarly sized. Figure
+\ref{fig:class_size} illustrates the distribution of students in each sample
+year. The most successfully balanced year is Year 3, in which the smallest class
+in the \textsc{wt} trials is size 9 and the largest class is size 18, giving a difference of 9.
+Additionally, in both Year 2 and 3 the majority of classes were size 12 or 13.
+While there is some range between class sizes in the \textsc{wt} algorithm, the
+figure demonstrates that it is much smaller than the range in \textsc{fcfs} and
+\textsc{greedy}. 
+
+As a whole, the \textsc{wt} algorithm outperformed \textsc{fcfs} and
+\textsc{greedy} on every metric we analyzed other than blocking pairs. Due to
+our re-framing of the problem under intra-group stability from Definition
+\ref{def:intra}, we accept this result as successful.  
