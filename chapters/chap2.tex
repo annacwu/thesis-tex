@@ -92,8 +92,110 @@ To make things clearer, we can represent our problem as a graph to provide us
 with a visualization of the problem (see Figure \ref{fig:model}).
 
 \begin{figure}[H] \centering
-  \includegraphics[width=0.85\linewidth]{figures/model.jpeg}\caption{Graph
-    illustrating a proportional 1-sided matching} \label{fig:model}
+ \begin{tikzpicture}[
+  classnode/.style={circle, draw, minimum size=1cm, inner sep=0},
+  studentnode/.style={circle, draw, minimum size=0.8cm, inner sep=0, thick},
+  ->, >=Stealth
+]
+
+%% ── Column headers ──────────────────────────────────────────────
+\node at (-3, 1.8) {$\mathcal{C}$};
+\node at (-3, 1.2) {\textsc{classes}};
+\node at (-1.25, 1.2) {\textsc{seats}};
+\node at (3.5,  1.8) {$S$};
+\node at (3.5,  1.2) {\textsc{students}};
+
+%% ── Preference box (top right) ──────────────────────────────────
+\node[draw, minimum width=2.8cm, minimum height=0.7cm, align=center]
+(prefbox) at (7.5, 0.2) {$c_1 \succ_{a_1} c_3 \succ_{a_1} c_n$};
+
+%% ── Helper macro: 4 coloured squares in a row ───────────────────
+% usage: \seats{x}{y}
+\newcommand{\seats}[2]{
+  \draw[blue,  thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
+  \draw[red,   thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
+  \draw[green!70!black, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
+  \draw[black, thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
+}
+
+%% ── Class C1 ────────────────────────────────────────────────────
+\node[classnode] (c1) at (-3, 0) {$c_1$};
+\seats{-1.5}{ 0.45}
+\seats{-1.5}{ 0.00}
+\node at (-1.2, -0.38) {$\cdots$};
+\seats{-1.5}{-0.75}
+
+%% ── Class C2 ────────────────────────────────────────────────────
+\node[classnode] (c2) at (-3, -2.8) {$c_2$};
+\seats{-1.5}{-2.35}
+\seats{-1.5}{-2.80}
+\node at (-1.2, -3.18) {$\cdots$};
+\seats{-1.5}{-3.55}
+
+%% ── Vertical dots between C2 and Cn-1 ──────────────────────────
+\node at (-3, -4.5) {$\vdots$};
+
+%% ── Class Cn-1 ──────────────────────────────────────────────────
+\node[classnode] (cn1) at (-3, -6.2) {$c_{n-1}$};
+\seats{-1.5}{-5.75}
+\seats{-1.5}{-6.20}
+\node at (-1.2, -6.58) {$\cdots$};
+\seats{-1.5}{-6.95}
+
+%% ── Class Cn ────────────────────────────────────────────────────
+\node[classnode] (cn) at (-3, -9.0) {$c_n$};
+\seats{-1.5}{-8.55}
+\seats{-1.5}{-9.00}
+\node at (-1.2, -9.38) {$\cdots$};
+\seats{-1.5}{-9.75}
+
+%% ── Student nodes: group A (blue) ───────────────────────────────
+\node[studentnode, blue, text=blue] (a1) at (3.5,  0.45) {$a_1$};
+\node[studentnode, blue, text=blue] (a2) at (3.5, -0.45) {$a_2$};
+\node at (3.5, -1.1) {$\vdots$};
+\node[studentnode, blue, text=blue] (ai) at (3.5, -2) {$a_i$};
+
+%% ── Student nodes: group B (red) ────────────────────────────────
+\node[studentnode, red, text=red] (b1) at (3.5, -3.1) {$b_1$};
+\node[studentnode, red, text=red] (b2) at (3.5, -4) {$b_2$};
+\node at (3.5, -4.65) {$\vdots$};
+\node[studentnode, red, text=red] (bj) at (3.5, -5.65) {$b_j$};
+
+%% ── Student nodes: group C (green) ──────────────────────────────
+\node[studentnode, green!70!black, text=green!70!black] (cc1) at (3.5, -6.85) {$c_1$};
+\node[studentnode, green!70!black, text=green!70!black] (cc2) at (3.5, -7.75) {$c_2$};
+\node at (3.5, -8.45) {$\vdots$};
+\node[studentnode, green!70!black, text=green!70!black] (ck) at (3.5, -9.35) {$c_k$};
+
+%% ── Curly braces for groups ──────────────────────────────────────
+\draw[-, decorate, decoration={brace, amplitude=6pt}, blue]
+  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, blue] {$A$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, red]
+  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, red] {$B$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, green!70!black]
+  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, green!70!black] {$C$};
+
+%% ── Arrow from a1 to preference box ────────────────────────────
+\draw[-, dotted] (a1.east) -- (prefbox.west);
+\node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_s(a_1)$};
+
+
+%% ── Crossing edges (seats -> students) ──────────────────────────
+% From C1 seats area to students
+\draw[-] (-1.8,  0.4) -- (a1);
+\draw[-] (-1.8,  0.00) -- (a2);
+\draw[-] (-1.45,  0.45) -- (b1);
+% From C2
+\draw[-] (-1.45, -2.35) -- (b2);
+% From Cn-1
+\draw[-] (-1.8, -5.75) -- (ai);
+\draw[-] (-1.1, -5.75) -- (cc1);
+% From Cn
+\draw[-] (-1.1, -8.55) -- (cc2);
+\draw[-] (-1.45, -8.55) -- (bj);
+\draw[-] (-1.1, -9.00) -- (ck);
+
+\end{tikzpicture}\caption{Graph illustrating a group-fair 1-sided matching.} \label{fig:model}
 \end{figure}
 
 In a graph representing the HUM-assignment problem, the vertices are comprised
@@ -145,8 +247,108 @@ our previous definition of a graph.\newpage
 \end{definition}
 
 \begin{figure}[H] \centering
-  \includegraphics[width=0.7\linewidth]{figures/weighted-example.jpeg}\caption{Graph
-    illustrating weighted edges for one student} \label{fig:weighted-example}
+  \begin{tikzpicture}[
+  classnode/.style={circle, draw, minimum size=1cm, inner sep=0},
+  studentnode/.style={circle, draw, minimum size=0.8cm, inner sep=0, thick},
+  weight/.style={midway, fill=white, inner sep=1pt, font=\small},
+  ->, >=Stealth
+]
+
+%% ── Column headers ──────────────────────────────────────────────
+\node at (-3, 1.8) {$\mathcal{C}$};
+\node at (-3, 1.2) {\textsc{classes}};
+\node at (-1.25, 1.2) {\textsc{seats}};
+\node at (3.5,  1.8) {$S$};
+\node at (3.5,  1.2) {\textsc{students}};
+
+%% ── Preference box (top right) ──────────────────────────────────
+\node[draw, minimum width=2.8cm, minimum height=0.7cm, align=center]
+(prefbox) at (7.5, 0.2) {$c_1 \succ_{a_1} c_2 \succ_{a_1} c_n$};
+
+%% ── Helper macro: 4 coloured squares in a row ───────────────────
+% usage: \seats{x}{y}
+\newcommand{\seats}[2]{
+  \draw[blue,  thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
+  \draw[red,   thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
+  \draw[green!70!black, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
+  \draw[black, thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
+}
+
+%% ── Class C1 ────────────────────────────────────────────────────
+\node[classnode] (c1) at (-3, 0) {$c_1$};
+\seats{-1.5}{ 0.45}
+\seats{-1.5}{ 0.00}
+\node at (-1.2, -0.38) {$\cdots$};
+\seats{-1.5}{-0.75}
+
+%% ── Class C2 ────────────────────────────────────────────────────
+\node[classnode] (c2) at (-3, -2.8) {$c_2$};
+\seats{-1.5}{-2.35}
+\seats{-1.5}{-2.80}
+\node at (-1.2, -3.18) {$\cdots$};
+\seats{-1.5}{-3.55}
+
+%% ── Vertical dots between C2 and Cn-1 ──────────────────────────
+\node at (-3, -4.5) {$\vdots$};
+
+%% ── Class Cn-1 ──────────────────────────────────────────────────
+\node[classnode] (cn1) at (-3, -6.2) {$c_{n-1}$};
+\seats{-1.5}{-5.75}
+\seats{-1.5}{-6.20}
+\node at (-1.2, -6.58) {$\cdots$};
+\seats{-1.5}{-6.95}
+
+%% ── Class Cn ────────────────────────────────────────────────────
+\node[classnode] (cn) at (-3, -9.0) {$c_n$};
+\seats{-1.5}{-8.55}
+\seats{-1.5}{-9.00}
+\node at (-1.2, -9.38) {$\cdots$};
+\seats{-1.5}{-9.75}
+
+%% ── Student nodes: group A (blue) ───────────────────────────────
+\node[studentnode, blue, text=blue] (a1) at (3.5,  0.45) {$a_1$};
+\node[studentnode, blue, text=blue] (a2) at (3.5, -0.45) {$a_2$};
+\node at (3.5, -1.1) {$\vdots$};
+\node[studentnode, blue, text=blue] (ai) at (3.5, -2) {$a_i$};
+
+%% ── Student nodes: group B (red) ────────────────────────────────
+\node[studentnode, red, text=red] (b1) at (3.5, -3.1) {$b_1$};
+\node[studentnode, red, text=red] (b2) at (3.5, -4) {$b_2$};
+\node at (3.5, -4.65) {$\vdots$};
+\node[studentnode, red, text=red] (bj) at (3.5, -5.65) {$b_j$};
+
+%% ── Student nodes: group C (green) ──────────────────────────────
+\node[studentnode, green!70!black, text=green!70!black] (cc1) at (3.5, -6.85) {$c_1$};
+\node[studentnode, green!70!black, text=green!70!black] (cc2) at (3.5, -7.75) {$c_2$};
+\node at (3.5, -8.45) {$\vdots$};
+\node[studentnode, green!70!black, text=green!70!black] (ck) at (3.5, -9.35) {$c_k$};
+
+%% ── Curly braces for groups ──────────────────────────────────────
+\draw[-, decorate, decoration={brace, amplitude=6pt}, blue]
+  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, blue] {$A$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, red]
+  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, red] {$B$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, green!70!black]
+  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, green!70!black] {$C$};
+
+%% ── Arrow from a1 to preference box ────────────────────────────
+\draw[-, dotted] (a1.east) -- (prefbox.west);
+\node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_s(a_1)$};
+
+
+%% ── Crossing edges (seats -> students) ──────────────────────────
+% From C1 seats area to students
+\draw[-] (-1.8,  0.45) -- node[weight, above] {2}(a1);
+\draw[-] (-0.75,  0) -- node[weight, below left] {1}(a1);
+% From C2
+\draw[-] (-1.8, -2.35) -- node[weight, above] {2}(a1);
+\draw[-] (-0.75,  -2.35) -- node[weight, below left] {1}(a1);
+% From Cn
+\draw[-] (-1.8, -8.55) -- node[weight, above] {2}(a1);
+\draw[-] (-0.75, -8.55) -- node[weight, below left] {1}(a1);
+
+\end{tikzpicture}
+\caption{Graph illustrating weighted edges for student $a_1$.} \label{fig:weighted-example}
 \end{figure}
 
 Now, we have a way to compare edges to each other to allow us to find a
