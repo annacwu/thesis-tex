@@ -4,88 +4,97 @@ on school choice and course allocation would seem to suggest that for our
 problem, which only features one-sided preferences as opposed to preferences on
 both sides of the market, we follow a fair division approach similar to that of
 Budish’s one-sided matching \cite{budish}. However, given the practical application of our
-problem as a mechanism for assigning every student to one specific class, we
+problem as a mechanism that is meant to reduce the Registrar's workload, we
 determined that constructing a notion of stability makes more sense than
-evaluating envy in the matching. Our solution is driven by the goal of assigning
-HUM classes that are balanced both in size and student interests, so we want to
-minimize the desire of students to swap with each other post-assignment as much
-as possible so as not to disrupt the balance. If no student wishes to swap with
+evaluating envy in the matching. While we care about student happiness in our
+solution, our formulation of the problem is primarily driven by the goal of
+assigning year-long HUM sections that are balanced both in size and student
+majors, meaning we want to minimize the desire of students to swap with each
+other post-assignment so as not to disrupt the balance of students. If no student wishes to swap with
 another student, then we can consider the assignment stable. This is the
-framework with which we shall formalize our model.
+framework under which we shall formalize our model.
 
 \section{The Model}
 
 The basic components of our model are the two sides of our market: a set of
 students and a set of HUM class sections, each of which have a certain number of
-seats. Though we are working in a bipartite setting, only one side of our market
-has preference over the other (i.e. students prefer certain classes, classes are
-inanimate and therefore indifferent to students...as far as we know). Students
+seats based on the class capacity. Though we are working in a bipartite setting,
+only one side of our market has preference over the other (i.e., students prefer
+certain classes, whereas classes are inanimate and therefore indifferent to
+students...as far as we know). Students
 also do not necessarily have ranked preference over every single available
 section; they likely equally do not want to take any sections that conflict with
 their other selected courses. So, preference lists will be incomplete, with
-those that students have a conflict with not being included in their ranking.
+those sections that students have a conflict with not being included in their ranking.
 \newpage
 
 \begin{definition} \label{def:overview}
-  The \emph{HUM-assignment} problem consists of a finite set of
-  students, $S$, and a finite set of class sections $C$. Each class section $c
-    \in C$ has a capacity $q_c$ representing the number of available seats in the
-  section. Each student $s \in S$ has a strict preference relation $\succ_s$
-  over $C \cup \{\emptyset\}$, where $\emptyset$ represents the outside option of
-  a student such that $\emptyset \succ_s c$ for some $c \in C$ denotes that the
-  class is not an option for the student.
+  The \emph{HUM-assignment} problem consists of a finite set of Reed College
+  students, $R$, and a finite set of class sections, $C$. Each class section $c
+    \in C$ has a capacity $q_c$ representing the number of seats in the class,
+    such that we can think of each $c$ as a set of seats where $|c| \leq q_c$.
+    We denote the set of all seats $S$, where $c \subset S$ for all $c \in C$.
+    Students rank class sections such that each student $r \in R$ has a strict
+    preference relation $\succ_s$ over $C \cup \{\emptyset\}$, where $\emptyset$
+    represents the outside option of a student such that $\emptyset \succ_s c$
+    for some $c \in C$ denotes that the class section is not an option for the student.
 \end{definition}
-\begin{definition}
-  A
-  \emph{1-sided matching (1M)} of students to class sections is a function $\mu :
-    S \rightarrow C \cup \emptyset $ such that
+
+\begin{definition} \label{def:1m}
+  A \emph{1-sided matching (1M)} of students to class sections is a function $\mu :
+    R \rightarrow S \cup \emptyset $ such that
   \begin{itemize}
     \item
-          Each student is assigned to either a class they prefer or no
-          class: \\ $\mu(s) =
-            \emptyset \text{ or } \mu(s) \succ_s \emptyset \text{ for all }s \in
-            S$
+          Each student is assigned to a seat in a class section they prefer or no
+          seat: \\ $\mu(r) =
+            \emptyset \text{ or } \mu(r) \succ_r \emptyset \text{ for all }r \in
+            R$.
     \item
           No class exceeds its capacity:
-          $|\{s \in S : \mu(s) = c\}| \leq q_c$ \text{ for all } $c \in C$
+          $|\{r \in R : \mu(r) = s_c\}| \leq q_c$ \text{ for all } $s_c \in c
+          \subset S$.
   \end{itemize}
 \end{definition}
 
 Finding a 1-sided matching would solve an instance of the HUM-assignment problem
 as defined above. However, we still have to introduce the last constraint of the
-problem: \emph{proportionality}.
+problem: \emph{group fairness}.
 
 Students can be divided into three groups based on the way Reed College divides
-majors: Group 1 for language, arts, and literature, Group 2 for
-social sciences, Group 3 for math and lab sciences. To implement the HUM
-philosophy, which is that the class provides an opportunity for students of all
+subjects: Group 1 for language, arts, and literature, Group 2 for
+social sciences, Group 3 for math and lab sciences \cite{group-reqs}. To implement the HUM
+philosophy, which is that the class provides an opportunity for students from all
 knowledge backgrounds and academic interests to discuss relevant texts, we want
-to ensure a balanced spread of each group of student between sections. This means
-avoiding scenarios such as all chem 101 students with the same lab being placed
+to ensure a distribution of students that "fairly" represents each group in every
+HUM section. Practically, this means avoiding scenarios such as all Chem 101 students
+with the same lab being placed
 in the same section due to the overwhelming similarity in their schedules. This
-will come in the form of quotas or caps on the number of seats per section that
+will come in the form of \textit{quotas or caps} on the number of seats per section that
 can be assigned to each group of student, so each class will be divided 
 into four groups of available seats: A, B, C, and free seats to allow for some
 flexibility.
 
-\begin{definition}
-  Under the proportionality constraint, $S$ is partitioned into
-  three sets: $A, B, C \subset S$, where $A \cup B \cup C = S$ and $A \cap B \cap
-    C = \emptyset$. Let students $s_1, s_2 \in A$ be denoted $a_1, a_2$.
+\begin{definition} \label{def:student-groups}
+  Under the group fairness constraint, $R$ is partitioned into
+  three sets: $A, B, C \subset R$, where $A \cup B \cup C \subseteq R$ and $A \cap B \cap
+    C = \emptyset$. Denote students in $A$ as $a_1, a_2, ..., a_i$, students in
+    $B$ as $b_1, b_2, ..., b_j$, and students in $C$ as $c_1, c_2, ..., c_k$.
 \end{definition}
 
 \begin{definition}
-  For each class $c$ with capacity $q_c$, let $q_c^t = \lfloor
-    q_c / 4 \rfloor$ for each $t \in \{A, B, C, F\}$, where $A, B, C$ correlate to
-  the groups of students and $F$ represents the set of free seats.
+  For each class $c \in C$ with capacity $q_c$, \[ |c| = q_c = \sum_{t \in
+  \{A,B,C,F\}} q_c^t \] where $A, B, C, F \subseteq
+c$. Similarly to Definition \ref{def:student-groups}, sets $A, B, C$ correspond to
+the groups of students. $F$ represents the set of free seats.
 \end{definition}
 
-\begin{definition}
-  A \emph{proportional 1-sided matching (P1M)} builds on our
-  definition of 1-sided matching by adding the quality that no class exceeds its capacity for each
-  group of student:
-  $|\{s \in A :
-    \mu(s) = c\}| \leq q_c^A + q_c^F$.
+\begin{definition} \label{def:f1m}
+  A \emph{group-fair 1-sided matching (F1M)} builds on Definition \ref{def:1m}
+  of a 1M by adding the quality that no class is assigned more students of each
+  group than there are reserved and free seats for those students, maintaining that no more
+  total seats are matched for a class than its overall capacity:
+  $|\{t \in T : \mu(t) = s_c^T\}| \leq q_c^T + q_c^F$ and $|\{r \in R : \mu(r) =
+  s_c\}| \leq q_c$ \text{ for all } $s_c \in c \subset S$.
 \end{definition}
 
 To make things clearer, we can represent our problem as a graph to provide us
@@ -101,8 +110,9 @@ with a visualization of the problem (see Figure \ref{fig:model}).
 %% ── Column headers ──────────────────────────────────────────────
 \node at (-3, 1.8) {$\mathcal{C}$};
 \node at (-3, 1.2) {\textsc{classes}};
+\node at (-1.25, 1.8) {$\mathcal{S}$};
 \node at (-1.25, 1.2) {\textsc{seats}};
-\node at (3.5,  1.8) {$S$};
+\node at (3.5,  1.8) {$R$};
 \node at (3.5,  1.2) {\textsc{students}};
 
 %% ── Preference box (top right) ──────────────────────────────────
@@ -195,39 +205,40 @@ with a visualization of the problem (see Figure \ref{fig:model}).
 \draw[-] (-1.45, -8.55) -- (bj);
 \draw[-] (-1.1, -9.00) -- (ck);
 
-\end{tikzpicture}\caption{Graph illustrating a group-fair 1-sided matching.} \label{fig:model}
+\end{tikzpicture}\caption{Graph illustrating an F1M.} \label{fig:model}
 \end{figure}
 
 In a graph representing the HUM-assignment problem, the vertices are comprised
-of students and classes, and an edge is drawn between a student and a class if
-the class is
-on the student's preference list. We can formally define this representation.
+of students and seats that belong to specific class sections, and an edge is
+drawn between a student and a seat if
+the corresponding class is on the student's preference list. We can formally define this
+representation.
 
 \begin{definition}
   Let $G = (V, E)$ be a bipartite graph where:
   \begin{itemize}
     \item
-          $V = S \cup C$
+          $V = R \cup S$
     \item
-          $E = \{(s, c) \mid s \in S, c \in C, c \succ_s
+          $E = \{(r, s_c) \mid r \in R, s_c \in S, c \in C, c \succ_r
             \emptyset\}$
   \end{itemize}
 \end{definition}
 
 In this form, the graph only represents our problem, not a solution. For a graph
 to represent a solution or a matching, each student would only have one edge
-connecting them to a single class in a way that adheres to class capacities. So,
+connecting them to a single seat in a class in a way that adheres to class capacities. So,
 we need a way to narrow down which edges lead to a viable solution. That means
 we need a way to judge edges against each other: we need to assign value to
 them. To accomplish this, we can give each edge a weight that represents how
 conducive it is to the constraints of our problem. Recall that we want to find a
 solution that satisfies two goals: every student is assigned to a class they
 prefer, and all reserved seats are filled by students of that reserved group. We
-can assign weights to the edges based on these goals such that a higher weight
+can assign weights to the edges based on these goals such that a greater weight
 indicates that edge embodies more of the qualities we want in our solution.
 Because we have two goals that are equally important, we can simply increment
 the weight of each edge by 1 for each goal it satisfies. We can now supplement
-our previous definition of a graph.\newpage
+our previous definition of a graph.
 
 \begin{definition}
   \label{weighted-def}
@@ -236,13 +247,12 @@ our previous definition of a graph.\newpage
     \item
           $V = S \cup C$
     \item
-          $E = \{(s, c) \mid s \in S, c \in C, c \succ_s
+          $E = \{(r, s_c) \mid r \in R, s_c \in S, c \in C, c \succ_r
             \emptyset\}$
     \item
           $w : E \rightarrow \{1 , 2 \} $ is a weight function
-          defined as \[ w(s, c) = \mathbf{1}\{\text{if student $s$ prefers class
-              $c$}\} + \mathbf{1}\{\text{$c$ is reserved for $s$'s
-              group}\} \]
+          defined as \[ w(r, s_c) = \mathbf{1}\{\text{if student $r$ prefers class
+          $c$}\} + \mathbf{1}\{\text{$s_c^T$ is reserved for $r \in T$}\} \]
   \end{itemize}
 \end{definition}
 
@@ -257,8 +267,9 @@ our previous definition of a graph.\newpage
 %% ── Column headers ──────────────────────────────────────────────
 \node at (-3, 1.8) {$\mathcal{C}$};
 \node at (-3, 1.2) {\textsc{classes}};
+\node at (-1.25, 1.8) {$\mathcal{S}$};
 \node at (-1.25, 1.2) {\textsc{seats}};
-\node at (3.5,  1.8) {$S$};
+\node at (3.5,  1.8) {$R$};
 \node at (3.5,  1.2) {\textsc{students}};
 
 %% ── Preference box (top right) ──────────────────────────────────
@@ -352,31 +363,32 @@ our previous definition of a graph.\newpage
 \end{figure}
 
 Now, we have a way to compare edges to each other to allow us to find a
-solution if one exists. Based on the way we've set up our weights, we know that the best
-available solution will be the graph with the maximum possible weight when
+solution if one exists. Based on the way we've set up our weights, we know that
+the "best" available solution (which satisfies the most constraints) will be the
+graph with the maximum possible weight when
 only one edge remains for each student. Our max-weight matching then has the
-properties required by our P1M definition, being that students of each group
-are divided relatively evenly to classes they prefer to be in, as well as
-maximizing the overall satisfaction of students with their assignments.
+properties required by our F1M (Definition \ref{def:f1m}), being that students of each group
+are prioritized assignments to classes they prefer, as well as each
+group being represented fairly within each class.
 
 \begin{definition}
-  A matching $\mu$ is a \emph{maximum-weight matching (MWM)}
-  if for all P1M matchings $\mu'$: \[ \sum_{s \in S} w(s, \mu(s)) \geq \sum_{s
-      \in S} w(s, \mu'(s)) \]
+  A matching $\mu$ is a \emph{maximum-weight matching}
+  if for all F1M matchings $\mu'$: \[ \sum_{r \in R} w(r, \mu(r)) \geq \sum_{r
+      \in R} w(r, \mu'(r)) \]
 \end{definition}
 
-Observe that a maximum-weight matching would not only serve as a P1M
+Observe that a maximum-weight matching would not only serve as a F1M
 solution, but it would also (by nature of the way we assign weights based on
 student preferences) ensure the solution is one in which the greatest number
-of students are happy with their match. So, viewing the problem through the
-lens of a weighted graph allows us to both solve the problem, and provide
-the solution that gives the most student satisfaction.
+of students are assigned to a class on their preference list. So, viewing the
+problem through the lens of a weighted graph provides us with a helpful
+framework for satisfying the problem.
 
-\section{The Challenge of Stability} We've determined how to find a solution
-to the problem we defined, and even find a solution that maximizes student
-happiness, but there is one more aspect to the problem we must consider.
+\section{The Challenge of Stability} 
+We've determined how to find a solution to the F1M problem from Definition
+\ref{def:f1m}, but there is one more aspect to the problem we must consider.
 Recall that matching is often studied under the analysis of
-\textbf{stability}. Notably, “stability” in our case adopts a different
+\textit{stability}. Notably, “stability” in our case adopts a different
 meaning than in a traditional stable matching problem. Because we are
 working with one-sided preferences, we do not consider “cheating” as a
 violation of stability between students and classes, but rather between
@@ -385,14 +397,15 @@ no blocking pairs \emph{between students}.
 
 \begin{definition}
   \label{def:stability}
-  A matching $\mu$ is \emph{stable} if there exists no blocking pair between
+  A matching $\mu$ is \emph{stable} if there exists no \textit{blocking pair} between
   students
-  $s_1, s_2 \in S$ such that $\mu(s_2) >_{s_1} \mu(s_1)$ and $\mu(s_1) >_{s_2}
-    \mu(s_2)$.
+  $r_1, r_2 \in R$ such that $\mu(r_2) >_{r_1} \mu(r_1)$ and $\mu(r_1) >_{r_2}
+    \mu(r_2)$.
 \end{definition}
 
 This notion of stability proves difficult for our problem, however. If we look
-back at our definition of the HUM-assignment problem with class capacities and
+back at our original definition of the HUM-assignment problem (Definition
+\ref{def:overview}) with class capacities and
 incomplete preferences, we will find that in some instances it is possible there
 may not even exist a stable matching to find.
 
@@ -401,11 +414,13 @@ may not even exist a stable matching to find.
   incomplete preferences.
 \end{theorem}
 
+\newpage
+
 \begin{proof}
   Let $C = \{ c_1, c_2\}$, where there are two groups of student
   $A$ and $B$ such that for each $c \in C, q_c^A, q_c^B = 1$ (each class can
   have at most one student of
-  each group). Let $S = \{ a_1, b_1, a_2, b_2 \}$. Let the preference lists be as
+  each group). Let $R = \{ a_1, b_1, a_2, b_2 \}$. Let the preference lists be as
   follows: \[
     \begin{array}{ll} a_1: & c_1           \\ b_1: & c_2 \\ a_2: & c_1 \succ c_2 \\
              b_2:      & c_2 \succ c_1
@@ -414,39 +429,40 @@ may not even exist a stable matching to find.
 
   In this case, regardless of the order of matching or algorithm, there is no
   stable matching. The $A$ students will both wish to be matched to $c_1$, which
-  only has one $A$ spot, and both $B$ students wish to be matched to $c_2$
-  which only has one $B$ spot. So, when the first round of matching is done,
-  that means that there is still an open $B$ spot for $c_1$ and an open
-  $A$ spot for $c_2$, which the unhappy $A$ and $B$ students can then switch
+  only has one $A$ seat, and both $B$ students wish to be matched to $c_2$
+  which only has one $B$ seat. So, when the first round of matching is done,
+  that means that there is still an open $B$ seat for $c_1$ and an open
+  $A$ seat for $c_2$, which the unhappy $A$ and $B$ students can then switch
   into on their own, respectively.
 \end{proof}
 
 Defining stability in this way is, then, too strict. Recall that even
 determining whether there is a stable matching or not is NP-complete in many
 scenarios similar to this one \cite{santhini}. So, we need to relax our constraints
-to allow us to explore some other notion of stability. For now, let’s simplify the problem. At a basic level,
+to allow us to explore some less restrictive notion of stability. For now, let’s
+simplify the problem. At a basic level,
 before we even think about stability, we want to work in an environment where we
-can be sure an algorithm would respect student preferences, such that no student
+can be sure an algorithm would respect all student preferences, such that no student
 is assigned to a class they did not list as an option. 
 
 To temporarily remove our notion of stability, we can alter our preferences from a
-ranked system to what is known as \textbf{0/1 preferences}. In 0/1 preferences,
-students assign a class
-a 1 if they are okay with it and a 0 if it is not an option for them. This way,
+ranked system to what is known as \textit{0/1 preferences}. In 0/1 preferences,
+students give a class a 1 if they are okay with being matched to it and a 0 if
+it is not an option for them. This way,
 there cannot be a notion of stability because all preferred classes have the
 same rank. Now, for ease of notation, we
-will let $C_r$ be the set of reserved seats across all classes. Observe that
+will let $S_{res}$ be the set of reserved seats across all classes. Observe that
 this includes all seats other than the set of free seats, or formally: 
  \[
-    |C_r| = \sum_{\substack{c \in C \\ t \neq F}} q_c^t
-  \] Notably, this
-simplified environment still lends itself well to the same weighted graph construction
-from definition \ref{weighted-def}, so we can continue to use it to represent our
-problem.
+   |S_{res}| = \sum_{\substack{c \in C \\ t \neq F}} q_c^t
+  \] 
+Notably, this simplified environment still lends itself well to the same
+weighted graph construction from Definition \ref{weighted-def}, so we can
+continue to use a weighted graph to represent our problem.
 
 \begin{theorem}
   \label{max-weight} A matching fills all reserved seats while only assigning students to classes they prefer if and only if it is the maximum-weight matching
-  where $w(\mu) = |S| + |C_r|$.
+  where $w(\mu) = |R| + |S_{res}|$.
 \end{theorem}
 
 \begin{proof}
@@ -463,93 +479,93 @@ problem.
           if the student prefers that seat, so every edge in $\mu$ contributes at
           least 1. By our assumption of characteristics of $\mu$, every student in
           $\mu$ got a seat they prefer, so summing over all students contributes at
-          least $|S|$ to $w(\mu)$. We also assumed each reserved seat was assigned to
+          least $|R|$ to $w(\mu)$. We also assumed each reserved seat was assigned to
           a student in $\mu$, which adds an extra +1 to the weight for the edge from
           each of those reserved seats. Summing over all reserved seats gives an
-          additional contribution of $|C_r|$, because the rest of the seats are still
-          1-weight edges. Therefore, we can bound $\mu$: \[ w(\mu) \geq |S| + |C_r|.
+          additional contribution of $|S_{res}|$, because the rest of the seats are still
+          1-weight edges. Therefore, we can bound $\mu$: \[ w(\mu) \geq |R| +
+            |S_{res}|.
           \]
 
     \item
-          \textbf{Upper bound of $\mu$:} From our definition, we know each edge
-          weight is at most 2. Similarly to the lower bound, we know $\mu$ has $|S|$
+      \textbf{Upper bound of $\mu$:} From Definition \ref{weighted-def}, we know each edge
+          weight is at most 2. Similarly to the lower bound, we know $\mu$ has $|R|$
           edges because each student was matched to one of their preferences.
           However, because only the reserved seats contribute an additional weight
-          to an edge, we know that the number of 2-weight edges $\leq |C_r|$. So,
-          the maximum summed weight of all edges must be $2|C_r| + |S| - |C_r|$,
+          to an edge, we know that the number of 2-weight edges $\leq |S_{res}|$. So,
+          the maximum summed weight of all edges must be $2|S_{res}| + |R| -
+          |S_{res}|$,
           representing the maximum number of 2-weight edges plus all students
-          assigned to an overflow seat. Note that is equivalent to $|S| + |C_r|$.
-          Therefore, we can bound $\mu$: \[ w(\mu) \leq |S| + |C_r|. \]
+          assigned to an overflow seat. Note that is equivalent to $|R| +
+          |S_{res}|$.
+          Therefore, we can bound $\mu$: \[ w(\mu) \leq |R| + |S_{res}|. \]
   \end{enumerate}
 
-  So, $\mu$ is a maximum-weight graph with a lower bound of $|S| + |C_r|$ and an
-  upper bound of $|S| + |C_r|$, so it must be that a matching that fully respects
-  student preferences and seat reservations has a weight $w(\mu) = |S| + |C_r|$.
+  So, $\mu$ is a maximum-weight graph with a lower bound of $|R| + |S_{res}|$ and an
+  upper bound of $|R| + |S_{res}|$, so it must be that a matching that fully respects
+  student preferences and seat reservations has a weight $w(\mu) = |R| + |S_{res}|$.
 
   Now, we prove the backwards direction. Let $\mu$ be a maximum-weight matching
-where $w(\mu) = |S| + |C_r|$. The term $|S|$ implies each student was assigned
+  where $w(\mu) = |R| + |S_{res}|$. The term $|R|$ implies each student was assigned
 to a class. By our construction of $G$ such that an edge between a student and a
 class only exists if the student prefers that class, the fact that each student
 is assigned to a class must mean it is on their preference list. Additionally,
-the $|C_r|$ term implies every reserved seat is assigned, because by our weight
+the $|S_{res}|$ term implies every reserved seat is assigned, because by our weight
 function each edge only has additional weight $+1$ if the edge is between a
 student of the same group as the seat. So, a maximum-weight matching where 
-$w(\mu) = |S| + |C_r|$ is a matching that fills all reserved seats while only
+$w(\mu) = |R| + |S_{res}|$ is a matching that fills all reserved seats while only
 assigning students to classes they prefer.
 \end{proof}
 
 Theorem \ref{max-weight} shows us that we can identify a way to 
-assign each student to a class they prefer while respecting proportionality
-constraints if such a
-matching exists. From here, we can begin to reintroduce stability. While it may
-not be feasible to find stability between every student,
+assign each student to a class they prefer while respecting group fairness
+constraints if such a matching exists. From here, we can begin to reintroduce
+stability. While it may not be feasible to find stability between every student,
 perhaps we can start by comparing just students of the same group.  We are
 introducing a new notion of stability here, where we will consider a matching
-stable if it exhibits \textbf{intra-group stability}. This
-means that for any group of student, that student does not form a blocking pair
-with another student \textbf{of the same group}.
+stable if it exhibits \textit{intra-group stability}. This
+means that for a student of any group, that student does not form a blocking pair
+with another student \textit{of the same group}.
 
 \begin{definition} \label{def:intra}
   A matching $\mu$ is \emph{intra-group stable} if, for any two students $t_1$
   and $t_2$ for all
-  groups $T \subset S$, $\mu(t_1) >_{t_1} \mu(t_2)$  or $\mu(t_2) >_{t_2}
+  groups $T \subset R$, $\mu(t_1) >_{t_1} \mu(t_2)$  or $\mu(t_2) >_{t_2}
     \mu(t_1)$ such that there exist no intra-group blocking pairs.
 \end{definition}
 
-With our new notion of intra-group stability, we can now add to our
-understanding of what makes a viable solution to our HUM-assignment problem.
+With our new goal of intra-group stability, we can now add to our
+understanding of a viable solution to our HUM-assignment problem.
 
 \begin{definition} \label{def:ispim}
-  An \emph{intra-group stable proportional 1-sided matching (ISP1M)} is a function $\mu :
-    S \rightarrow C$ such that
+  An \emph{intra-group stable, group-fair 1-sided matching (ISF1M)} is a function $\mu :
+    R \rightarrow S$ such that
   \begin{itemize}
     \item
           Each student is assigned to a class they prefer: \\
-          $\mu(s) \succ_s \emptyset \text{ for all }s \in
-            S$
+          $\mu(r) \succ_r \emptyset \text{ for all }r \in
+            R$
     \item
           No class exceeds its capacity:
-          $|\{s \in S : \mu(s) = c\}| \leq q_c$ \text{ for all } $c \in C$
-
+         $|\{r \in R : \mu(r) = s_c\}| \leq q_c$ \text{ for all } $s_c \in c \subset S$
     \item
-          No class exceeds its capacity for each
-          group of student: \\ $|\{s \in T : \mu(s) = c\}| \leq q_c^T + q_c^F$
+          No class exceeds its capacity for each student group: \\ 
+          $|\{t \in T : \mu(t) = s_c^T\}| \leq q_c^T + q_c^F$
     \item
-          There exist no intra-group blocking pairs: \\ for all $t_1, t_2 \in T \subset S$, $\mu(t_1) >_{t_1} \mu(t_2)$ or
-          $\mu(t_2) >_{t_2} \mu(t_1)$
+          There exist no intra-group blocking pairs: \\ for all $t_1, t_2 \in T \subset R$, 
+          $\mu(t_1) >_{t_1} \mu(t_2)$ or $\mu(t_2) >_{t_2} \mu(t_1)$
   \end{itemize}
 \end{definition}
 
-For now, our goal will be to develop an algorithm that finds an ISP1M to solve
-our problem. We will classify our previous definition of stability (definition
-\ref{def:stability}) as
-\textbf{inter-group stability} (blocking pairs involving students of different
-groups) to draw a distinction between the two notions.
-For now, inter-group instability does not interfere with our search for an intra-group stable
-solution. Though we
-would ideally guarantee stability between all students, looking at the
+For now, our goal will be to develop an algorithm that finds an ISF1M to solve
+our problem. We will classify our previous definition of stability (Definition
+\ref{def:stability}) as \textit{inter-group stability} (blocking pairs involving
+students of different groups) to draw a distinction between the two notions.
+For now, we will consider an ISF1M to be a successful solution to the
+HUM-assignment problem even though it is not inter-group stable. Though we would
+ideally guarantee stability between all students, looking at the
 problem through the lens of intra-group stability allows us to give some
 theoretical guarantee about minimizing the amount of swapping that will occur
-in an assignment while remaining computationally feasible, as opposed to turning
-to less-reliable heuristic solutions to try to solve the broader conception of the problem.
+in an assignment while still remaining computationally feasible, as opposed to turning
+to less-reliable heuristic solutions in an attempt to solve the broader conception of the problem.
 
