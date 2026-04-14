@@ -81,7 +81,7 @@ flexibility.
     $B$ as $b_1, b_2, ..., b_j$, and students in $C$ as $c_1, c_2, ..., c_k$.
 \end{definition}
 
-\begin{definition}
+\begin{definition} \label{def:group-caps}
   For each class $c \in C$ with capacity $q_c$, \[ |c| = q_c = \sum_{t \in
   \{A,B,C,F\}} q_c^t \] where $A, B, C, F \subseteq
 c$. Similarly to Definition \ref{def:student-groups}, sets $A, B, C$ correspond to
@@ -231,12 +231,12 @@ connecting them to a single seat in a class in a way that adheres to class capac
 we need a way to narrow down which edges lead to a viable solution. That means
 we need a way to judge edges against each other: we need to assign value to
 them. To accomplish this, we can give each edge a weight that represents how
-conducive it is to the constraints of our problem. Recall that we want to find a
-solution that satisfies two goals: every student is assigned to a class they
-prefer, and all reserved seats are filled by students of that reserved group. We
-can assign weights to the edges based on these goals such that a greater weight
-indicates that edge embodies more of the qualities we want in our solution.
-Because we have two goals that are equally important, we can simply increment
+conducive it is to the constraints of our problem based on how well that match
+would accomplish our goals. Recall that we want to satisfy two goals: every
+student is assigned to a class they prefer, and all reserved seats are filled by
+students of that reserved group. We
+call a matching \textit{full} if every student is matched to a seat they prefer. 
+Because we these two goals are equally important to us, we can simply increment
 the weight of each edge by 1 for each goal it satisfies. We can now supplement
 our previous definition of a graph.
 
@@ -542,7 +542,7 @@ understanding of a viable solution to our HUM-assignment problem.
     R \rightarrow S$ such that
   \begin{itemize}
     \item
-          Each student is assigned to a class they prefer: \\
+          Each student is assigned to a class they prefer (the matching is full): \\
           $\mu(r) \succ_r \emptyset \text{ for all }r \in
             R$
     \item

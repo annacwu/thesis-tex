@@ -1,30 +1,40 @@
 % !TEX root = ../thesis.tex
 \chapter{Developing an Algorithm}
+
+Now that we've formally defined our problem and ideal solution, we need to
+actually create a way to find that solution. We also need to keep in
+mind that any algorithm we develop must improve upon the current system, as
+there already exists a standard method for HUM 110 sign-ups. So, we will evaluate the current
+system against our newfound ISF1M goals and determine if we can develop an
+algorithm that accomplishes those goals more effectively. 
+
 \section{First Come, First Served}
 As it currently stands, the sign-up process for HUM 110 classes takes place during
 freshman class registration. The registration software, SOLAR, opens to incoming
 freshmen at a certain time, and at that time (or later) all freshmen log on to
 the platform and choose their own academic year schedule in whatever order they
-desire. This includes their HUM 110 class (or, as is the driving force behind this
-project, classes plural). Though this process may not inherently seem like an
+desire. This includes their HUM 110 section (or, as is the driving force behind this
+project, sections plural). Though this process may not inherently seem like an
 algorithm, it can actually be modelled as the algorithm commonly known as
 \textit{First Come First Served} (\textsc{fcfs}).
 
-\textsc{fcfs} takes some ordering of students (in this case, those who sign up
-for HUM 110 the fastest to slowest after registration opens), and at their point of
+\textsc{fcfs} takes some ordering of students that represents the registration
+order (in this case, those who sign up for HUM 110 the fastest to slowest after
+the registration software opens), and at their point of
 selection each student chooses their top available choice until every student
 has chosen a HUM class. In this case, “available” means classes that have not
-yet reached capacity. We can write out \textsc{fcfs} formally as follows, where $P_s$ represents the ordered
-preference list for a student $s$ (corresponding to their preference relation defined
-in Definition \ref{def:overview}).
+yet reached capacity. We can write out \textsc{fcfs} formally as follows, where
+$P_r$ represents the ordered preference list for a student $r$ (corresponding to
+their preference relation defined in Definition \ref{def:overview}).
 
 \begin{algorithm} \label{alg:fcfs}
   \caption{First Come First Served}
-  \begin{algorithmic}
-     \For{each student $s$ in $S$} \Comment{where $S$ is an ordered set}
+  \begin{algorithmic}[1] 
+     \For{each student $r$ in $R$} \Comment{where $R$ is an ordered set
+     corresponding to registration order}
      \For{each class $c$ in $P_s$}  \If{\# students assigned to $c < q_c$}
-     \Comment{class is not at capacity} \State $\mu(s) \gets
-      c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor \EndFor
+     \Comment{class is not at capacity} \State $\mu(r) \gets
+      s_c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor \EndFor
  \State \Return matching $\mu$
 
   \end{algorithmic}
@@ -34,9 +44,11 @@ There are various benefits to a \textsc{fcfs} algorithm, one of the most
 significant for our purposes being that the given matching will be
 \textit{inter-group stable}. Because each student chooses their most preferred
 option when it is their turn to select, there can be no two pairs of students
-that wish to switch. A proof using this logic can be found in section 2 of this
-chapter. Additionally, in practice for \textsc{fcfs}, many students get their
-top choice of class or near to it for HUM 110. 
+that wish to switch. Theorem \ref{thm:fcfs-stable} proves \textsc{fcfs}
+stability later in this chapter. Additionally, in practice many students get
+their first or second choice of HUM section under \textsc{fcfs}, and the
+algorithm is easy to implement because it essentially already is the mechanism in
+use.
 
 However, \textsc{fcfs} has other issues. For instance, it is possible some
 students will not get to choose a class they want at all if all of the ones they
@@ -48,25 +60,26 @@ that improves upon \textsc{fcfs} with group fairness.
 \section{A Greedy Approach}
 
 We introduce group fairness into our algorithm with what we call a
-\textit{greedy} algorithm: one that attempts to maximize student happiness while
-following the constraints set by the group fairness. We call it \textit{greedy}
+\textit{greedy} algorithm: one that attempts to maximize the rank a student
+gives their assignment while following the group fairness constraints. We call it \textit{greedy}
 because for each student, we still assign them their best available choice at
 the time of evaluation. However, in addition to the class capacity constraint,
-“available” also considers caps on how many of each group of students can be in
-each class. So, a class that is not yet at capacity is still unavailable to a
-student of group $T$ if it has already reached its maximum number of group $T$
-students. Essentially, \textsc{greedy} implements \textsc{fcfs} under the additional group fairness restriction. 
+“available” also considers the group caps from Definition \ref{def:group-caps},
+though without utilizing a set of free seats. So, a class that is not yet at
+capacity is still unavailable to a student of group $T$ if it has already
+reached its maximum number of group $T$ students. Essentially, \textsc{greedy}
+implements \textsc{fcfs} under the additional group fairness restriction. 
 
 \begin{algorithm} \label{alg:greedy}
-  \caption{Greedy Algorithm}
-  \begin{algorithmic}[1] \For{each student $s_T$ in $S$} \Comment{where $T$ is the
-    student's group} \For{each class $c$ in $P_s$} \If{\# students assigned to $c
-      < q_c$ and \# $T$ students assigned to $c < q_c^T$} \State $\mu(s) \gets
-      c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor  \State append $s$ to $X$ \EndFor
+  \caption{Greedy}
+  \begin{algorithmic}[1] \For{each student $t$ in $R$} \Comment{where $t$ is a
+    student of some group $T \subset R$} \For{each class $c$ in $P_t$} \If{\# students assigned to $c
+      < q_c$ and \# $T$ students assigned to $c < q_c^T$} \State $\mu(t) \gets
+      s_c^T$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor  \State append $t$ to $X$ \EndFor
 
-    \For{each student $s_T$ in $X$} \Comment{randomly assign unmatched
+    \For{each student $t$ in $X$} \Comment{randomly assign unmatched
     students} \State choose
-    random available $c$ from $C$ \State $\mu(s) \gets c$ \EndFor
+    random available $s_c$ from $C$ \State $\mu(t) \gets s_c$ \EndFor
 
     \State \Return matching $\mu$
     \end{algorithmic}
@@ -74,121 +87,180 @@ students. Essentially, \textsc{greedy} implements \textsc{fcfs} under the additi
 
 Let's compare \textsc{greedy} to \textsc{fcfs}. The primary differences are in
 line 3, where we add the group cap constraint, and the second part of the
-algorithm starting on line 10 assigns students randomly instead of leaving them
+algorithm starting on line 10 assigns remaining students randomly instead of leaving them
 unmatched. We can start by showing that in a
-vanilla environment, in which we do not factor in student groups, both
+``vanilla" environment, in which we do not consider student groups, both
 algorithms output a stable matching. Note that in a vanilla environment,
 \textsc{greedy} is equivalent to \textsc{fcfs} because unmatched versus random
-assignments are regarded with the same preference rank by students. 
+assignments are regarded with the same preference rank by students.
 
-\begin{theorem} \label{thm:greedyvanilla}
-  \textsc{greedy} outputs a stable matching in a vanilla
-  environment.
-\end{theorem}
+\newpage
+
+\begin{lemma} \label{thm:fcfs-greedy}
+  \textsc{fcfs} is equivalent to \textsc{greedy} in a vanilla environment.
+\end{lemma}
+
+\begin{proof}
+  Observe that in a vanilla environment, $q_c^T = q_c$ because there are
+  no group caps. So, the second part of the ``and" statement in line 3 of \textsc{greedy}
+  will always be true when the first part of the statement is true. Therefore,
+  both algorithms will behave equivalently on the same ordered input of students
+  in the first for loop, as the conditional statements check the same condition
+  as line 3 of \textsc{fcfs}. Now, let $\mu$ be the matching output by \textsc{fcfs}
+  and $\mu'$ be the matching output by \textsc{greedy}. Any student not in $\mu$
+  was matched to $\emptyset$. By Definition \ref{def:overview}, a student $r$ in
+  $\mu'$ who received a random $s_c$ in lines 11 and 12 of \textsc{greedy} ranks $\emptyset \succ_r
+  \mu'(r)$. Therefore, when evaluating blocking pairs, unmatched students in
+  $\mu$ and randomly matched students in $\mu'$ will be functionally equivalent in
+  terms of the rank of their assignment. Thus, \textsc{fcfs} is equivalent to
+  \textsc{greedy} in a vanilla environment.
+\end{proof}
+
+\begin{lemma} \label{thm:greedyvanilla}
+  \textsc{greedy} outputs an inter-group stable matching in a vanilla environment.
+\end{lemma}
 
 \begin{proof}
   Let $\mu$ denote the outputted matching over an ordered set of
-  students, $S$. Let $s_1, s_2 \in S$, where $s_1$ comes before $s_2$ in the order.
-  Assume for the sake of a contradiction that $s_1$ and $s_2$ form a blocking
-  pair, such that $\mu(s_2) >_{s_1} \mu(s_1)$ and $\mu(s_1) >_{s_2} \mu(s_2)$.
+  students, $R$. Let $r_1, r_2 \in R$, where $r_1$ comes before $r_2$ in the order.
+  Assume for the sake of a contradiction that $r_1$ and $r_2$ form a blocking
+  pair, such that $\mu(r_2) >_{r_1} \mu(r_1)$ and $\mu(r_1) >_{r_2} \mu(r_2)$.
 
-  By lines 3 and 11 of \textsc{greedy}, we know $\mu(s_1)$ was either $s_1$'s top
-  available choice or a random assignment. So, if $\mu(s_2) >_{s_1} \mu(s_1)$, then
-  $\mu(s_2)$ must not be available when $s_1$ is matched, which means $s_2$ was
-  matched first. However, this is a contradiction of our assumption that $s_1$
-  comes before $s_2$ in the input to the algorithm. Thus, $\mu(s_2)$ is available
-  when $s_1$ is matched, so it must be the case that $\mu(s_1) >_{s_1} \mu(s_2)$.
-  Therefore, $s_1$ and $s_2$ do not form a blocking pair, and we can conclude that
+  By lines 3 and 11 of \textsc{greedy}, we know $\mu(r_1)$ was either $r_1$'s top
+  available choice or a random assignment. So, if $\mu(r_2) >_{r_1} \mu(r_1)$, then
+  $\mu(r_2)$ must not be available when $r_1$ is matched, which means $r_2$ was
+  matched first. However, this is a contradiction of our assumption that $r_1$
+  comes before $r_2$ in the input to the algorithm. Thus, $\mu(r_2)$ is available
+  when $r_1$ is matched, so it must be the case that $\mu(r_1) >_{r_1} \mu(r_2)$.
+  Therefore, $r_1$ and $r_2$ do not form a blocking pair, and we can conclude that
   $\mu$ is stable.
+\end{proof}
+
+\begin{theorem} \label{thm:fcfs-stable}
+  \textsc{fcfs} outputs an inter-group stable matching.
+\end{theorem}
+
+\begin{proof}
+  By Lemma \ref{thm:fcfs-greedy}, we know \textsc{fcfs} is equivalent to
+  \textsc{greedy} in a vanilla environment. Lemma \ref{thm:greedyvanilla} proves
+  that in a vanilla environment, \textsc{greedy} outputs an inter-group stable
+  matching. So, together those two lemmas imply that \textsc{fcfs} outputs an
+  inter-group stable matching.
 \end{proof}
 
 Now, we can formally evaluate what happens when we do consider groups. As we
 discussed in Theorem \ref{thm:unstable}, we know an inter-group stable matching
-may not exist at all when we introduce caps on groups. This already poses a
-problem for \textsc{greedy}, as it means it may not always output an inter-group
-stable matching because one might not exist. However, even assuming there does
+may not exist at all when we introduce caps on groups. However, even assuming there does
 exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to find it. 
 
 \begin{theorem} \label{thm:greedyunstable}
-  \textsc{greedy} does not always output a stable matching with group cap.
+  \textsc{greedy} does not always output a inter-group stable matching in a
+  general environment.
 \end{theorem}
 
 \begin{proof}
   Let $\mu$ denote \textsc{greedy}'s outputted matching over a set of
-  students, $S$. We will prove by counter example that $\mu$ is not stable.
+  students, $R$. We will prove by counter example that $\mu$ is not stable.
 
-  Let $S = A \cup B$ where there are two groups of students, group $A$
+  Let $R = A \cup B$ where there are two groups of students, group $A$
   and group $B$. Let  $C = \{ c_1, c_2, c_3 \mid q_{c_i}^a = 1, q_{c_i}^b =
   1$\}, such that each $c \in C$ can have at most one student from each
-  group. Let $a_1, b_1, a_2, b_2 \in S$ where students $a_1, a_2 \in A$ and $b_1, b_2 \in B$. Let the preference lists of the
-  students be as follows: \[
+  group. Let $R = \{a_1, b_1, a_2, b_2\}$ be ordered where students $a_1, a_2 \in A$ and
+  $b_1, b_2 \in B$. Let the preference lists of the students be as follows: \[
     \begin{array}{ll} a_1: & c_1 \succ c_3 \\ b_1: &
              c_2 \succ c_3            \\ a_2: & c_1 \succ c_2\\ b_2: & c_2 \succ
                 c_1
     \end{array}
-  \] Observe that in $\mu$, $\mu(a_1) = c_1$ and $\mu(b_1) = c_2$,
+    \] Observe that in $\mu$, $\mu(a_1) = s_{c_1}^A$ and $\mu(b_1) = s_{c_2}^B$,
   because they are the first two students to be matched and their first choices
-  are different, so they receive their top choices. Next, $\mu(a_2) = c_2$
-  because $c_1$ already has a student in group $A$ so $c_1$ is no longer
-  available when matching $a_2$, and similarly $\mu(b_2) = c_1$ because
+  are different, so they receive their top choices. Next, $\mu(a_2) = s_c_2^A$
+  because $c_1$ already has a student in group $A$, so $c_1$ is no longer
+  available when matching $a_2$, and similarly $\mu(b_2) = s_{c_1}^B$ because
   $c_2$ already has a student in group $B$. Notice that $\mu(b_2) >_{a_2}
   \mu(a_2)$ and $\mu(a_2) >_{b_2} \mu(b_2)$, forming a blocking pair in which
-  $a_2$ and
-  $b_2$ are incentivized to switch classes with each other. So, it must be the case
-  that $\mu$ is not a stable matching and therefore \textsc{greedy} cannot guarantee a
-  stable matching under group cap constraints.
+  $a_2$ and $b_2$ are incentivized to switch classes with each other. So, it must be the case
+  that $\mu$ is not an inter-group stable matching and therefore \textsc{greedy}
+  cannot guarantee an inter-group stable matching under group cap constraints.
 \end{proof}
 
-The issue with \textsc{greedy} is that we are still working in our too-constrained environment from
-the start of chapter 2. We need to come up with an algorithm that allows us to
-work with our conception of intra-group stability from definition
-\ref{def:intra}. 
+Notably, the above counterexample does exhibit intra-group stability as
+$\mu(a_1)$ is $a_1$'s top choice, so they will never want to swap with $a_2$
+(and similar for $b_1$ and $b_2$). In fact, we claim that \textsc{greedy} will
+always output an intra-group stable matching.
+At each point of evaluation for a student of some group, they are given their
+highest ranked available seat for that group. So within groups, we have a
+similar stability argument to Lemma \ref{thm:greedyvanilla}. 
+
+While \textsc{greedy} is intra-group stable, its primary issue is that
+it does not guarantee a full matching. Students can be assigned to classes not
+in their preference lists due to the second for loop assigning leftover students
+to random classes. We need to come up with an algorithm that makes use of our
+helpful graph framework from Definition \ref{weighted-def} if we want to get
+closer to creating ISF1M solutions. 
 
 \section{Weighted Trading}
-Let's return to our conception of the HUM-assignment as modeled by a graph. We
+Let's return to our conception of the HUM-assignment problem as modeled by a graph. We
 know by Theorem \ref{max-weight} we can use a maximum-weight matching algorithm
-to find a matching that is group fair and assigns every student to a seat they
-prefer. Notably, this is only one requirement away from being an ISP1M solution
-as per definition \ref{def:ispim}. We just need to reintroduce intra-group
-stability to our max-weight matching. To do that, we would need to be sure that
-we remove all blocking pairs between students of the same group while preserving
+to find a solution that is group fair and assigns every student to a seat they
+prefer. Notably, this is only one requirement away from being an ISF1M solution
+(see Definition \ref{def:ispim}). We just need to reintroduce intra-group
+stability to our max-weight matching. To do that, we need to 
+remove all blocking pairs between students of the same group while preserving
 the weight of the max-weight matching, as the weight is how we determined that
 the matching is full and group fair. Here we define a new algorithm called the
 \textit{Weighted-Trading} (\textsc{wt}) algorithm.  
 
 \begin{algorithm} \label{alg:wt}
-  \caption{Weighted-Trading Algorithm \textit{WT}}
-  \label{WT-alg}
+  \caption{Weighted-Trading}
   \begin{algorithmic}[1] \State $w(\mu) \gets 0$ \While{$w(\mu)
-    \neq |S| + |C_r|$} \State $\mu \gets \textsc{max-weight}(S, C)$ \If{$w(\mu)
-      \neq |S| + |C_r|$} \State reduce $|C_r|$ \EndIf \EndWhile \For{each $T \subset S$}
+    \neq |R| + |S_{res}|$ and \# reserved seats for all groups $> 0$}
+      \State $\mu \gets \textsc{max-weight}(R, S)$ \If{$w(\mu)
+      \neq |R| + |S_{res}|$} \For {each group of seats $T$ in $S$} \State $|T| =
+      |T| - 1$ \Comment{reduce the size of $S_{res}$} \EndFor
+      \EndIf \EndWhile \For{each group $T \subset R$}
     \While{$\exists$ blocking pair $t_i, t_j$} \State $\mu(t_i) \gets \mu(t_j)$,
     $\mu(t_j) \gets \mu(t_i)$ \EndWhile \EndFor \State \Return matching $\mu$
   \end{algorithmic}
 \end{algorithm}
 
 
-We can break the \textsc{wt} algorithm into two key stages: lines 1 to 7 and lines 8 to
-13. 
+We can break the \textsc{wt} algorithm into two key stages: lines 1 to 9 and
+lines 10 to 15. 
 
-The first stage is the \textit{weighted} part of the algorithm: it repeatedly runs the
-max-weight algorithm until it finds a satisfying assignment. If the weight of
-the first max-weight run is not $ |S| + |Cr|$ (as per Theorem  \ref{max-weight}) we relax our seat reservations to allow for more students of various groups to fill the class. This involves decrementing the number of reserved seats per group by one and then re-running the max-weight algorithm. If the seat reservations are relaxed to the point that there are no more reserved seats, it means there is no group-fair solution and we simply output the max-weight matching for students without considering their groups. 
+The first stage is the \textit{weighted} part of the algorithm: it repeatedly
+runs \textsc{max-weight} until it finds a satisfying assignment. If the weight of
+the first \textsc{max-weight} run is not $|R| + |S_{res}|$ (as per Theorem
+\ref{max-weight}) we ``relax" our seat reservations to allow for more students
+of various groups to fill the class. This involves decrementing the number of
+reserved seats per group by one and then re-running \textsc{max-weight} now that
+the set of reserved seats is smaller. If the seat reservations are relaxed to
+the point that there are no more reserved seats, it means there is no group-fair
+solution and we simply use the max-weight output to get a full matching for
+students without considering group caps. Then, we still proceed with the trading
+stage for intra-group stability.
 
-The latter stage is the \textit{trading} part of the algorithm, which handles our intra-group stability requirement. We check for all existing blocking pairs between students of the same group, and we swap or trade their assignments with each other. Notably, we have to continually check each pair in a group of students until no more blocking pairs remain, as checking each student once does not account for new blocking pairs that may arise from swapping the assignments of two students. At the end of the algorithm, we have a group fair, intra-group stable matching (or an ISP1M) where each student is assigned a class they prefer if such a matching exists.
+The latter stage is the \textit{trading} part of the algorithm, which handles
+our intra-group stability requirement. We check for all existing blocking pairs
+between students of the same group, and we swap or trade their assignments with
+each other. Notably, we have to continually check each pair in a group of
+students until no more blocking pairs remain, as checking each student once does
+not account for new blocking pairs that may arise from swapping the assignments
+of two students. At the end of the algorithm, we have a full, group fair, intra-group
+stable matching (or an ISF1M) where each student is assigned a class they prefer
+if such a matching exists.
 
-We can assert that the outputted matching after trading is still full and group
-fair by proving that the weight of the graph is still the maximum weight found
-in stage 1 of \textsc{wt}. 
+We can assert that the outputted matching after the trading stage is still full and group
+fair by proving that the weight of the graph is still the same max weight found
+in the weighted stage of \textsc{wt}. 
 
 \begin{theorem} \label{thm:same_weights}
-  For a matching $\mu$ output by the \textsc{wt} algorithm, $w(\mu) = |S| +
-    |C_r|$.
+  For a matching $\mu$ output by the \textsc{wt} algorithm, $w(\mu) = |R| +
+  |S_{res}|$.
 \end{theorem}
 
 \begin{proof}
-  At line 7 of Algorithm \ref{alg:wt}, $w(\mu) = |S| + |C_r|$
-  because it was just output by the max-weight algorithm, assuming such a
+  At line 9 of \textsc{wt}, $w(\mu) = |R| + |S_{res}|$
+  because it was just output by \textsc{max-weight}, assuming such a
   matching exists. So, we have to
   evaluate the for loop that compares each student of some group to each other
   student of that same group. In the for loop, the students swap seats if they
@@ -202,44 +274,52 @@ in stage 1 of \textsc{wt}.
 
 While it would be nice to guarantee inter-group stability, recall that the only
 known algorithms for assignment problems that consider inter-group stability and
-group fairness are NP-complete  \cite{santhini}. With the \textsc{wt} algorithm, we can guarantee that if an ISP1M exists, we can find it in an efficient amount of time. 
+group fairness are NP-complete  \cite{santhini}. With the \textsc{wt} algorithm, we can guarantee that if an ISF1M exists, we can find it in an efficient amount of time. 
 
 \begin{theorem} \label{thm:polywt}
-  The \textsc{wt} algorithm will output a stable matching in
-  polynomial time.
+  The \textsc{wt} algorithm will output an intra-group stable matching in cubic time with
+  respect to the vertices in $G$.
 \end{theorem}
 
 \begin{proof}
   Let $\mu$ be the matching output by \textsc{max-weight} at
-  line 7 of Algorithm \ref{alg:wt}. Observe lines 8 and 9 of Algorithm
-  \ref{alg:wt}, which outline that within each student group, we must swap the
+  line 9 of \textsc{wt}. Observe lines 11 and 12, which outline that within each
+  student group, we must swap the
   assignments of blocking pairs until no more remain. We know this loop will
-  terminate because of our assumption that preference lists are finite, so
+  terminate because of our assumption that preference lists are finite, so even
+  in the worst case 
   students will eventually reach their highest possible preference and no longer
   be able to form blocking pairs. The maximum length of a preference list is
   equivalent to the number of classes, $|C|$. So, the maximum number of times
-  the while loop can execute per for loop is as follows: \[ |C| \times |S|\]
+  the while loop can execute per for loop is as follows: \[ |C| \times |R|\]
   because at most we can traverse each student's entire preference list once. If
-  we terminate this loop for each group of student $T \subset S$, then we must have
+  we terminate this loop for each group of student $T \subset R$, then we must have
   intra-group stability because no more blocking pairs remain in each group. 
 
   We can analyze the runtime of this algorithm. Since the while loop executes at
-  most $(|C| < |S|) \times |S|$ times, we can bound the execution of the while
-  loop to $O(S^2)$. Additionally, we run the while loop for each group of
-  student. There can be at most $|S|$ groups of students, such that each student
-  is in a distinct group, so that gives us $O(S^3)$. Therefore, the trading
-  stage of the algorithm will run in at most cubic time. Note that before
-  that, we run the Max-Weight algorithm at least once, which runs in $O(V^3)$
+  most $|C| \times |R| \times \# \text{ groups}$ times, we can bound the
+  execution of the while loop to $O(|C| \times |R| \times \# \text{
+  groups})$. Notably, $|C| \leq |R|$ and $\# \text{ groups } \leq |R|$, and in
+  practical cases there will be significantly fewer student groups and class
+  sections than there
+  are students, so the significant factor for this bound is $|R|$. Therefore, the trading
+  stage of the algorithm will run with respect to the size of $R$. 
+
+  Observe that before that, we run \textsc{max-weight} at least once, which runs in $O(V^3)$
   time where $V$ is the set of vertices \cite{hungarian}. Our vertices are
-  all the students and seats, so the runtime for the weighted stage is O$((q_c \cdot C +
-  |S|)^3)$.
-  So, our total runtime for the algorithm is $O((q_c \cdot C +
-  |S|)^3 + S^3)$ = O$((q_c \cdot C + |S|)^3)$. Therefore, the \textsc{wt}
-  algorithm outputs an intra-group stable matching in cubic time.
+  all the students and seats, so the runtime for the weighted stage is $(|S| +
+  |R|)^3$. So, our total runtime for the algorithm is $(|S|+
+  |R|)^3 + (|C| \times |R| \times \# \text{ groups})$ = O$((|S| + |R|)^3)$. Therefore, the \textsc{wt}
+  algorithm outputs an intra-group stable matching in cubic time with respect to
+  the vertices in $G$.
 \end{proof}
 
-We now have an algorithm that theoretically gives us a viable solution to the
-HUM-assignment problem. The next step is to evaluate it against \textsc{fcfs}
-and \textsc{greedy} to determine whether it performs well in practice. 
+By Theorem \ref{thm:polywt}, we now have an algorithm that theoretically gives
+us a group-fair, intra-group stable matching. Note that the matching is also
+full, as every student is matched to a class in the \textsc{max-weight} section
+if such a matching is possible. So, the \textsc{wt} algorithm we've developed
+outputs an ISF1M solution to the HUM-assignment problem when one exists. 
+The next step is to evaluate it against \textsc{fcfs} and \textsc{greedy} to
+determine whether it performs well in practice. 
 
 
