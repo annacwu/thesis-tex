@@ -83,7 +83,7 @@ implements \textsc{fcfs} under the additional group fairness restriction.
 Let's compare \textsc{greedy} to \textsc{fcfs}. The primary difference is in
 line 3, where we add the group cap constraint as part of the conditional check
 for whether a class is available.We can start by showing that in a
-``vanilla" environment, in which we do not consider student groups, both
+vanilla environment, in which we do not consider student groups, both
 algorithms output a stable matching. Note that in a vanilla environment,
 \textsc{greedy} is equivalent to \textsc{fcfs} because we consider all
 group capacities to be the same as class capacities.
@@ -159,7 +159,7 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
     \end{array}
     \] Observe that in $\mu$, $\mu(a_1) = s_{c_1}^A$ and $\mu(b_1) = s_{c_2}^B$,
   because they are the first two students to be matched and their first choices
-  are different, so they receive their top choices. Next, $\mu(a_2) = s_c_2^A$
+  are different, so they receive their top choices. Next, $\mu(a_2) = s_{c_2}^A$
   because $c_1$ already has a student in group $A$, so $c_1$ is no longer
   available when matching $a_2$, and similarly $\mu(b_2) = s_{c_1}^B$ because
   $c_2$ already has a student in group $B$. Notice that $\mu(b_2) >_{a_2}

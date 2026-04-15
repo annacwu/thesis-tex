@@ -3,11 +3,11 @@
 
 \section{Analyzing Algorithms}
 
-An algorithm is a list of specific instructions written to achieve some goal.
-The goal varies, and in casual conversation individuals have come to associate
-\textit{algorithm} with the phrase “my algorithm” or “the algorithm,” an entity
-with the goal to create profit for big tech companies by keeping users engaged
-on their apps. While those algorithms exist, they are only one type of
+An \textit{algorithm} is a list of specific instructions written to achieve some
+goal. The word ``algorithm" has become an increasingly prevalent phrase on the
+internet with the popularity of social media, and it is often framed as an
+opaque force of technology that controls what content users are shown. 
+While those social media algorithms exist, they are only one type of
 algorithm. A cookie recipe is an algorithm, providing instructions a baker
 follows to yield a batch of cookies upon completion. GPS devices provide
 algorithms for driving from one location to another. In computer science, an
@@ -36,7 +36,7 @@ and measuring ingredients by hand, the algorithm works well for me to make a
 batch of 24 cookies. However, if I start a popular cookie franchise and suddenly
 I need 2,400 cookies a day, my original algorithm is not going to be the most
 efficient way to make that many cookies. While it may make sense when baking
-cookies to handle these two cases differently, in many computer science problems
+cookies to handle these two cases differently, in computer science problems
 data commonly scales to very large sizes, so it is helpful to know our
 algorithms will still be efficient in those cases. 
 
@@ -56,8 +56,8 @@ time, however, so our next category of time analysis is polynomial time.
 Recall that a polynomial is a mathematical expression that combines terms of
 variables and constants using various operations (e.g. $x^4 + 2x^3 + 7$ or $x^2
 + y^2$). In time analysis, we simplify to the largest term in a polynomial and
-we disregard coefficients due to the fact that they become irrelevant as the
-input scales. For instance, say we have a number $x^{100}$ versus $3x^{100}$. If
+we disregard coefficients due to the fact that they become asymptotically
+negligible. For instance, say we have a number $x^{100}$ versus $3x^{100}$. If
 $x = 1,000$, then both of these numbers are extremely large regardless of if we
 multiply it by 3. So in big-O notation, we would say $f(x) = 3x^{100} =
 x^{100}$. Similarly for multiple terms, in $x^{100} + x^5$ the larger $x^{100}$
@@ -72,12 +72,14 @@ O(n)$ time  (note this would be more specifically linear time, but linear time
 is a subset of polynomial time). For our purposes, we can consider polynomial
 time to be sufficiently “efficient,” with the consideration that we would hope
 for our algorithm to be much closer to $O(n)$ time than $O(n^{100})$, as the
-former is much more efficient than the latter. Our last category is exponential
+former is much more efficient than the latter. 
+
+Our last category is exponential
 time, which is very slow compared to our other two categories. We consider an
 algorithm “inefficient” if it takes exponential time. An example of exponential
 time in Big-O is $O(2^n)$. As $n$ grows larger in this case, the running time
 increases extremely rapidly. To compare polynomial time and exponential time,
-imagine we have some number $n = 1000$. If we square $n$, we get a polynomial
+imagine we have some number $n = 1,000$. If we square $n$, we get a polynomial
 expression: $n^2 = 1,000,000$. That is indeed large, but not compared to $2^n$,
 which is “a number much larger than the number of atoms in the universe”
 \cite{Sipser_2006}.
@@ -86,19 +88,19 @@ which is “a number much larger than the number of atoms in the universe”
 
 In time complexity theory, the field of mathematical analysis centered on the
 running time of algorithms, we give names to the aforementioned categories.
-Specifically, the most important complexity category for our purposes is P,
+Specifically, the most important complexity category for our purposes is $P$,
 which denotes the class of problems that can be solved with polynomial time
-algorithms. That means we can think of P as a collection of problems where every
+algorithms. In other words, we can think of $P$ as a collection of problems where every
 problem in the collection has an algorithm that will find a solution in
-polynomial time. Perhaps intuitively, we know there exist many complex problems
+polynomial time. Perhaps intuitively, we know there exist many problems
 that take longer than polynomial time to solve (such as those that take
-exponential time and belong to the class E). A less intuitive fact is that there
-also exist problems that we think do not belong in P, but we don't know how to
+exponential time and therefore belong to the class $E$). A less intuitive fact is that there
+also exist problems that we think do not belong in $P$, but we don't know how to
 prove it at this time nor do we believe we will know how to prove it anytime
 soon. 
 
 To understand what I mean by this, we need to discuss another important
-complexity class called NP: the class of problems solved by
+complexity class called $NP$: the class of problems solved by
 \textit{nondeterministic polynomial} time algorithms. In very simplified terms,
 one could think of “nondeterministic” as a brute force approach: we take all
 possible solutions to a problem, and we have an algorithm that takes polynomial
@@ -119,31 +121,31 @@ It is not possible to guarantee that the first evaluated solution to an
 algorithm will always solve the problem, but we can imagine that if there were
 $n$ possible solutions to an algorithm and we happened to have $n$ computers
 that can all run the algorithm on a distinct solution, one of those computers
-would run the lucky input and solve the problem in polynomial time (if a valid
+would run the lucky input and solve the problem in polynomial time (assuming a valid
 solution exists). We could not determine which computer it would be, but we
 would know it exists. In real life, we do not have $n$ computers for every
 problem we wish to solve with $n$ possible solutions. However, if we were
 somehow given the solution output by that lucky computer, we could
 \textit{verify} that it is correct by running the lucky computer’s input on the
-real computer we do have in polynomial time. All of this is to say that NP is
+real computer we do have, which will take polynomial time. All of this is to explain that $NP$ is
 the class of problems that have algorithms for which we can verify a given
 solution is correct in polynomial time. We cannot necessarily find that solution
 in polynomial time, but if it was given to us we can prove it solves the problem
 in polynomial time. 
 
-Keep in mind that problems we know are in P are also in NP, because we can
+Keep in mind that problems we know are in $P$ are also in $NP$, because we can
 verify that their solutions (which we can find in polynomial time) are correct
 in polynomial time. We will denote the problems that we cannot prove are or are
-not in P as $NP\setminus{P}$, which means the set difference of $NP$ and $P$, or
+not in $P$ as $NP\setminus{P}$, which means the set difference of $NP$ and $P$, or
 all problems in $NP$ that are not known to be in $P$. Generally, we consider the
 class of problems in $NP\setminus{P}$ to be very difficult to solve, as it means
 no one has ever discovered an algorithm that can find a correct solution in
-polynomial time. The hardest NP problems are known as \textit{NP-complete}
+polynomial time. The hardest $NP$ problems are known as \textit{NP-complete}
 problems, where “complete” means the problem can be generalized to take the form
-of every other problem in NP. So, if a polynomial time algorithm was discovered
-for an NP-complete problem, it would mean that every NP problem could be solved
+of every other problem in $NP$. So, if a polynomial time algorithm was discovered
+for an \textit{NP-complete} problem, it would mean that every $NP$ problem could be solved
 in polynomial time, and therefore all of those problems would actually just be
-in P \cite{Sipser_2006}.
+in $P$ \cite{Sipser_2006}.
 
 \section{Graph Theory}
 
@@ -162,12 +164,12 @@ infection from one person to another). \setlength{\belowcaptionskip}{-10pt}
     vertex/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt}
 ]
 
-\node[vertex] (1) at (0, 2)   {1};
-\node[vertex] (2) at (2, 2.5) {2};
-\node[vertex] (3) at (2, 0)   {3};
-\node[vertex] (4) at (3.5, 1) {4};
-\node[vertex] (5) at (5.5, 3) {5};
-\node[vertex] (6) at (6.5, 0) {6};
+\node[vertex] (1) at (0, 2)   {a};
+\node[vertex] (2) at (2, 2.5) {b};
+\node[vertex] (3) at (2, 0)   {c};
+\node[vertex] (4) at (3.5, 1) {d};
+\node[vertex] (5) at (5.5, 3) {e};
+\node[vertex] (6) at (6.5, 0) {f};
 
 \draw[thick] (1) -- (2);
 \draw[thick] (2) -- (4);
@@ -176,51 +178,33 @@ infection from one person to another). \setlength{\belowcaptionskip}{-10pt}
 \draw[thick] (5) -- (6);
 
 \end{tikzpicture}\caption{Simple graph with 6
-vertices and 5 edges} \label{fig:simple-graph} \end{figure}
+vertices and 5 edges.} \label{fig:simple-graph} \end{figure}
 \setlength{\belowcaptionskip}{12pt}
 
-Graphs can famously be used to model scheduling problems by adjusting their
+Graphs can be used to model more complicated problems by adjusting their
 structure slightly. A basic graph problem has vertices and edges, but we can add
-factors such as \textit{direction} going from one vertex to another, or some
-number of \textit{colors} with which we want to color vertices such that no two
-adjacent vertices (vertices connected by an edge) are the same color. The latter
-example is actually one of the most studied NP-complete problems: is it possible
-to color a graph $G$ using $k$ colors? It is also the structure of graph under
-which scheduling has been extensively studied, where vertices represent events,
-edges encode overlapping time conflicts between events, and the number of colors
-is the number of available time slots into which those events can be scheduled
-\cite{graphs}. \setlength{\belowcaptionskip}{-10pt} \begin{figure}[H] \centering
-  \begin{tikzpicture}[
-    vertex/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt, fill=#1},
-    vertex/.default=blue!20
-]
-
-\node[vertex=orange!30]    (1) at (0, 2)   {1};
-\node[vertex=green!30]   (2) at (2, 2.5) {2};
-\node[vertex=orange!30]  (3) at (2, 0)   {3};
-\node[vertex=blue!30] (4) at (3.5, 1) {4};
-\node[vertex=green!30] (5) at (5.5, 3) {5};
-\node[vertex=orange!30] (6) at (6.5, 0) {6};
-
-\draw[thick] (1) -- (2);
-\draw[thick] (2) -- (4);
-\draw[thick] (3) -- (4);
-\draw[thick] (4) -- (5);
-\draw[thick] (5) -- (6);
-\end{tikzpicture}\caption{Graph from
-Figure 1.1 colored with 3 colors} \label{fig:graph-color} \end{figure}
-\setlength{\belowcaptionskip}{12pt}
-
-Another way to construct graphs is to add \textit{weights} to edges. A weight in
-this context is some value derived based on the constraints of the problem, and
-this form of graph often lends itself to optimization. As in, the weighted graph
-can be used to model problems where we want to maximize or minimize the weights.
+factors such as \textit{direction} going from one vertex to another, or
+assigning \textit{weights} to the edges. A ``weight" in
+this context is some value derived from the constraints of the problem. The weighted graph
+can then be used to model problems where we want to maximize or minimize the weights.
 For instance, we can construct a graph where each vertex represents a city and
 each edge represents a highway from one city to another. If we were planning a
 roadtrip, we could add a weight to each edge to signify the travel time of that
 highway from one city to another. Then, if we were planning a road trip to all
 the cities on the graph, we could find the fastest route by finding the path
 with the smallest weight. 
+
+There are many scenarios in which we may also want to find the maximum total
+weight of a graph. Many polynomial time algorithms exist for maximizing weights,
+one of the more well known ones being the \textit{Hungarian} algorithm that runs
+in $O(V^3)$ time \cite{hungarian}. Algorithms such as he Hungarian algorithm can
+be helpful in many instances, such as assigning resources to entities. We can use
+edges to draw connections between resources and entities, and assign weights
+based on how desirable that resource is to each entity. This construction models
+real-life instances such as assigning taxi drivers to waiting customers, or (as we will
+find in this thesis) classes to students. Resource assignment problems are
+actually extensively studied under another field of research as well called 
+\textit{mechanism design}.
 
 \begin{figure}[H] \centering
 \begin{tikzpicture}[
@@ -242,13 +226,13 @@ with the smallest weight.
 \draw[thick] (5) -- node[weight, right]       {5} (6);
 
 \end{tikzpicture}\caption{Graph from
-Figure 1.1 with weights } \label{fig:weighted-graph} \end{figure}
+Figure \ref{fig:simple-graph} with weights.} \label{fig:weighted-graph} \end{figure}
 
 \section{Mechanism Design}
 
 Mechanism design has traditionally been studied by economists and game
-theorists, though in recent years computer scientists have increasingly joined
-the field because mechanisms are often just algorithms. Mechanism design is the
+theorists, though in recent years computer scientists have been joining 
+the field as well because mechanisms are often just algorithms. Mechanism design is the
 construction of systems that “fairly” (under various definitions of the word)
 address scenarios involving a host of participants with adverse or overlapping
 goals. Some examples of problems that fall under this classification are as
@@ -257,21 +241,13 @@ any party \cite{voting}, auctioning search engine advertisement spots in a way
 that promotes honest bidding \cite{auctions}, assigning roommates from a pool of
 students such that each student ends up with a roommate they prefer
 \cite{irving}, and maximizing aid while allocating food donations to food banks
-\cite{foodbank}.
-
-One of the most standard metrics for evaluating the effectiveness of a mechanism
-is whether it is \textit{strategy-proof}, or prevents participants from taking
-advantage of the rules of the mechanism for their own gain. Many more metrics
-exist for evaluating subcategories of mechanism design, but almost all
-mechanisms can be evaluated under strategy-proofness. There are two
-subcategories of mechanism design relevant to this thesis: stable matching and
-fair division. 
-
+\cite{foodbank}. There are two subcategories of mechanism design relevant to this
+thesis: stable matching and fair division. 
 
 
 \subsection{Stable Matching}
 
-Many real world scenarios can be modelled as matching problems, such as
+Many real world scenarios can be modelled as \textit{matching} problems, such as
 assigning medical students to hospitals for residency \cite{nrmp}, or the
 aforementioned roommates example (known as the Stable Roommates problem). The
 standard (and heteronormative) matching problem is known as the Stable Marriage
@@ -297,8 +273,8 @@ of couples with no blocking pairs.
 ]
 
 % Labels (raised higher above the nodes)
-\node at (1, 1.2) {\textbf{men}};
-\node at (5, 1.2) {\textbf{women}};
+\node at (1, 1.2) {\text{Men}};
+\node at (5, 1.2) {\text{Women}};
 
 % Left preference box (gap increased so dotted line is short)
 \node[box] at (-1.5, 0.5) {$1 > 6 > 5 > 2 \cdots$};
@@ -344,7 +320,7 @@ of couples with no blocking pairs.
 
 \end{tikzpicture}
 \caption{Bipartite
-directional graph illustrating the Stable Marriage problem}
+directional graph illustrating the Stable Marriage problem.}
 \label{fig:stable-marriage} \end{figure}
 
 In 1962, David Gale and Lloyd Shapley published a seminal paper for the field in
@@ -355,32 +331,19 @@ solve the College Admissions problem: matching high school student applicants to
 colleges. College Admissions differs slightly from Stable Marriage: it is a
 \textit{many-to-one} matching in which colleges accept multiple students rather
 than each college matching with a single student, and it has \textit{incomplete
-preferences} because students do not rank (apply to) every possible college on
-the list. With a slight adaptation of the DA algorithm, it can solve this
+preferences} because students do not rank (apply to) every possible college that
+exists. With a slight adaptation of the DA algorithm, it can solve this
 version of College Admissions. Since 1962, the DA algorithm has been adapted to
 fit many more problems with additional factors, including the residency problem. 
 
-However, there remain subsets of problems that do not fall under the same
-paradigm as the DA algorithm: for instance, problems with a one-sided market.
-The Stable Roommates problem from above is an example of a one-sided market, in
-which participants are matched within one undivided pool of participants rather
-than between two distinct categories. Stability in a one-sided market retains
-the same meaning as in a bipartite setting. Over 20 years after Gale and
-Shapley’s paper, Robert Irving published a paper with a solution to the Stables
-Roommates problem, in which he proved his algorithm outputs a stable matching of
-roommates in polynomial time if one exists \cite{irving}. Irving’s algorithm,
-similarly to the DA algorithm in bipartite markets, provides the groundwork for
-the majority of research on one-sided matching problems. 
-
 \subsection{Fair Division}
 
-The difference between two-sided matching and fair division (also known as fair
-allocation) is most often \textit{one-sided} preferences. “One-sided”
-preferences has a different meaning than a “one-sided” market: one-sided
-preferences still means a bipartite market, but only one side cares what they
-are matched to. Because only one side cares, we no longer have the idea that
+The difference between matching and fair division (also known as fair
+allocation) is most often two-sided versus \textit{one-sided} preferences. One-sided
+preferences means only one side of the bipartite market cares what they
+are matched to. Because only one side has preferences, we no longer have the idea that
 “cheating” could occur; instead, we evaluate fair division under \textit{envy}.
-Say we have a cake that is half chocolate and half vanilla, and we are dividing
+For instance, say we have a cake that is half chocolate and half vanilla, and we are dividing
 the cake between people at a party. A person who prefers vanilla but receives
 chocolate will be \textit{envious} of those who receive a vanilla slice. In a
 fair division problem, the goal is to minimize the amount of envy between
@@ -435,15 +398,15 @@ significantly more joy from vanilla over chocolate).
 \node at (4.4, -3.5) {\frownie};
 \end{tikzpicture}
 \caption{Cake cutting
-example where $c_1$ and $v_3$ would envy each other} \label{fig:cake-cutting}
+example where $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
 \end{figure}
 
-The cake-cutting example is the canon example for divisible goods
-\cite{genesis}, but there is also a lot of study into the allocation of
-indivisible goods: items that cannot be cut up like a cake. The aforementioned
+The cake-cutting example is the canon example for what is known as
+\textit{divisible goods} \cite{genesis}, but there is also a lot of study into the allocation of
+\textit{indivisible goods}: items that cannot be cut up like a cake. The aforementioned
 food bank example, allocating donated items (such as non-perishable cans of
-food) to different food banks based on preferences they provide, involves
-indivisible goods \cite{foodbank}.
+food) to different food banks based on preferences they provide, is a fair
+division problem with indivisible goods \cite{foodbank}.
 
 In addition to envy and welfare, fair division will often be evaluated under
 Pareto-optimality. An allocation is considered \textit{Pareto-optimal} if there
@@ -460,11 +423,12 @@ difficult to achieve.
 \section{Adding Constraints}
 
 What’s known as the “vanilla” versions of these matching and division
-environments, which is to say the more simple or basic versions, have been
+environments, which is to say the more simple or basic environments without many
+additional factors, have been
 studied thoroughly by now. So, to advance mechanism design research and to more
 accurately model real-world scenarios, scientists add \textit{constraints} to
 the problems. Constraints come in many forms, and often make problems so complex
-they become NP-complete. In the scope of class assignment and related matching
+they become \textit{NP-complete}. In the scope of class assignment and related matching
 problems, constraints often come in the forms of quotas on class capacity and
 categories of students.
 
@@ -477,14 +441,14 @@ problem. Gale and Shapley’s College Admissions problem, in which a college wit
 $n$ applicants can admit up to $q$ students, is traditionally studied with these
 capacity constraints (where $q$ is for quota). Lower bound quotas in something
 like the College Admissions would encode in the mechanism that schools need to
-accept at least $m$ students of some type \cite{quotas}. Strict quotas are one
-such constraint that can cause finding a stable matching in a bipartite setting
-to be NP-hard\cite{santhini}, so quotas are often studied under “soft”
+accept at least $m$ students of some type \cite{quotas}. Strict quotas can cause
+finding a stable matching in a bipartite setting
+to be \textit{NP-hard} \cite{santhini}, so quotas are often studied under “soft”
 constraints as well: for example, allowing a quota to be a target range rather
 than a specific number.
 
 This quota-based extension of the College Admissions problem more accurately
-reflects reality by acting as diversity constraints. The goal of diversity
+reflects reality by modelling diversity constraints. The goal of diversity
 constraints is usually to produce a matching/allocation in which some type of
 participants is spread evenly or represented accurately in the result. In the
 actual college admissions problem, these constraints are commonly known as
@@ -495,47 +459,25 @@ not always benefit the minority applicants \cite{affirmative-action}. As a
 result, diversity constraints can take many forms—they have been studied under
 frameworks of lower-bound quotas \cite{quotas}, proportionality (evenly
 distributing types of students in the matching) \cite{proportionality}, and
-group fairness (ensuring each distinct group of students is as happy with their
-matching as possible based on the happiness of each individual student in the
-group) \cite{pandagroupfairness}. In each of those papers implementing diversity
-constraints, the constraints make the problems NP-complete.  
+\textit{group fairness} (equalizing outcomes across protected and non-protected
+groups) \cite{fairness}. In each of those papers implementing diversity
+constraints, the constraints make the problems \textit{NP-complete}.  
 
 
-\subsection{Optimization}
+\subsection{Group Fairness}
 
-When we work with an NP-hard or especially an NP-complete problem, we generally
-do not attempt to find an algorithm that gives an exact solution; the fact that
-the problem is NP-hard means we don’t know if it is even possible to find an
-exact solution efficiently. However, as we have seen with quotas and diversity,
-many problems with relevant real-world applications are in NP. Does that mean we
-simply give up trying to find a solution? 
-
-Maybe we have to let go of the idea of an exact solution, but that doesn’t have
-to stop us from trying to find a solution we deem \textit{good enough}. “Good
-enough” can mean many things depending on the problem, which is the driving
-force behind \textit{optimization}. Optimization problems attempt to find a
-near-optimal (if not optimal) solution under given constraints.  Often, these
-will take the form of \textit{approximation} algorithms, which will relax some
-of the constraints or allow a violation of the constraints up to some upper
-bound to guarantee a solution that is as close to the optimal solution as
-mathematically possible. We can clarify what we mean by “near-optimal” based on
-the optimal solution: if an optimal solution has some value (such as a stable
-matching with no blocking pairs), we want to find a solution that
-maximizes/minimizes how close we get to that value (such as a matching that
-guarantees a maximum of one blocking pair). Another optimization approach is
-with \textit{heuristic} algorithms, which leans even more into the “good enough”
-mentality by focusing on the empirical results. Rather than making mathematical
-guarantees about the optimality of the solution, a heuristic algorithm will be
-evaluated for its performance on actual data. Usually, despite the worst-case
-scenario being mathematically infeasible, the algorithm is able to output a
-solution when given real scenarios, and therefore we consider it to be a
-reasonable solution. The goal of both approximation and heuristic algorithms is
-to find an adequate solution quickly when the optimal solution cannot be
-reasonably found. There are other approaches to solving optimization problems,
-but these approaches are the most relevant to this thesis. 
-
-
-
+``Group fairness" in classification or assignment tasks refers to
+``preventing discrimination against against protected population subgroups"
+while still achieving some ``utility" in the assignment \cite{fairness}. These problems
+involve classifying individuals themselves by some metric of ``similarity" with
+respect to the particular task. A lot of research has been done on defining
+``similarity" mathematically, but in this thesis we are more concerned with
+ensuring pre-determined similar students, denoted by being part of some student
+group, are treated fairly in class assignment. That is, we use group fairness to
+signify that students of different groups are represented proportionally within
+HUM sections with respect to their overall demographic presence in the student
+body, or that students of all groups have equal opportunity to be in all of the
+HUM sections. 
 
 \section{Related Work}
 
@@ -561,13 +503,13 @@ the cycle is broken.
 
 Six years later, in 2009, Abdulkadiroğlu, Pathak, and Roth amended the 2003
 paper with a case study into the New York City high school allocation mechanism,
-scrutinizing the DA algorithm under strategy-proofness and stability. They show
+scrutinizing the DA algorithm under stability. They show
 empirically that there is a loss of Pareto efficiency in the algorithm when
-adding strategy-proofness and stability to the environment \cite{abu-2009}. 
+adding stability to the environment \cite{abu-2009}. 
 
-Many papers, including some outside of school choice specifically, extend one or
+Many later papers extend one or
 both of Abdulkadiroğlu’s papers in further research. In 2010, Biró et al.
-studied school choice in a college setting with upper and lower quotas,
+studied school choice in a college setting with both upper and lower quotas,
 constraining the environment in a new way. They determined that stable matchings
 do not always exist with those quotas, and in fact determining whether a stable
 matching exists at all is NP-complete \cite{quotas}. Three years later, Hafalir
@@ -584,24 +526,23 @@ papers that implicate stability with diverse students of multiple types
 
 Since 2003, research also branched from two-sided school choice into one-sided
 matching, where only one side of the market has preferences. This was often
-studied under the framework of course allocation, a mechanism design problem
-which arose from the existing school choice literature. In 2011, Budish and
+studied under the framework of course allocation. In 2011, Budish and
 Cantillon published the seminal paper on course allocation at Harvard (which
 cites Abdulkadiroğlu’s 2003 and 2009 papers) in which they evaluate Harvard’s
-mechanism under strategyproofness and Pareto-optimality \cite{budish}. There
+mechanism under Pareto-optimality \cite{budish}. There
 have been slight alterations to their framework since then, such as the effects
 of incomplete preferences on participant welfare. 
 
 Only in recent years have scholars started studying one-sided matching with
-quotas and other diversity constraints. In fact, the constraints closest to that
-in this paper (groups of students as well as sub-types within the groups) only
-seem to exist in literature published as recently as 2025. Specifically,
+quotas and other diversity constraints. In fact, the fairness constraints closest to that
+in this paper only
+seem to exist in literature published as recently as March-August 2025. Specifically,
 Santhini et al. researched the empirical effects of both soft quotas
 \cite{santhini} and group fairness \cite{santhini-group-fairness} on the
 mechanism using convex optimization (also done similarly by Panda et al.
 \cite{pandagroupfairness}). There is not readily as much theory-based research
 on one-sided matching with constraints as two-sided matching, and those that do
-study it under a theoretical framework use more of a fair division analysis than
+study it under a theoretical framework use more of a fair division envy/Pareto-based analysis than
 stability.
 
 As far as we can tell, the closest paper to our construction of stability in
@@ -612,6 +553,6 @@ stability to be “if, whenever a student prefers a school to her assignment, th
 school is enrolled up to its capacity by students who have higher priority at
 that school” \cite{abdu2011generalized}, where “higher priority” in the
 one-sided setting only considers how strongly the other students prefer that
-school. The paper does not consider the effect of adding diversity constraints. 
+school. The paper does not consider the effect of adding fairness constraints. 
 
 
