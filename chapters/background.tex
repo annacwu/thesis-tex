@@ -1,12 +1,12 @@
 % !TEX root = ../thesis.tex
-\chapter{Background} 
+\chapter{Background}
 
 \section{Analyzing Algorithms}
 
 An \textit{algorithm} is a list of specific instructions written to achieve some
 goal. The word ``algorithm" has become an increasingly prevalent phrase on the
 internet with the popularity of social media, and it is often framed as an
-opaque force of technology that controls what content users are shown. 
+opaque force of technology that controls what content users are shown.
 While those social media algorithms exist, they are only one type of
 algorithm. A cookie recipe is an algorithm, providing instructions a baker
 follows to yield a batch of cookies upon completion. GPS devices provide
@@ -15,7 +15,7 @@ algorithm is a sequence of lines of code that perform a computation, usually
 mathematical calculations or processing data. Because algorithms are so
 versatile, and there are so many different ways of accomplishing one goal, we
 analyze algorithms by their efficiency: how many resources they use and how much
-time they take to complete the task. 
+time they take to complete the task.
 
 \subsection{Big-O}
 
@@ -38,12 +38,12 @@ I need 2,400 cookies a day, my original algorithm is not going to be the most
 efficient way to make that many cookies. While it may make sense when baking
 cookies to handle these two cases differently, in computer science problems
 data commonly scales to very large sizes, so it is helpful to know our
-algorithms will still be efficient in those cases. 
+algorithms will still be efficient in those cases.
 
 We \textit{estimate} running time through asymptotic analysis. In Big-O
 notation, we write that for some algorithm called $f$, $f(n) = O(g(n))$. This is
 read “$f(n)$ is big $O$ of $g(n)$,” where $f$ on input $n$ will take \textbf{at
-most} $g(n)$ time to run. The big $O$ signifies the “at most” in that statement,
+  most} $g(n)$ time to run. The big $O$ signifies the “at most” in that statement,
 or more formally it denotes an \textit{upper bound} on the asymptotic running
 time. Running time can be classified into different categories. The most
 relevant categories to this thesis are constant time, polynomial time, and
@@ -51,16 +51,16 @@ exponential time. Constant time, $O(1)$, can be abstractly thought of as any
 operation that takes the same fixed amount of time regardless of the input size.
 Constant time is the fastest running time an algorithm can have. Most algorithms
 involve more complicated operations than those that can be done in constant
-time, however, so our next category of time analysis is polynomial time. 
+time, however, so our next category of time analysis is polynomial time.
 
 Recall that a polynomial is a mathematical expression that combines terms of
 variables and constants using various operations (e.g. $x^4 + 2x^3 + 7$ or $x^2
-+ y^2$). In time analysis, we simplify to the largest term in a polynomial and
+  + y^2$). In time analysis, we simplify to the largest term in a polynomial and
 we disregard coefficients due to the fact that they become asymptotically
 negligible. For instance, say we have a number $x^{100}$ versus $3x^{100}$. If
 $x = 1,000$, then both of these numbers are extremely large regardless of if we
 multiply it by 3. So in big-O notation, we would say $f(x) = 3x^{100} =
-x^{100}$. Similarly for multiple terms, in $x^{100} + x^5$ the larger $x^{100}$
+  x^{100}$. Similarly for multiple terms, in $x^{100} + x^5$ the larger $x^{100}$
 term will be the part that grows bigger, so when analyzing time, it overshadows
 the $x^5$ term. When we think about polynomial time, we think about how many
 actions must be completed per input to the algorithm. For instance, if I already
@@ -68,11 +68,11 @@ have cookie dough and I need to bake the cookies, my algorithm might be: for
 every tablespoon of cookie dough, roll the dough into a ball and then sprinkle
 cinnamon on top. That is 2 actions to complete for every tablespoon of cookie
 dough. So, if we have $n$ tablespoons, we could say this step takes $O(2n) =
-O(n)$ time  (note this would be more specifically linear time, but linear time
+  O(n)$ time  (note this would be more specifically linear time, but linear time
 is a subset of polynomial time). For our purposes, we can consider polynomial
 time to be sufficiently “efficient,” with the consideration that we would hope
 for our algorithm to be much closer to $O(n)$ time than $O(n^{100})$, as the
-former is much more efficient than the latter. 
+former is much more efficient than the latter.
 
 Our last category is exponential
 time, which is very slow compared to our other two categories. We consider an
@@ -84,7 +84,7 @@ expression: $n^2 = 1,000,000$. That is indeed large, but not compared to $2^n$,
 which is “a number much larger than the number of atoms in the universe”
 \cite{Sipser_2006}.
 
-\subsection{P vs NP} 
+\subsection{P vs NP}
 
 In time complexity theory, the field of mathematical analysis centered on the
 running time of algorithms, we give names to the aforementioned categories.
@@ -97,7 +97,7 @@ that take longer than polynomial time to solve (such as those that take
 exponential time and therefore belong to the class $E$). A less intuitive fact is that there
 also exist problems that we think do not belong in $P$, but we don't know how to
 prove it at this time nor do we believe we will know how to prove it anytime
-soon. 
+soon.
 
 To understand what I mean by this, we need to discuss another important
 complexity class called $NP$: the class of problems solved by
@@ -131,7 +131,7 @@ real computer we do have, which will take polynomial time. All of this is to exp
 the class of problems that have algorithms for which we can verify a given
 solution is correct in polynomial time. We cannot necessarily find that solution
 in polynomial time, but if it was given to us we can prove it solves the problem
-in polynomial time. 
+in polynomial time.
 
 Keep in mind that problems we know are in $P$ are also in $NP$, because we can
 verify that their solutions (which we can find in polynomial time) are correct
@@ -159,26 +159,28 @@ even the spread of disease (where vertices are people and edges represent an
 infection from one person to another). \setlength{\belowcaptionskip}{-10pt}
 
 \begin{figure}[H] \centering
- \begin{tikzpicture}[
-    node distance=2cm,
-    vertex/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt}
-]
+  \begin{tikzpicture}[
+      node distance=2cm,
+      vertex/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt}
+    ]
 
-\node[vertex] (1) at (0, 2)   {a};
-\node[vertex] (2) at (2, 2.5) {b};
-\node[vertex] (3) at (2, 0)   {c};
-\node[vertex] (4) at (3.5, 1) {d};
-\node[vertex] (5) at (5.5, 3) {e};
-\node[vertex] (6) at (6.5, 0) {f};
+    \node[vertex] (1) at (0, 2)   {a};
+    \node[vertex] (2) at (2, 2.5) {b};
+    \node[vertex] (3) at (2, 0)   {c};
+    \node[vertex] (4) at (3.5, 1) {d};
+    \node[vertex] (5) at (5.5, 3) {e};
+    \node[vertex] (6) at (6.5, 0) {f};
 
-\draw[thick] (1) -- (2);
-\draw[thick] (2) -- (4);
-\draw[thick] (3) -- (4);
-\draw[thick] (4) -- (5);
-\draw[thick] (5) -- (6);
+    \draw[thick] (1) -- (2);
+    \draw[thick] (2) -- (4);
+    \draw[thick] (3) -- (4);
+    \draw[thick] (4) -- (5);
+    \draw[thick] (5) -- (6);
 
-\end{tikzpicture}\caption{Simple graph with 6
-vertices and 5 edges.} \label{fig:simple-graph} \end{figure}
+  \end{tikzpicture}
+  \caption{Simple graph with 6
+    vertices and 5 edges.} \label{fig:simple-graph}
+\end{figure}
 \setlength{\belowcaptionskip}{12pt}
 
 Graphs can be used to model more complicated problems by adjusting their
@@ -192,7 +194,7 @@ each edge represents a highway from one city to another. If we were planning a
 roadtrip, we could add a weight to each edge to signify the travel time of that
 highway from one city to another. Then, if we were planning a road trip to all
 the cities on the graph, we could find the fastest route by finding the path
-with the smallest weight. 
+with the smallest weight.
 
 There are many scenarios in which we may also want to find the maximum total
 weight of a graph. Many polynomial time algorithms exist for maximizing weights,
@@ -203,35 +205,37 @@ edges to draw connections between resources and entities, and assign weights
 based on how desirable that resource is to each entity. This construction models
 real-life instances such as assigning taxi drivers to waiting customers, or (as we will
 find in this thesis) classes to students. Resource assignment problems are
-actually extensively studied under another field of research as well called 
+actually extensively studied under another field of research as well called
 \textit{mechanism design}.
 
 \begin{figure}[H] \centering
-\begin{tikzpicture}[
-    vertex/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt},
-    weight/.style={midway, fill=white, inner sep=1pt, font=\small}
-]
+  \begin{tikzpicture}[
+      vertex/.style={circle, draw, thick, minimum size=8mm, inner sep=0pt},
+      weight/.style={midway, fill=white, inner sep=1pt, font=\small}
+    ]
 
-\node[vertex] (1) at (0, 2)   {a};
-\node[vertex] (2) at (2, 2.5) {b};
-\node[vertex] (3) at (2, 0)   {c};
-\node[vertex] (4) at (3.5, 1) {d};
-\node[vertex] (5) at (5.5, 3) {e};
-\node[vertex] (6) at (6.5, 0) {f};
+    \node[vertex] (1) at (0, 2)   {a};
+    \node[vertex] (2) at (2, 2.5) {b};
+    \node[vertex] (3) at (2, 0)   {c};
+    \node[vertex] (4) at (3.5, 1) {d};
+    \node[vertex] (5) at (5.5, 3) {e};
+    \node[vertex] (6) at (6.5, 0) {f};
 
-\draw[thick] (1) -- node[weight, above]       {7} (2);
-\draw[thick] (2) -- node[weight, left]        {2} (4);
-\draw[thick] (3) -- node[weight, below]       {4} (4);
-\draw[thick] (4) -- node[weight, above left]  {8} (5);
-\draw[thick] (5) -- node[weight, right]       {5} (6);
+    \draw[thick] (1) -- node[weight, above]       {7} (2);
+    \draw[thick] (2) -- node[weight, left]        {2} (4);
+    \draw[thick] (3) -- node[weight, below]       {4} (4);
+    \draw[thick] (4) -- node[weight, above left]  {8} (5);
+    \draw[thick] (5) -- node[weight, right]       {5} (6);
 
-\end{tikzpicture}\caption{Graph from
-Figure \ref{fig:simple-graph} with weights.} \label{fig:weighted-graph} \end{figure}
+  \end{tikzpicture}
+  \caption{Graph from
+    Figure \ref{fig:simple-graph} with weights.} \label{fig:weighted-graph}
+\end{figure}
 
 \section{Mechanism Design}
 
 Mechanism design has traditionally been studied by economists and game
-theorists, though in recent years computer scientists have been joining 
+theorists, though in recent years computer scientists have been joining
 the field as well because mechanisms are often just algorithms. Mechanism design is the
 construction of systems that “fairly” (under various definitions of the word)
 address scenarios involving a host of participants with adverse or overlapping
@@ -242,8 +246,7 @@ that promotes honest bidding \cite{auctions}, assigning roommates from a pool of
 students such that each student ends up with a roommate they prefer
 \cite{irving}, and maximizing aid while allocating food donations to food banks
 \cite{foodbank}. There are two subcategories of mechanism design relevant to this
-thesis: stable matching and fair division. 
-
+thesis: stable matching and fair division.
 
 \subsection{Stable Matching}
 
@@ -264,64 +267,65 @@ assigned partners and will “elope,” leaving the other two participants alone
 This couple would be known as a \textit{blocking pair}, because their elopement
 “blocks” the matching from being complete. Herein lies the stability aspect of
 stable matching: we wish to find an algorithm that outputs a complete matching
-of couples with no blocking pairs. 
+of couples with no blocking pairs.
 
 \begin{figure}[H] \centering
-\begin{tikzpicture}[
-  node/.style={circle, draw, minimum size=0.7cm, inner sep=0},
-  box/.style={rectangle, draw, minimum width=2.5cm, minimum height=0.8cm, align=center}
-]
+  \begin{tikzpicture}[
+      node/.style={circle, draw, minimum size=0.7cm, inner sep=0},
+      box/.style={rectangle, draw, minimum width=2.5cm, minimum height=0.8cm, align=center}
+    ]
 
-% Labels (raised higher above the nodes)
-\node at (1, 1.2) {\text{Men}};
-\node at (5, 1.2) {\text{Women}};
+    % Labels (raised higher above the nodes)
+    \node at (1, 1.2) {\text{Men}};
+    \node at (5, 1.2) {\text{Women}};
 
-% Left preference box (gap increased so dotted line is short)
-\node[box] at (-1.5, 0.5) {$1 > 6 > 5 > 2 \cdots$};
+    % Left preference box (gap increased so dotted line is short)
+    \node[box] at (-1.5, 0.5) {$1 > 6 > 5 > 2 \cdots$};
 
-% Right preference box
-\node[box] at (7.5, 0.5) {$1 > 4 > 2 > 3 \cdots$};
+    % Right preference box
+    \node[box] at (7.5, 0.5) {$1 > 4 > 2 > 3 \cdots$};
 
-% Men nodes
-\node[node] (m1) at (1,  0)   {1};
-\node[node] (m2) at (1, -1)   {2};
-\node[node] (m3) at (1, -2) {3};
-\node[node] (m4) at (1, -3) {4};
-\node[node] (m5) at (1, -4)   {5};
-\node[node] (m6) at (1, -5)   {6};
+    % Men nodes
+    \node[node] (m1) at (1,  0)   {1};
+    \node[node] (m2) at (1, -1)   {2};
+    \node[node] (m3) at (1, -2) {3};
+    \node[node] (m4) at (1, -3) {4};
+    \node[node] (m5) at (1, -4)   {5};
+    \node[node] (m6) at (1, -5)   {6};
 
-% Women nodes
-\node[node] (w1) at (5,  0)   {1};
-\node[node] (w2) at (5, -1)   {2};
-\node[node] (w3) at (5, -2) {3};
-\node[node] (w4) at (5, -3) {4};
-\node[node] (w5) at (5, -4)   {5};
-\node[node] (w6) at (5, -5)   {6};
+    % Women nodes
+    \node[node] (w1) at (5,  0)   {1};
+    \node[node] (w2) at (5, -1)   {2};
+    \node[node] (w3) at (5, -2) {3};
+    \node[node] (w4) at (5, -3) {4};
+    \node[node] (w5) at (5, -4)   {5};
+    \node[node] (w6) at (5, -5)   {6};
 
-% Dotted lines from boxes to node 1 (with explicit start/end to avoid overlap)
-\draw[dotted, thick] (0.25, 0.5) -- (0.65, 0);
-\draw[dotted, thick] (5.35, 0)  -- (5.75, 0.5);
+    % Dotted lines from boxes to node 1 (with explicit start/end to avoid overlap)
+    \draw[dotted, thick] (0.25, 0.5) -- (0.65, 0);
+    \draw[dotted, thick] (5.35, 0)  -- (5.75, 0.5);
 
-% Edges
-\draw (m1) -- (w1);
-\draw (m2) -- (w5);
-\draw (m3) -- (w2);
-\draw (m4) -- (w6);
-\draw (m5) -- (w4);
-\draw (m6) -- (w3);
+    % Edges
+    \draw (m1) -- (w1);
+    \draw (m2) -- (w5);
+    \draw (m3) -- (w2);
+    \draw (m4) -- (w6);
+    \draw (m5) -- (w4);
+    \draw (m6) -- (w3);
 
-% Arrows (matching from diagram: crossing pattern)
-\draw[->] (m1) -- (w1);
-\draw[->] (m2) -- (w5);
-\draw[->] (m3) -- (w2);
-\draw[->] (m4) -- (w6);
-\draw[->] (m5) -- (w4);
-\draw[->] (m6) -- (w3);
+    % Arrows (matching from diagram: crossing pattern)
+    \draw[->] (m1) -- (w1);
+    \draw[->] (m2) -- (w5);
+    \draw[->] (m3) -- (w2);
+    \draw[->] (m4) -- (w6);
+    \draw[->] (m5) -- (w4);
+    \draw[->] (m6) -- (w3);
 
-\end{tikzpicture}
-\caption{Bipartite
-directional graph illustrating the Stable Marriage problem.}
-\label{fig:stable-marriage} \end{figure}
+  \end{tikzpicture}
+  \caption{Bipartite
+    directional graph illustrating the Stable Marriage problem.}
+  \label{fig:stable-marriage}
+\end{figure}
 
 In 1962, David Gale and Lloyd Shapley published a seminal paper for the field in
 which they proposed the \textbf{deferred acceptance} (DA) algorithm, a solution
@@ -331,10 +335,10 @@ solve the College Admissions problem: matching high school student applicants to
 colleges. College Admissions differs slightly from Stable Marriage: it is a
 \textit{many-to-one} matching in which colleges accept multiple students rather
 than each college matching with a single student, and it has \textit{incomplete
-preferences} because students do not rank (apply to) every possible college that
+  preferences} because students do not rank (apply to) every possible college that
 exists. With a slight adaptation of the DA algorithm, it can solve this
 version of College Admissions. Since 1962, the DA algorithm has been adapted to
-fit many more problems with additional factors, including the residency problem. 
+fit many more problems with additional factors, including the residency problem.
 
 \subsection{Fair Division}
 
@@ -349,56 +353,56 @@ chocolate will be \textit{envious} of those who receive a vanilla slice. In a
 fair division problem, the goal is to minimize the amount of envy between
 participants and maximize the amount of \textit{welfare}, where welfare is the
 benefit participants yield from the goods they receive (such as feeling
-significantly more joy from vanilla over chocolate). 
+significantly more joy from vanilla over chocolate).
 
 \begin{figure}[H] \centering
-\begin{tikzpicture}[
-  node/.style={circle, draw, minimum size=0.8cm, inner sep=0},
-  ->, >=Stealth
-]
+  \begin{tikzpicture}[
+      node/.style={circle, draw, minimum size=0.8cm, inner sep=0},
+      ->, >=Stealth
+    ]
 
-% Cake rectangle (white left portion)
-\draw[line width=1.5pt] (0, 0) rectangle (10, 3);
+    % Cake rectangle (white left portion)
+    \draw[line width=1.5pt] (0, 0) rectangle (10, 3);
 
-% Shaded right portion
-\fill[gray!20] (5, 0) rectangle (10, 3);
-\draw[line width=1.5pt] (5, 0) rectangle (10, 3);
+    % Shaded right portion
+    \fill[gray!20] (5, 0) rectangle (10, 3);
+    \draw[line width=1.5pt] (5, 0) rectangle (10, 3);
 
-% Orange vertical cut lines (no arrowheads, just lines)
-\draw[orange, thick, -] (0.75,   -0.3) -- (0.75,   3.8);
-\draw[orange, thick, -] (1.5, -0.3) -- (1.5, 3.8);
-\draw[orange, thick, -] (2.25, -0.3) -- (2.25, 3.8);
-\draw[orange, thick, -] (5, -0.3) -- (5, 3.8);
-\draw[orange, thick, -] (5.75, -0.3) -- (5.75, 3.8);
+    % Orange vertical cut lines (no arrowheads, just lines)
+    \draw[orange, thick, -] (0.75,   -0.3) -- (0.75,   3.8);
+    \draw[orange, thick, -] (1.5, -0.3) -- (1.5, 3.8);
+    \draw[orange, thick, -] (2.25, -0.3) -- (2.25, 3.8);
+    \draw[orange, thick, -] (5, -0.3) -- (5, 3.8);
+    \draw[orange, thick, -] (5.75, -0.3) -- (5.75, 3.8);
 
-% Black arrows from midpoints between cuts down to nodes
-% v1: left edge (0) to cut1 (1), midpoint = 0.5
-\draw[->] (0.5,  0) -- (0.5,  -2);
-% v2: cut1 (1) to cut2 (1.8), midpoint = 1.4
-\draw[->] (1,  0) -- (1.8,  -2);
-% c1: cut2 (1.8) to cut3 (2.6), midpoint = 2.2
-\draw[->] (1.75,  0) -- (3.1,  -2);
-% v3: cut4 (5.5) to cut5 (6.2), midpoint = 5.85
-\draw[->] (5.5, 0) -- (4.4,  -2);
+    % Black arrows from midpoints between cuts down to nodes
+    % v1: left edge (0) to cut1 (1), midpoint = 0.5
+    \draw[->] (0.5,  0) -- (0.5,  -2);
+    % v2: cut1 (1) to cut2 (1.8), midpoint = 1.4
+    \draw[->] (1,  0) -- (1.8,  -2);
+    % c1: cut2 (1.8) to cut3 (2.6), midpoint = 2.2
+    \draw[->] (1.75,  0) -- (3.1,  -2);
+    % v3: cut4 (5.5) to cut5 (6.2), midpoint = 5.85
+    \draw[->] (5.5, 0) -- (4.4,  -2);
 
-% Nodes row
-\node[node] (v1) at (0.5,  -2.7) {$v_1$};
-\node[node] (v2) at (1.8,  -2.7) {$v_2$};
-\node[node] (c1) at (3.1,  -2.7) {$c_1$};
-\node[node] (v3) at (4.4,  -2.7) {$v_3$};
-\node[node] (v4) at (5.7,  -2.7) {$v_4$};
-\node[node] (c2) at (7.0,  -2.7) {$c_2$};
-\node[node] (c3) at (8.3,  -2.7) {$c_3$};
-\node[node] (c4) at (9.6,  -2.7) {$c_4$};
+    % Nodes row
+    \node[node] (v1) at (0.5,  -2.7) {$v_1$};
+    \node[node] (v2) at (1.8,  -2.7) {$v_2$};
+    \node[node] (c1) at (3.1,  -2.7) {$c_1$};
+    \node[node] (v3) at (4.4,  -2.7) {$v_3$};
+    \node[node] (v4) at (5.7,  -2.7) {$v_4$};
+    \node[node] (c2) at (7.0,  -2.7) {$c_2$};
+    \node[node] (c3) at (8.3,  -2.7) {$c_3$};
+    \node[node] (c4) at (9.6,  -2.7) {$c_4$};
 
-% Small arrows below v1, v2 (pointing down = happy)
-\node at (0.5, -3.5) {\smiley};
-\node at (1.8, -3.5) {\smiley};
-\node at (3.1, -3.5) {\frownie};
-\node at (4.4, -3.5) {\frownie};
-\end{tikzpicture}
-\caption{Cake cutting
-example where $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
+    % Small arrows below v1, v2 (pointing down = happy)
+    \node at (0.5, -3.5) {\smiley};
+    \node at (1.8, -3.5) {\smiley};
+    \node at (3.1, -3.5) {\frownie};
+    \node at (4.4, -3.5) {\frownie};
+  \end{tikzpicture}
+  \caption{Cake cutting
+    example where $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
 \end{figure}
 
 The cake-cutting example is the canon example for what is known as
@@ -417,8 +421,7 @@ is better or the same as allocation $B$ for every participant. As more factors
 are added to fair allocation problems—such as considering the order in which
 goods arrive for distribution, scaling the number of participants, and more
 specific definitions of welfare—envy-freeness and Pareto-optimality become more
-difficult to achieve. 
-
+difficult to achieve.
 
 \section{Adding Constraints}
 
@@ -432,7 +435,7 @@ they become \textit{NP-complete}. In the scope of class assignment and related m
 problems, constraints often come in the forms of quotas on class capacity and
 categories of students.
 
-\subsection{Quotas and Diversity} 
+\subsection{Quotas and Diversity}
 
 Quotas in allocation and matching problems can be implemented as upper and lower
 bounds on the mechanism. Upper bound quotas imply capacity constraints, such as
@@ -461,8 +464,7 @@ frameworks of lower-bound quotas \cite{quotas}, proportionality (evenly
 distributing types of students in the matching) \cite{proportionality}, and
 \textit{group fairness} (equalizing outcomes across protected and non-protected
 groups) \cite{fairness}. In each of those papers implementing diversity
-constraints, the constraints make the problems \textit{NP-complete}.  
-
+constraints, the constraints make the problems \textit{NP-complete}.
 
 \subsection{Group Fairness}
 
@@ -477,7 +479,7 @@ group, are treated fairly in class assignment. That is, we use group fairness to
 signify that students of different groups are represented proportionally within
 HUM sections with respect to their overall demographic presence in the student
 body, or that students of all groups have equal opportunity to be in all of the
-HUM sections. 
+HUM sections.
 
 \section{Related Work}
 
@@ -487,10 +489,9 @@ is the problem of assigning high school students to high schools such that
 parents are satisfied, each student has a school to attend, and no school admits
 more students than they can accommodate. Course allocation in mechanism design
 is the problem of constructing a system to assign students to classes based on
-which classes they prefer to take. 
+which classes they prefer to take.
 
-
-\subsection{Two-sided matching} 
+\subsection{Two-sided matching}
 
 In 2003, Abdulkadiroğlu and Sonmez published a seminal paper on school choice,
 in which they view the problem through the bipartite lens of schools and
@@ -499,13 +500,13 @@ Gale-Shapley DA algorithm as a solution as well as their own algorithm, which
 they called Top Trading Cycles (TTC) \cite{school-choice}. In Top Trading
 Cycles, if the matching has a cycle of students in which each student prefers
 the next student’s school, each assignment is given to the next student until
-the cycle is broken. 
+the cycle is broken.
 
 Six years later, in 2009, Abdulkadiroğlu, Pathak, and Roth amended the 2003
 paper with a case study into the New York City high school allocation mechanism,
 scrutinizing the DA algorithm under stability. They show
 empirically that there is a loss of Pareto efficiency in the algorithm when
-adding stability to the environment \cite{abu-2009}. 
+adding stability to the environment \cite{abu-2009}.
 
 Many later papers extend one or
 both of Abdulkadiroğlu’s papers in further research. In 2010, Biró et al.
@@ -521,7 +522,6 @@ stability effects of quotas on the two-sided school choice problem, including
 papers that implicate stability with diverse students of multiple types
 \cite{kurata}.
 
-
 \subsection{One-sided matching}
 
 Since 2003, research also branched from two-sided school choice into one-sided
@@ -531,7 +531,7 @@ Cantillon published the seminal paper on course allocation at Harvard (which
 cites Abdulkadiroğlu’s 2003 and 2009 papers) in which they evaluate Harvard’s
 mechanism under Pareto-optimality \cite{budish}. There
 have been slight alterations to their framework since then, such as the effects
-of incomplete preferences on participant welfare. 
+of incomplete preferences on participant welfare.
 
 Only in recent years have scholars started studying one-sided matching with
 quotas and other diversity constraints. In fact, the fairness constraints closest to that
@@ -553,6 +553,5 @@ stability to be “if, whenever a student prefers a school to her assignment, th
 school is enrolled up to its capacity by students who have higher priority at
 that school” \cite{abdu2011generalized}, where “higher priority” in the
 one-sided setting only considers how strongly the other students prefer that
-school. The paper does not consider the effect of adding fairness constraints. 
-
+school. The paper does not consider the effect of adding fairness constraints.
 

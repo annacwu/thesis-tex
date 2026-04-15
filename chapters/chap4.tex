@@ -15,7 +15,7 @@ time they are in class, it provides a good baseline for what discipline a
 student is interested in, which is sufficient for our group fairness purposes.
 The Registrar also provided us with the master class schedules for each year
 corresponding to the student data, so we can match students to the actual
-sections that were available for their year. 
+sections that were available for their year.
 
 \section{Implementation}
 
@@ -33,7 +33,7 @@ our data into these objects. While Python may not be as fast as other languages
 with some similar features, we decided that because the \textsc{wt} algorithm performs in
 polynomial time (see Theorem \ref{thm:polywt}) and Reed has relatively small class sizes,
 the impact on the performance of the algorithms was less essential than the
-readability of the code. 
+readability of the code.
 
 \subsection{Synthesizing Preferences}
 
@@ -41,7 +41,7 @@ While we did have access to the student schedule and major data, we were still
 missing a key component of a matching problem: rankings. Because there was no
 feasible way of acquiring each student’s actual preferences from class
 registration years ago, we needed to synthesize student rankings over the HUM
-sections to effectively simulate our HUM-assignment environment. 
+sections to effectively simulate our HUM-assignment environment.
 
 According to conversations with The Registrar throughout this process, Reed
 College students are generally less inclined to wake up early and take longer
@@ -58,7 +58,7 @@ generated. We found an effective $\phi$ value for our purposes was 0.4, which al
 some deviation but overall keeps the rankings more central. In practice, this
 manifests in the form of most students having a 50-min MWF section as their top
 choice, though there are approximately 35\% of students who have a longer TTh
-class as their top choice. 
+class as their top choice.
 
 In $\texttt{synthesize\_preferences}$, we iterate through each student’s schedule and find
 all of the HUM sections that do not conflict with their other chosen classes
@@ -73,7 +73,7 @@ individual section. These are the preferences used when running each algorithm.
 A relevant consideration to note here is that because our student schedule data
 is from years where students had to conciously make room on their schedule for
 their desired HUM sections, it is possible there is a bias over which sections do not have a
-time conflict. 
+time conflict.
 
 \subsection{Notes on the Algorithms}
 
@@ -83,7 +83,7 @@ HUM. In our implementation, we randomly shuffle the list of students and then
 iterate through to represent this ordering. Note that this means we do not test
 the algorithms against an adversarial ordering for \textsc{fcfs} or
 \textsc{greedy}, and that both of those algorithms could actually benefit from the
-random ordering. 
+random ordering.
 
 For the \textsc{wt} algorithm, we represent the graph of students to seats as an
 \textit{adjacency matrix}. The rows of the matrix represent students, and the columns represent seats
@@ -92,7 +92,7 @@ index we calculate the weight of the edge between the student and that seat in
 accordance with Definition \ref{weighted-def}. For instance, in
 Figure \ref{fig:adj_matrix}, student 0 has weight 0 for seat 0, so we place a 0
 at 0,0 in the matrix. A 0 means there is no edge between that student and seat.
-Similarly, student 0 has weight 2 for seat 1, so we have a 2 at 0,1. 
+Similarly, student 0 has weight 2 for seat 1, so we have a 2 at 0,1.
 
 \begin{figure}[h]
   \centering
@@ -114,9 +114,9 @@ The adjacency matrix we generate is the input to \textsc{max-weight}. In Section
 \textit{LAPJVsp}, implemented in the SciPy library \cite{scipy}. LAPJVsp also
 performs in $O(n^3)$ time theoretically, but in practice is usually much faster
 \cite{Jonker}, which is helpful when repeatedly running trials of the algorithm
-in our experiments. 
+in our experiments.
 
-The matching returned for all algorithms is a Python dictionary with student IDs as the keys, and the ID of the class they were assigned to as values. 
+The matching returned for all algorithms is a Python dictionary with student IDs as the keys, and the ID of the class they were assigned to as values.
 
 \section{Results}
 
@@ -125,43 +125,48 @@ does not necessarily output the same preferences each time, as well as the
 randomness involved in the ordering of \textsc{fcfs} and \textsc{greedy}, we ran
 many trials to accurately evaluate the algorithms’ performances. The length of
 the preference lists was another variable that could affect whether students got
-a class they preferred, so we vary the trials by preference list length as well. 
+a class they preferred, so we vary the trials by preference list length as well.
 
 We ran 50 trials each on preference lists of lengths at most 5, 10, and full
 (not truncated) for all three years of data per algorithm. We want to analyze
 the results against the following metrics in each trial, chosen based on our
 ISF1M construction (Definition \ref{def:ispim}) and our original motivation for the
-project: 
+project:
 \begin{itemize}
-  \item How well distributed the groups of students are among classes
-  \item The number of blocking pairs in the final matching 
-  \item The number of unmatched students
-  \item The average rank a student gives their assignment to indicate student
-    satisfaction
-  \item How balanced sections are in terms of class size
+  \item
+        How well distributed the groups of students are among classes
+  \item
+        The number of blocking pairs in the final matching
+  \item
+        The number of unmatched students
+  \item
+        The average rank a student gives their assignment to indicate student
+        satisfaction
+  \item
+        How balanced sections are in terms of class size
 \end{itemize}
 
 Firstly, we can measure how well distributed the groups of students are by
 looking at the minimums and maximums for each trial. That is, what is the
 minimum number of students of each group in each section, and what is the
 maximum? These metrics will indicate to us how group fair the matchings output
-by each algorithm are.  
+by each algorithm are.
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.65\linewidth]{figures/min_students.png}
-    \caption{Comparison of the minimum number of students of each group in each section over
+  \includegraphics[width=0.65\linewidth]{figures/min_students.png}
+  \caption{Comparison of the minimum number of students of each group in each section over
     varying preference list lengths and years of sample data.}
-    \label{fig:min_students}
+  \label{fig:min_students}
 \end{figure}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.65\linewidth]{figures/max_students.png}
-    \caption{Comparison of the maximum number of students of each group in each section over
-  varying preference list lengths and years of sample data.}
-    \label{fig:max_students}
- \end{figure}
+  \centering
+  \includegraphics[width=0.65\linewidth]{figures/max_students.png}
+  \caption{Comparison of the maximum number of students of each group in each section over
+    varying preference list lengths and years of sample data.}
+  \label{fig:max_students}
+\end{figure}
 
 Figures \ref{fig:min_students} and \ref{fig:max_students} illustrate how
 students are distributed within groups. Notably, in each sampled year, the set
@@ -176,15 +181,15 @@ plot. It is also important that in Figure \ref{fig:min_students}, \textsc{fcfs} 
 \textsc{greedy} frequently distributed
 students such that almost every trial had sections with 0 students of some
 group, whereas in all of the \textsc{wt} trials with preference lists longer
-than 5 there was some representation of each group in every class. 
+than 5 there was some representation of each group in every class.
 
 \begin{figure}[H]
-  \centering    
+  \centering
   \includegraphics[width=0.65\linewidth]{figures/groups_violin.png}
-    \caption{Comparison between groups of number of students assigned to each
+  \caption{Comparison between groups of number of students assigned to each
     class for Year 3. (See plots with similar results for other years of sample
-  data in the appendix.)}
-    \label{fig:group_size}
+    data in the appendix.)}
+  \label{fig:group_size}
 \end{figure}
 
 We also observe the overall visualization of the distribution of groups
@@ -198,10 +203,10 @@ each group being 4 students. Thus, \textsc{wt} accomplishes group fairness much
 more successfully than the other two algorithms.
 
 \begin{figure}
-  \centering    
+  \centering
   \includegraphics[width=0.65\linewidth]{figures/blocking.png}
-    \caption{Comparison of inter-group blocking pairs present in each trial.}
-    \label{fig:blocking_pairs}
+  \caption{Comparison of inter-group blocking pairs present in each trial.}
+  \label{fig:blocking_pairs}
 \end{figure}
 
 We also are interested in our original conception of stability, which means we want to check how many
@@ -215,12 +220,11 @@ consistent with Theorem \ref{thm:greedyunstable} and our problem framework
 for \textsc{wt} in Definition \ref{def:ispim} that disregards the presence of
 inter-group instability.
 
-
 \begin{figure}
-  \centering    
+  \centering
   \includegraphics[width=0.65\linewidth]{figures/unmatched.png}
-    \caption{Comparison of number of unmatched students in each trial.}
-    \label{fig:unmatched}
+  \caption{Comparison of number of unmatched students in each trial.}
+  \label{fig:unmatched}
 \end{figure}
 
 Relatedly, we check how many students remain unmatched in the final matching
@@ -235,10 +239,10 @@ one more than the length of the preference list rank (ex. rank 6 for lists of
 length 5) if a student is unmatched in the final matching.
 
 \begin{figure}
-  \centering    
+  \centering
   \includegraphics[width=0.65\linewidth]{figures/rank.png}
-    \caption{Comparison of average rank of assignment in each trial.}
-    \label{fig:ranks}
+  \caption{Comparison of average rank of assignment in each trial.}
+  \label{fig:ranks}
 \end{figure}
 
 \newpage
@@ -250,14 +254,14 @@ least satisfied in \textsc{greedy}. Additionally, when we look at Figure
 \textsc{wt} for having so many more blocking pairs, in that students on average
 receive a section they rank slightly lower than their assignments in
 \textsc{fcfs}. However, it does still tend to give students their second or
-third choice across all years and preference list lengths.  
+third choice across all years and preference list lengths.
 
 \begin{figure}[H]
-  \centering    
+  \centering
   \includegraphics[width=0.65\linewidth]{figures/classes_violin.png}
-    \caption{Comparison between sample years of distribution of students to
-      class sections over all trials.}
-    \label{fig:class_size}
+  \caption{Comparison between sample years of distribution of students to
+    class sections over all trials.}
+  \label{fig:class_size}
 \end{figure}
 
 Finally, though it was not explicitly part of the design of the algorithms, we are
@@ -270,10 +274,10 @@ difference of 6.
 Additionally, in both Year 2 and 3 the majority of classes were size 12 or 13.
 While there is some range between class sizes in the \textsc{wt} algorithm, the
 figure demonstrates that it is much smaller than the range in \textsc{fcfs} and
-\textsc{greedy}, especially for longer length preference lists. 
+\textsc{greedy}, especially for longer length preference lists.
 
 As a whole, the \textsc{wt} algorithm outperformed \textsc{fcfs} and
 \textsc{greedy} on every metric we analyzed other than blocking pairs. Due to
 our re-framing of the problem under intra-group stability from Definition
 \ref{def:intra}, we accept this result as successful as we prioritize finding a
-full, group fair matching.  
+full, group fair matching.
