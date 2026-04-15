@@ -1,0 +1,61 @@
+% !TEX root = ../thesis.tex
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+\chaptermark{Conclusion}
+\markboth{Conclusion}{Conclusion}
+
+
+Our results show that the \textsc{wt} algorithm can be an effective potential solution
+for The Registrar to ensure all freshmen are registered for a year-long HUM 110
+section. Our algorithm also contributes to the study of stable bipartite
+one-sided matching with incomplete preferences and group fairness constraints.
+By formulating the task as a weighted graph matching problem, we are able to
+give theoretical guarantees about every student being matched to a HUM section
+in a full, fair, intra-group stable solution. Though students may be assigned to
+a class section that is ranked lower on their preference list than they would
+get in the current system, our experiments show that students still tend to receive one
+of their top three preferences for the tradeoffs of group fairness and ensuring
+every student is matched.
+
+In our experiments, we notably do not evaluate the \textsc{wt} algorithm against
+adversarial instances of \textsc{fcfs} and \textsc{greedy}. For both of those algorithms where the
+outcome is heavily dictated by the registration order, there necessarily exists
+certain orders of students that would result in a worst-case matching. Finding
+those theoretical worst-case orderings and testing performance against those
+cases would be a relevant extension to this project.
+
+Additionally, our experiments were performed on partially synthesized data based
+on previous years of class scheduling, where the system may have inherent biases
+that would affect the performance of the algorithm in an actual implementation
+setting. It would also usually be standard practice to test the $\phi$ value in the
+Mallows preference synthesis to evaluate how the algorithm performs on different
+levels of deviation from the central vote. We determined that due to how many other
+variables we were already testing (data sample year, preference list length,
+randomness over $\phi$ = 0.4, various algorithms), adding that as another
+variable was beyond the scope of this thesis. That being said, it would be helpful future work to
+take the algorithm and results presented here and test the performance of
+\textsc{wt} in a real setting.
+
+More further work can be taken in many directions due to how many different
+fields of computer science and mathematics this project incorporates. The
+\textsc{wt} algorithm produces many inter-group blocking pairs in each output; one could
+investigate approximation algorithms or heuristic methods of reducing the number
+of blocking pairs to achieve inter-group stability more often and compare the
+effectiveness of those solutions to \textsc{wt}. We also do not explicitly design our
+algorithm around balancing class sizes beyond the enforcement of class
+capacities. There could be much more done with the weight function to
+attempt to encode the class size balancing as an additional constraint to the
+problem. Furthermore, most mechanism design solutions across stable matching and
+fair division are evaluated under \textit{strategy-proofness}, or whether an entity in
+the model can “game” the system to achieve a better outcome for themself at the
+cost of other entities. We do not evaluate the \textsc{wt} algorithm for
+strategy-proofness; extending this project to find a strategy-proof solution
+would also be a fruitful direction for further study. 
+
+In conclusion, we hope our algorithm helps open doors for future CS seniors to
+collaborate with The Registrar or other Reed institutions to come up with
+projects that allow students to use their Reed education to make a lasting,
+tangible impact on the Reed community. We also wish all current and future Reed
+students luck in creating their class schedules for years to come. 
+
