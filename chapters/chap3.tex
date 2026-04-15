@@ -30,8 +30,7 @@ their preference relation defined in Definition \ref{def:overview}).
 \begin{algorithm} \label{alg:fcfs}
   \caption{First Come First Served}
   \begin{algorithmic}[1] 
-     \For{each student $r$ in $R$} \Comment{where $R$ is an ordered set
-     corresponding to registration order}
+     \For{each student $r$ in $R$} \Comment{where $R$ is an ordered set}
      \For{each class $c$ in $P_s$}  \If{\# students assigned to $c < q_c$}
      \Comment{class is not at capacity} \State $\mu(r) \gets
       s_c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor \EndFor
@@ -75,26 +74,19 @@ implements \textsc{fcfs} under the additional group fairness restriction.
   \begin{algorithmic}[1] \For{each student $t$ in $R$} \Comment{where $t$ is a
     student of some group $T \subset R$} \For{each class $c$ in $P_t$} \If{\# students assigned to $c
       < q_c$ and \# $T$ students assigned to $c < q_c^T$} \State $\mu(t) \gets
-      s_c^T$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor  \State append $t$ to $X$ \EndFor
+      s_c^T$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor \EndFor
 
-    \For{each student $t$ in $X$} \Comment{randomly assign unmatched
-    students} \State choose
-    random available $s_c$ from $C$ \State $\mu(t) \gets s_c$ \EndFor
-
-    \State \Return matching $\mu$
+      \State \Return matching $\mu$
     \end{algorithmic}
 \end{algorithm}
 
-Let's compare \textsc{greedy} to \textsc{fcfs}. The primary differences are in
-line 3, where we add the group cap constraint, and the second part of the
-algorithm starting on line 10 assigns remaining students randomly instead of leaving them
-unmatched. We can start by showing that in a
+Let's compare \textsc{greedy} to \textsc{fcfs}. The primary difference is in
+line 3, where we add the group cap constraint as part of the conditional check
+for whether a class is available.We can start by showing that in a
 ``vanilla" environment, in which we do not consider student groups, both
 algorithms output a stable matching. Note that in a vanilla environment,
-\textsc{greedy} is equivalent to \textsc{fcfs} because unmatched versus random
-assignments are regarded with the same preference rank by students.
-
-\newpage
+\textsc{greedy} is equivalent to \textsc{fcfs} because we consider all
+group capacities to be the same as class capacities.
 
 \begin{lemma} \label{thm:fcfs-greedy}
   \textsc{fcfs} is equivalent to \textsc{greedy} in a vanilla environment.
@@ -106,13 +98,7 @@ assignments are regarded with the same preference rank by students.
   will always be true when the first part of the statement is true. Therefore,
   both algorithms will behave equivalently on the same ordered input of students
   in the first for loop, as the conditional statements check the same condition
-  as line 3 of \textsc{fcfs}. Now, let $\mu$ be the matching output by \textsc{fcfs}
-  and $\mu'$ be the matching output by \textsc{greedy}. Any student not in $\mu$
-  was matched to $\emptyset$. By Definition \ref{def:overview}, a student $r$ in
-  $\mu'$ who received a random $s_c$ in lines 11 and 12 of \textsc{greedy} ranks $\emptyset \succ_r
-  \mu'(r)$. Therefore, when evaluating blocking pairs, unmatched students in
-  $\mu$ and randomly matched students in $\mu'$ will be functionally equivalent in
-  terms of the rank of their assignment. Thus, \textsc{fcfs} is equivalent to
+  as line 3 of \textsc{fcfs}. Thus, \textsc{fcfs} is equivalent to
   \textsc{greedy} in a vanilla environment.
 \end{proof}
 
@@ -126,8 +112,8 @@ assignments are regarded with the same preference rank by students.
   Assume for the sake of a contradiction that $r_1$ and $r_2$ form a blocking
   pair, such that $\mu(r_2) >_{r_1} \mu(r_1)$ and $\mu(r_1) >_{r_2} \mu(r_2)$.
 
-  By lines 3 and 11 of \textsc{greedy}, we know $\mu(r_1)$ was either $r_1$'s top
-  available choice or a random assignment. So, if $\mu(r_2) >_{r_1} \mu(r_1)$, then
+  By line 3 of \textsc{greedy}, we know $\mu(r_1)$ was either $r_1$'s top
+  available choice or $r_1$ is unmatched. So, if $\mu(r_2) >_{r_1} \mu(r_1)$, then
   $\mu(r_2)$ must not be available when $r_1$ is matched, which means $r_2$ was
   matched first. However, this is a contradiction of our assumption that $r_1$
   comes before $r_2$ in the input to the algorithm. Thus, $\mu(r_2)$ is available
@@ -235,7 +221,7 @@ of various groups to fill the class. This involves decrementing the number of
 reserved seats per group by one and then re-running \textsc{max-weight} now that
 the set of reserved seats is smaller. If the seat reservations are relaxed to
 the point that there are no more reserved seats, it means there is no group-fair
-solution and we simply use the max-weight output to get a full matching for
+solution and we simply use the \textsc{max-weight} output to get a full matching for
 students without considering group caps. Then, we still proceed with the trading
 stage for intra-group stability.
 
