@@ -32,7 +32,7 @@ their preference relation defined in Definition \ref{def:overview}).
   \caption{First Come First Served}
   \begin{algorithmic}[1]
     \For{each student $r$ in $R$} \Comment{where $R$ is an ordered set}
-    \For{each class $c$ in $P_s$}  \If{\# students assigned to $c < q_c$}
+    \For{each class $c$ in $P_r$}  \If{\# students assigned to $c < q_c$}
     \Comment{class is not at capacity} \State $\mu(r) \gets
       s_c$ \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor \EndFor
     \State \Return matching $\mu$
