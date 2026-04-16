@@ -102,6 +102,9 @@ To make things clearer, we can represent our problem as a graph to provide us
 with a visualization of the problem (see Figure \ref{fig:model}).
 
 \begin{figure}[H] \centering
+\definecolor{plasmaA}{HTML}{0D0887}
+\definecolor{plasmaB}{HTML}{CC4678}
+\definecolor{plasmaC}{HTML}{F89441}
  \begin{tikzpicture}[
   classnode/.style={circle, draw, minimum size=1cm, inner sep=0},
   studentnode/.style={circle, draw, minimum size=0.8cm, inner sep=0, thick},
@@ -121,12 +124,11 @@ with a visualization of the problem (see Figure \ref{fig:model}).
 (prefbox) at (7.5, 0.2) {$c_1 \succ_{a_1} c_3 \succ_{a_1} c_n$};
 
 %% ── Helper macro: 4 coloured squares in a row ───────────────────
-% usage: \seats{x}{y}
 \newcommand{\seats}[2]{
-  \draw[blue,  thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
-  \draw[red,   thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
-  \draw[green!70!black, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
-  \draw[black, thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
+  \draw[plasmaA, thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
+  \draw[plasmaB, thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
+  \draw[plasmaC, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
+  \draw[black,   thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
 }
 
 %% ── Class C1 ────────────────────────────────────────────────────
@@ -160,55 +162,49 @@ with a visualization of the problem (see Figure \ref{fig:model}).
 \node at (-1.2, -9.38) {$\cdots$};
 \seats{-1.5}{-9.75}
 
-%% ── Student nodes: group A (blue) ───────────────────────────────
-\node[studentnode, blue, text=blue] (a1) at (3.5,  0.45) {$a_1$};
-\node[studentnode, blue, text=blue] (a2) at (3.5, -0.45) {$a_2$};
+%% ── Student nodes: group A ───────────────────────────────────────
+\node[studentnode, plasmaA, text=plasmaA] (a1) at (3.5,  0.45) {$a_1$};
+\node[studentnode, plasmaA, text=plasmaA] (a2) at (3.5, -0.45) {$a_2$};
 \node at (3.5, -1.1) {$\vdots$};
-\node[studentnode, blue, text=blue] (ai) at (3.5, -2) {$a_i$};
+\node[studentnode, plasmaA, text=plasmaA] (ai) at (3.5, -2) {$a_i$};
 
-%% ── Student nodes: group B (red) ────────────────────────────────
-\node[studentnode, red, text=red] (b1) at (3.5, -3.1) {$b_1$};
-\node[studentnode, red, text=red] (b2) at (3.5, -4) {$b_2$};
+%% ── Student nodes: group B ───────────────────────────────────────
+\node[studentnode, plasmaB, text=plasmaB] (b1) at (3.5, -3.1) {$b_1$};
+\node[studentnode, plasmaB, text=plasmaB] (b2) at (3.5, -4) {$b_2$};
 \node at (3.5, -4.65) {$\vdots$};
-\node[studentnode, red, text=red] (bj) at (3.5, -5.65) {$b_j$};
+\node[studentnode, plasmaB, text=plasmaB] (bj) at (3.5, -5.65) {$b_j$};
 
-%% ── Student nodes: group C (green) ──────────────────────────────
-\node[studentnode, green!70!black, text=green!70!black] (cc1) at (3.5, -6.85) {$c_1$};
-\node[studentnode, green!70!black, text=green!70!black] (cc2) at (3.5, -7.75) {$c_2$};
+%% ── Student nodes: group C ───────────────────────────────────────
+\node[studentnode, plasmaC, text=plasmaC] (cc1) at (3.5, -6.85) {$c_1$};
+\node[studentnode, plasmaC, text=plasmaC] (cc2) at (3.5, -7.75) {$c_2$};
 \node at (3.5, -8.45) {$\vdots$};
-\node[studentnode, green!70!black, text=green!70!black] (ck) at (3.5, -9.35) {$c_k$};
+\node[studentnode, plasmaC, text=plasmaC] (ck) at (3.5, -9.35) {$c_k$};
 
 %% ── Curly braces for groups ──────────────────────────────────────
-\draw[-, decorate, decoration={brace, amplitude=6pt}, blue]
-  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, blue] {$A$};
-\draw[-, decorate, decoration={brace, amplitude=6pt}, red]
-  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, red] {$B$};
-\draw[-, decorate, decoration={brace, amplitude=6pt}, green!70!black]
-  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, green!70!black] {$C$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaA]
+  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, plasmaA] {$A$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaB]
+  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, plasmaB] {$B$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaC]
+  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, plasmaC] {$C$};
 
-%% ── Arrow from a1 to preference box ────────────────────────────
+%% ── Arrow from a1 to preference box ─────────────────────────────
 \draw[-, dotted] (a1.east) -- (prefbox.west);
 \node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_s(a_1)$};
 
-
 %% ── Crossing edges (seats -> students) ──────────────────────────
-% From C1 seats area to students
 \draw[-] (-1.8,  0.4) -- (a1);
 \draw[-] (-1.8,  0.00) -- (a2);
 \draw[-] (-1.45,  0.45) -- (b1);
-% From C2
 \draw[-] (-1.45, -2.35) -- (b2);
-% From Cn-1
 \draw[-] (-1.8, -5.75) -- (ai);
 \draw[-] (-1.1, -5.75) -- (cc1);
-% From Cn
 \draw[-] (-1.1, -8.55) -- (cc2);
 \draw[-] (-1.45, -8.55) -- (bj);
 \draw[-] (-1.1, -9.00) -- (ck);
 
 \end{tikzpicture}\caption{Graph illustrating an F1M.} \label{fig:model}
 \end{figure}
-
 In a graph representing the HUM-assignment problem, the vertices are comprised
 of students and seats that belong to specific class sections, and an edge is
 drawn between a student and a seat if
@@ -258,6 +254,9 @@ our previous definition of a graph.
 \end{definition}
 
 \begin{figure}[H] \centering
+\definecolor{plasmaA}{HTML}{0D0887}
+\definecolor{plasmaB}{HTML}{CC4678}
+\definecolor{plasmaC}{HTML}{F89441}
   \begin{tikzpicture}[
   classnode/.style={circle, draw, minimum size=1cm, inner sep=0},
   studentnode/.style={circle, draw, minimum size=0.8cm, inner sep=0, thick},
@@ -278,12 +277,11 @@ our previous definition of a graph.
 (prefbox) at (7.5, 0.2) {$c_1 \succ_{a_1} c_2 \succ_{a_1} c_n$};
 
 %% ── Helper macro: 4 coloured squares in a row ───────────────────
-% usage: \seats{x}{y}
 \newcommand{\seats}[2]{
-  \draw[blue,  thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
-  \draw[red,   thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
-  \draw[green!70!black, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
-  \draw[black, thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
+  \draw[plasmaA, thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
+  \draw[plasmaB, thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
+  \draw[plasmaC, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
+  \draw[black,   thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
 }
 
 %% ── Class C1 ────────────────────────────────────────────────────
@@ -317,36 +315,35 @@ our previous definition of a graph.
 \node at (-1.2, -9.38) {$\cdots$};
 \seats{-1.5}{-9.75}
 
-%% ── Student nodes: group A (blue) ───────────────────────────────
-\node[studentnode, blue, text=blue] (a1) at (3.5,  0.45) {$a_1$};
-\node[studentnode, blue, text=blue] (a2) at (3.5, -0.45) {$a_2$};
+%% ── Student nodes: group A ───────────────────────────────────────
+\node[studentnode, plasmaA, text=plasmaA] (a1) at (3.5,  0.45) {$a_1$};
+\node[studentnode, plasmaA, text=plasmaA] (a2) at (3.5, -0.45) {$a_2$};
 \node at (3.5, -1.1) {$\vdots$};
-\node[studentnode, blue, text=blue] (ai) at (3.5, -2) {$a_i$};
+\node[studentnode, plasmaA, text=plasmaA] (ai) at (3.5, -2) {$a_i$};
 
-%% ── Student nodes: group B (red) ────────────────────────────────
-\node[studentnode, red, text=red] (b1) at (3.5, -3.1) {$b_1$};
-\node[studentnode, red, text=red] (b2) at (3.5, -4) {$b_2$};
+%% ── Student nodes: group B ───────────────────────────────────────
+\node[studentnode, plasmaB, text=plasmaB] (b1) at (3.5, -3.1) {$b_1$};
+\node[studentnode, plasmaB, text=plasmaB] (b2) at (3.5, -4) {$b_2$};
 \node at (3.5, -4.65) {$\vdots$};
-\node[studentnode, red, text=red] (bj) at (3.5, -5.65) {$b_j$};
+\node[studentnode, plasmaB, text=plasmaB] (bj) at (3.5, -5.65) {$b_j$};
 
-%% ── Student nodes: group C (green) ──────────────────────────────
-\node[studentnode, green!70!black, text=green!70!black] (cc1) at (3.5, -6.85) {$c_1$};
-\node[studentnode, green!70!black, text=green!70!black] (cc2) at (3.5, -7.75) {$c_2$};
+%% ── Student nodes: group C ───────────────────────────────────────
+\node[studentnode, plasmaC, text=plasmaC] (cc1) at (3.5, -6.85) {$c_1$};
+\node[studentnode, plasmaC, text=plasmaC] (cc2) at (3.5, -7.75) {$c_2$};
 \node at (3.5, -8.45) {$\vdots$};
-\node[studentnode, green!70!black, text=green!70!black] (ck) at (3.5, -9.35) {$c_k$};
+\node[studentnode, plasmaC, text=plasmaC] (ck) at (3.5, -9.35) {$c_k$};
 
 %% ── Curly braces for groups ──────────────────────────────────────
-\draw[-, decorate, decoration={brace, amplitude=6pt}, blue]
-  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, blue] {$A$};
-\draw[-, decorate, decoration={brace, amplitude=6pt}, red]
-  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, red] {$B$};
-\draw[-, decorate, decoration={brace, amplitude=6pt}, green!70!black]
-  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, green!70!black] {$C$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaA]
+  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, plasmaA] {$A$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaB]
+  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, plasmaB] {$B$};
+\draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaC]
+  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, plasmaC] {$C$};
 
-%% ── Arrow from a1 to preference box ────────────────────────────
+%% ── Arrow from a1 to preference box ─────────────────────────────
 \draw[-, dotted] (a1.east) -- (prefbox.west);
 \node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_s(a_1)$};
-
 
 %% ── Crossing edges (seats -> students) ──────────────────────────
 % From C1 seats area to students
@@ -362,7 +359,6 @@ our previous definition of a graph.
 \end{tikzpicture}
 \caption{Graph illustrating weighted edges for student $a_1$.} \label{fig:weighted-example}
 \end{figure}
-
 Now, we have a way to compare edges to each other to allow us to find a
 solution if one exists. Based on the way we've set up our weights, we know that
 the "best" available solution (which satisfies the most constraints) will be the
@@ -438,7 +434,7 @@ may not even exist a stable matching to find.
 \end{proof}
 
 Defining stability in this way is, then, too strict. Recall that even
-determining whether there is a stable matching or not is NP-complete in many
+determining whether there is a stable matching or not is \textit{NP-complete} in many
 scenarios similar to this one \cite{santhini}. So, we need to relax our constraints
 to allow us to explore some less restrictive notion of stability. For now, let’s
 simplify the problem. At a basic level,

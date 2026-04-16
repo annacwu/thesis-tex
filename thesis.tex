@@ -25,7 +25,7 @@ decorations.pathreplacing, calc}
 
 \theoremstyle{remark} \newtheorem{remark}[theorem]{Remark}
 
-\title{My Final College Paper} \author{Anna Wu} \date{May 2026}
+\title{An Algorithm for HUM 110 Assignment} \author{Anna Wu} \date{May 2026}
 \division{Mathematical and Natural Sciences} \advisor{Harper Knittel}
 \department{Computer Science}
 
@@ -37,25 +37,33 @@ decorations.pathreplacing, calc}
 % \includeonly{chapters/chap4}
 \begin{document}
 
-% \maketitle \frontmatter % this stuff will be roman-numbered
-% \pagestyle{empty} % this removes page numbers from the frontmatter
+\maketitle \frontmatter % this stuff will be roman-numbered
+\pagestyle{empty} % this removes page numbers from the frontmatter
 
 % Acknowledgements (Acceptable American spelling) are optional % So are
 % Acknowledgments (proper English spelling) 
-% \chapter*{Acknowledgements} I want to thank a few people.
+\chapter*{Acknowledgements} I want to thank a few people.
 
-% \chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
+\chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
 %     remove this to move table to the left
-%   \begin{tabular}{ll} \textbf{P}  	&
-% Polynomial \\ \textbf{NP}  	&  Nondeterministic Polynomial \\ \textbf{GA}
-% &  Greedy Algorithm & \textbf{TTC} &  Top Trading Cycles  \\
-
-% \end{tabular} \end{table}
+  \begin{tabular}{ll} 
+    \textbf{HUM} & Humanities \\
+    \textbf{P}  	& Polynomial \\ 
+    \textbf{NP}  	&  Nondeterministic Polynomial \\ 
+    \textbf{DA}   & Deferred Acceptance \\
+    \textbf{1M}   & 1-sided matching \\
+    \textbf{F1M}  & Group fair 1-sided matching \\
+    \textbf{ISF1M} & Intra-group stable, group fair 1-sided matching \\
+    \textbf{FCFS} & First Come, First Served \\
+    \textbf{WT} & Weighted Trading \\
+\end{tabular} \end{table}
 
 \tableofcontents
 
-% \mainmatter % here the regular arabic numbering starts
-% \pagestyle{fancyplain} % turns page numbering back on
+\listoffigures
+
+\mainmatter % here the regular arabic numbering starts
+\pagestyle{fancyplain} % turns page numbering back on
 %
 \include{chapters/intro}
 \include{chapters/background}
@@ -65,8 +73,29 @@ decorations.pathreplacing, calc}
 \include{chapters/conc}
 % \include{chapters/proof_drafts}
 
+ \appendix
+      \chapter{Additional Results}
+
+\begin{figure} [H]
+  \centering
+  \includegraphics[width=0.55\linewidth]{figures/year1extra.png}
+  \caption{Comparison between groups of number of students assigned to each
+  class for Year 1.}
+  \label{fig:yr1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.55\linewidth]{figures/year2extra.png}
+  \caption{Comparison between groups of number of students assigned to each
+  class for Year 2.}
+  \label{fig:yr2}
+\end{figure}
+
+\backmatter
+
 \renewcommand{\bibname}{References}
-% \addcontentsline{toc}{chapter}{References}
+\addcontentsline{toc}{chapter}{References}
 \printbibliography{}
 
 \end{document}
