@@ -260,11 +260,18 @@ third choice across all years and preference list lengths.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.65\linewidth]{figures/classes_violin.png}
-  \caption{Comparison between sample years of distribution of students to
+  \caption{Comparison between sample years of distribution of grouped students to
     class sections over all trials.}
   \label{fig:class_size}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.65\linewidth]{figures/balanced_sizes.png}
+  \caption{Comparison between sample years of distribution of all students to
+    class sections over all trials without group fairness constraints.}
+  \label{fig:balanced_size}
+\end{figure}
 Finally, though it was not explicitly part of the design of the algorithms, we are
 interested in how well the sections are balanced regardless of student groups.
 Generally, we would hope all the sections are similarly sized. Figure
@@ -275,7 +282,15 @@ difference of 6.
 Additionally, in both Year 2 and 3 the majority of classes were size 12 or 13.
 While there is some range between class sizes in the \textsc{wt} algorithm, the
 figure demonstrates that it is much smaller than the range in \textsc{fcfs} and
-\textsc{greedy}, especially for longer length preference lists.
+\textsc{greedy}, especially for longer length preference lists. We also isolated
+how well the algorithms balance class sizes by performing
+trials over all students without groups. Figure
+\ref{fig:balanced_size} illustrates this outcome. If we compare it to Figure
+\ref{fig:class_size}, we can see that class sizes become noticeably more
+balanced when we do not consider groups for \textsc{wt}, especially for longer
+preference list lengths. As is expected by Lemmas \ref{thm:fcfs-greedy} and
+\ref{thm:greedyvanilla}, \textsc{fcfs} does not
+exhibit a difference, and \textsc{greedy} behaves the same as \textsc{fcfs}.  
 
 As a whole, the \textsc{wt} algorithm outperformed \textsc{fcfs} and
 \textsc{greedy} on every metric we analyzed other than blocking pairs. Due to
