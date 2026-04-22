@@ -7,12 +7,12 @@ both sides of the market, we follow a fair division approach similar to that of
 Budish’s one-sided matching \cite{budish}. However, given the practical application of our
 problem as a mechanism that is meant to reduce the Registrar's workload, we
 determined that constructing a notion of stability makes more sense than
-evaluating envy in the matching. While we care about student happiness in our
+evaluating envy in a fair division manner. While we care about student happiness in our
 solution, our formulation of the problem is primarily driven by the goal of
 assigning year-long HUM sections that are balanced both in size and student
-majors, meaning we want to minimize the desire of students to swap with each
-other post-assignment so as not to disrupt the balance of students. If no student wishes to swap with
-another student, then we can consider the assignment stable. This is the
+majors, meaning we want to minimize the ability of students to swap with each
+other post-assignment so as not to disrupt the balance. If no two students
+recipricolly wish to swap with each other, then we can consider the assignment stable. This is the
 framework under which we shall formalize our model.
 
 \section{The Model}
@@ -31,29 +31,29 @@ those sections that students have a conflict with not being included in their ra
 
 \begin{definition} \label{def:overview}
   The \emph{HUM-assignment} problem consists of a finite set of Reed College
-  students, $R$, and a finite set of class sections, $C$. Each class section $c
-    \in C$ has a capacity $q_c$ representing the number of seats in the class,
-    such that we can think of each $c$ as a set of seats where $|c| \leq q_c$.
-    We denote the set of all seats $S$, where $c \subset S$ for all $c \in C$.
-    Students rank class sections such that each student $r \in R$ has a strict
-    preference relation $\succ_r$ over $C \cup \{\emptyset\}$, where $\emptyset$
-    represents the outside option of a student such that $\emptyset \succ_r c$
-    for some $c \in C$ denotes that the class section is not an option for the student.
+  students, $\mathcal{R}$, and a finite set of class sections, $\mathcal{C}$.
+  Each class section $C \in \mathcal{C}$ has a capacity $q$ representing the
+  number of seats in the class: we can think of each $C$ as a set of seats where
+  $|C| \leq q$. We denote the set of all seats $\mathcal{S}$, where $C \subset
+  \mathcal{S}$ is disjoint for all $C \in \mathcal{C}$. Students rank classes in
+  $\mathcal{C}$: each student $r \in \mathcal{R}$ has a strict preference relation $\succ_r$ over
+  $\mathcal{C} \cup \{\emptyset\}$, where $\emptyset$ represents the outside
+  option of a student. That is, $\emptyset \succ_r C$ indicates a student prefers
+  no match over being matched with $C$ for all $C \in \mathcal{C}$.
 \end{definition}
 
 \begin{definition} \label{def:1m}
   A \emph{1-sided matching (1M)} of students to class sections is a function $\mu :
-    R \rightarrow S \cup \emptyset $ such that
+  \mathcal{R} \rightarrow \mathcal{C} \cup \emptyset $ such that
   \begin{itemize}
     \item
-          Each student is assigned to a seat in a class section they prefer or no
-          seat: \\ $\mu(r) =
-            \emptyset \text{ or } \mu(r) \succ_r \emptyset \text{ for all }r \in
-            R$.
+          Each student is assigned to a class section they prefer or no
+          seat: \\ $\mu(r) \succ_r \emptyset\text{ or } \mu(r) = \emptyset
+          \text{ for all }r \in \mathcal{R}$.
     \item
           No class exceeds its capacity:
-          $|\{r \in R : \mu(r) = s_c\}| \leq q_c$ \text{ for all } $s_c \in c
-          \subset S$.
+          $|\{r \in \mathcal{R} : \mu(r) \in C\}| \leq q$ \text{ for all } $C
+          \subset \mathcal{S}$.
   \end{itemize}
 \end{definition}
 
@@ -66,40 +66,51 @@ subjects: Group 1 for language, arts, and literature, Group 2 for
 social sciences, Group 3 for math and lab sciences \cite{group-reqs}. To implement the HUM
 philosophy, which is that the class provides an opportunity for students from all
 knowledge backgrounds and academic interests to discuss relevant texts, we want
-to ensure a distribution of students that "fairly" represents each group in every
+to ensure a distribution of students that ``fairly" represents each group in every
 HUM section. Practically, this means avoiding scenarios such as all Chem 101 students
 with the same lab being placed
 in the same section due to the overwhelming similarity in their schedules. This
 will come in the form of \textit{quotas or caps} on the number of seats per section that
-can be assigned to each group of student, so each class will be divided 
-into four groups of available seats: A, B, C, and free seats to allow for some
-flexibility.
+can be assigned to each group of student, meaning each class will be divided 
+into two sets of seats. One set will be \textit{reserved} seats, representing
+some number of seats in each class that are reserved for each group of student.
+The other set is a number of \textit{free} seats in each class that any student can be
+assigned to, which will allow for some flexibility. 
 
 \begin{definition} \label{def:student-groups}
-  Under the group fairness constraint, $R$ is partitioned into
-  three disjoint sets: $A, B, C \subset R$, where $A \cup B \cup C \subseteq R$ and $A \cap B \cap
-    C = \emptyset$. Denote students in $A$ as $a_1, a_2, ..., a_i$, students in
-    $B$ as $b_1, b_2, ..., b_j$, and students in $C$ as $c_1, c_2, ..., c_k$.
+  Under the group fairness constraint, $\mathcal{R}$ is partitioned into
+  three disjoint sets: $X, Y, Z \subset \mathcal{R}$, where $X \cup Y \cup Z
+  \subseteq \mathcal{R}$
+  and $X \cap Y \cap
+    Z = \emptyset$. Denote students in $X$ as $x_1, x_2, ..., x_i$, students in
+    $Y$ as $y_1, y_2, ..., y_j$, and students in $Z$ as $z_1, z_2, ..., z_k$.
 \end{definition}
 
 \begin{definition} \label{def:group-caps}
-  For each class $c \in C$ with capacity $q_c$, \[ |c| = q_c = \sum_{t \in
-  \{A,B,C,F\}} q_c^t \] where $A, B, C, F \subseteq
-c$. Similarly to Definition \ref{def:student-groups}, sets $A, B, C$ correspond to
-the groups of students. $F$ represents the set of free seats.
+  For each class $C \in \mathcal{C}$ with capacity $q$, \[ |C| = q = \sum_{t \in
+  \{X,Y,Z,F\}} q^t \] where $X \cup Y \cup Z \cup F \subseteq
+C$. Similarly to Definition \ref{def:student-groups}, sets of seats $X, Y, Z$ correspond to
+the three groups of students. We denote the set of all reserved seats
+$\mathcal{S}_{res} = X \cup Y \cup Z$. $F$ represents the set of free seats. We
+denote a specific seat $s \in C$ reserved for group $T$ as $s_c^T$. 
 \end{definition}
 
 \begin{definition} \label{def:f1m}
   A \emph{group-fair 1-sided matching (F1M)} builds on Definition \ref{def:1m}
-  of a 1M by adding the quality that no class is assigned more students of each
-  group than there are reserved and free seats for those students, maintaining that no more
+  of a 1M by adding the constraints that no class is assigned more students of each
+  group than there are reserved and free seats for those student where no more
+  than one student is matched to each free seat, maintaining that no more
   total seats are matched for a class than its overall capacity:
-  $|\{t \in T : \mu(t) = s_c^T\}| \leq q_c^T + q_c^F$ and $|\{r \in R : \mu(r) =
-  s_c\}| \leq q_c$ \text{ for all } $s_c \in c \subset S$.
+  \begin{itemize}
+    \item $|\{t \in T : \mu(t) \in C\}| \leq q^T + q^F$. 
+    \item $|\{r \in R : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
+      \mathcal{S}$.
+    \item $|\{r \in R : \mu(r) \in F \subset C\}| \leq q^F \text{ for all } C
+      \subset \mathcal{S}$.
+  \end{itemize}
 \end{definition}
 
-To make things clearer, we can represent our problem as a graph to provide us
-with a visualization of the problem (see Figure \ref{fig:model}).
+To make things clearer, we can visualize our problem using a graph (see Figure \ref{fig:model}).
 
 \begin{figure}[H] \centering
 \definecolor{plasmaA}{HTML}{0D0887}
@@ -114,96 +125,111 @@ with a visualization of the problem (see Figure \ref{fig:model}).
 %% ── Column headers ──────────────────────────────────────────────
 \node at (-3, 1.8) {$\mathcal{C}$};
 \node at (-3, 1.2) {\textsc{classes}};
-\node at (-1.25, 1.8) {$\mathcal{S}$};
-\node at (-1.25, 1.2) {\textsc{seats}};
-\node at (3.5,  1.8) {$R$};
+\node at (-1.0, 1.8) {$\mathcal{S}$};
+\node at (-1.0, 1.2) {\textsc{seats}};
+\node at (3.5,  1.8) {$\mathcal{R}$};
 \node at (3.5,  1.2) {\textsc{students}};
 
 %% ── Preference box (top right) ──────────────────────────────────
 \node[draw, minimum width=2.8cm, minimum height=0.7cm, align=center]
-(prefbox) at (7.5, 0.2) {$c_1 \succ_{a_1} c_3 \succ_{a_1} c_n$};
+(prefbox) at (7.5, 0.2) {$C_1 \succ_{x_1} C_3 \succ_{x_1} C_n$};
 
-%% ── Helper macro: 4 coloured squares in a row ───────────────────
-\newcommand{\seats}[2]{
-  \draw[plasmaA, thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
-  \draw[plasmaB, thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
-  \draw[plasmaC, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
-  \draw[black,   thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
+%% ── Helper macro: horizontal coloured squares ───────────────────
+\newcommand{\seats}[6]{%
+  % #1=xcenter, #2=ytop, #3=nA(row1), #4=nB(row2), #5=nC(row3), #6=nF(row4)
+  \tikzmath{
+    \sqw = 0.35;
+    \sqh = 0.35;
+    \gap = 0.05;
+    \hstep = \sqw + \gap;
+    \vstep = \sqh + \gap;
+    % Row 1: plasmaA (pink/red)
+    for \j in {1,...,#3}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[plasmaA, thick] (\xx, #2) rectangle (\xx+\sqw, #2+\sqh); };
+    };
+    % Row 2: plasmaA (blue)
+    for \j in {1,...,#4}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[plasmaB, thick] (\xx, #2-\vstep) rectangle (\xx+\sqw, #2-\vstep+\sqh); };
+    };
+    % Row 3: green
+    for \j in {1,...,#5}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[plasmaC, thick] (\xx, #2-2*\vstep) rectangle (\xx+\sqw, #2-2*\vstep+\sqh); };
+    };
+    % Row 4: black
+    for \j in {1,...,#6}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[black, thick] (\xx, #2-3*\vstep) rectangle (\xx+\sqw, #2-3*\vstep+\sqh); };
+    };
+  }
 }
+\newcommand{\seatsrow}[2]{\seats{#1}{#2}{2}{3}{4}{3}}
 
 %% ── Class C1 ────────────────────────────────────────────────────
-\node[classnode] (c1) at (-3, 0) {$c_1$};
-\seats{-1.5}{ 0.45}
-\seats{-1.5}{ 0.00}
-\node at (-1.2, -0.38) {$\cdots$};
-\seats{-1.5}{-0.75}
+\node[classnode] (c1) at (-3, -0.2) {$C_1$};
+\seatsrow{-2.0}{0.2}
+
 
 %% ── Class C2 ────────────────────────────────────────────────────
-\node[classnode] (c2) at (-3, -2.8) {$c_2$};
-\seats{-1.5}{-2.35}
-\seats{-1.5}{-2.80}
-\node at (-1.2, -3.18) {$\cdots$};
-\seats{-1.5}{-3.55}
+\node[classnode] (c2) at (-3, -2.6) {$C_2$};
+\seatsrow{-2.0}{-2.2}
 
-%% ── Vertical dots between C2 and Cn-1 ──────────────────────────
-\node at (-3, -4.5) {$\vdots$};
+%% ── Vertical dots ────────────────────────────────────────────────
+\node at (-3, -4.2) {$\vdots$};
 
 %% ── Class Cn-1 ──────────────────────────────────────────────────
-\node[classnode] (cn1) at (-3, -6.2) {$c_{n-1}$};
-\seats{-1.5}{-5.75}
-\seats{-1.5}{-6.20}
-\node at (-1.2, -6.58) {$\cdots$};
-\seats{-1.5}{-6.95}
+\node[classnode] (cn1) at (-3, -6) {$C_{n-1}$};
+\seatsrow{-2.0}{-5.6}
 
 %% ── Class Cn ────────────────────────────────────────────────────
-\node[classnode] (cn) at (-3, -9.0) {$c_n$};
-\seats{-1.5}{-8.55}
-\seats{-1.5}{-9.00}
-\node at (-1.2, -9.38) {$\cdots$};
-\seats{-1.5}{-9.75}
+\node[classnode] (cn) at (-3, -8.4) {$C_n$};
+\seatsrow{-2.0}{-8}
 
-%% ── Student nodes: group A ───────────────────────────────────────
-\node[studentnode, plasmaA, text=plasmaA] (a1) at (3.5,  0.45) {$a_1$};
-\node[studentnode, plasmaA, text=plasmaA] (a2) at (3.5, -0.45) {$a_2$};
+%% ── Student nodes: group X ───────────────────────────────────────
+\node[studentnode, plasmaA, text=plasmaA] (a1) at (3.5,  0.45) {$x_1$};
+\node[studentnode, plasmaA, text=plasmaA] (a2) at (3.5, -0.45) {$x_2$};
 \node at (3.5, -1.1) {$\vdots$};
-\node[studentnode, plasmaA, text=plasmaA] (ai) at (3.5, -2) {$a_i$};
+\node[studentnode, plasmaA, text=plasmaA] (ai) at (3.5, -2) {$x_i$};
 
-%% ── Student nodes: group B ───────────────────────────────────────
-\node[studentnode, plasmaB, text=plasmaB] (b1) at (3.5, -3.1) {$b_1$};
-\node[studentnode, plasmaB, text=plasmaB] (b2) at (3.5, -4) {$b_2$};
+%% ── Student nodes: group Y ───────────────────────────────────────
+\node[studentnode, plasmaB, text=plasmaB] (b1) at (3.5, -3.1) {$y_1$};
+\node[studentnode, plasmaB, text=plasmaB] (b2) at (3.5, -4) {$y_2$};
 \node at (3.5, -4.65) {$\vdots$};
-\node[studentnode, plasmaB, text=plasmaB] (bj) at (3.5, -5.65) {$b_j$};
+\node[studentnode, plasmaB, text=plasmaB] (bj) at (3.5, -5.65) {$y_j$};
 
-%% ── Student nodes: group C ───────────────────────────────────────
-\node[studentnode, plasmaC, text=plasmaC] (cc1) at (3.5, -6.85) {$c_1$};
-\node[studentnode, plasmaC, text=plasmaC] (cc2) at (3.5, -7.75) {$c_2$};
+%% ── Student nodes: group Z ───────────────────────────────────────
+\node[studentnode, plasmaC, text=plasmaC] (cc1) at (3.5, -6.85) {$z_1$};
+\node[studentnode, plasmaC, text=plasmaC] (cc2) at (3.5, -7.75) {$z_2$};
 \node at (3.5, -8.45) {$\vdots$};
-\node[studentnode, plasmaC, text=plasmaC] (ck) at (3.5, -9.35) {$c_k$};
+\node[studentnode, plasmaC, text=plasmaC] (ck) at (3.5, -9.35) {$z_k$};
 
 %% ── Curly braces for groups ──────────────────────────────────────
 \draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaA]
-  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, plasmaA] {$A$};
+  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, plasmaA] {$X$};
 \draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaB]
-  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, plasmaB] {$B$};
+  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, plasmaB] {$Y$};
 \draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaC]
-  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, plasmaC] {$C$};
+  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, plasmaC] {$Z$};
 
 %% ── Arrow from a1 to preference box ─────────────────────────────
 \draw[-, dotted] (a1.east) -- (prefbox.west);
-\node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_r(a_1)$};
+\node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_r(x_1)$};
 
 %% ── Crossing edges (seats -> students) ──────────────────────────
-\draw[-] (-1.8,  0.4) -- (a1);
-\draw[-] (-1.8,  0.00) -- (a2);
-\draw[-] (-1.45,  0.45) -- (b1);
-\draw[-] (-1.45, -2.35) -- (b2);
-\draw[-] (-1.8, -5.75) -- (ai);
-\draw[-] (-1.1, -5.75) -- (cc1);
-\draw[-] (-1.1, -8.55) -- (cc2);
-\draw[-] (-1.45, -8.55) -- (bj);
-\draw[-] (-1.1, -9.00) -- (ck);
+\draw[-] (-1.85,  0.4) -- (a1);
+\draw[-] (-1.45,  0.35) -- (a2);
+\draw[-] (-1.85,  0.0) -- (b1);
+\draw[-] (-1.85, -2.4) -- (b2);
+\draw[-] (-1.85, -5.45) -- (ai);
+\draw[-] (-1.85, -6.20) -- (cc1);
+\draw[-] (-1.85, -8.65) -- (cc2);
+\draw[-] (-1.85, -8.25) -- (bj);
+\draw[-] (-1.45, -8.65) -- (ck);
 
-\end{tikzpicture}\caption{Graph illustrating an F1M.} \label{fig:model}
+\end{tikzpicture}\caption{Graph illustrating an F1M, where each group of
+students, $X, Y,$ and $Z$, is represented by a different color.} \label{fig:model}
 \end{figure}
 In a graph representing the HUM-assignment problem, the vertices are comprised
 of students and seats that belong to specific class sections, and an edge is
@@ -215,10 +241,11 @@ representation.
   Let $G = (V, E)$ be a bipartite graph where:
   \begin{itemize}
     \item
-          $V = R \cup S$
+      $V = \mathcal{R} \cup \mathcal{S}$
     \item
-          $E = \{(r, s_c) \mid r \in R, s_c \in S, c \in C, c \succ_r
-            \emptyset\}$
+      $E = \{(t, s_c^T) \mid t \in T \subset \mathcal{R}, s_c^T \in \mathcal{S}, C \in
+        \mathcal{C}, C \succ_t
+            \emptyset\}$.
   \end{itemize}
 \end{definition}
 
@@ -233,25 +260,9 @@ would accomplish our goals. Recall that we want to satisfy two goals: every
 student is assigned to a class they prefer, and all reserved seats are filled by
 students of that reserved group. We
 call a matching \textit{full} if every student is matched to a seat they prefer. 
-Because we these two goals are equally important to us, we can simply increment
+Because these two goals are equally important to us, we can simply increment
 the weight of each edge by 1 for each goal it satisfies. We can now supplement
 our previous definition of a graph.
-
-\begin{definition}
-  \label{weighted-def}
-  Let $G = (V, E)$ be a bipartite graph where:
-  \begin{itemize}
-    \item
-          $V = S \cup C$
-    \item
-          $E = \{(r, s_c) \mid r \in R, s_c \in S, c \in C, c \succ_r
-            \emptyset\}$
-    \item
-          $w : E \rightarrow \{1 , 2 \} $ is a weight function
-          defined as \[ w(r, s_c) = \mathbf{1}\{\text{if student $r$ prefers class
-          $c$}\} + \mathbf{1}\{\text{$s_c^T$ is reserved for $r \in T$}\} \]
-  \end{itemize}
-\end{definition}
 
 \begin{figure}[H] \centering
 \definecolor{plasmaA}{HTML}{0D0887}
@@ -267,106 +278,146 @@ our previous definition of a graph.
 %% ── Column headers ──────────────────────────────────────────────
 \node at (-3, 1.8) {$\mathcal{C}$};
 \node at (-3, 1.2) {\textsc{classes}};
-\node at (-1.25, 1.8) {$\mathcal{S}$};
-\node at (-1.25, 1.2) {\textsc{seats}};
-\node at (3.5,  1.8) {$R$};
+\node at (-1.0, 1.8) {$\mathcal{S}$};
+\node at (-1.0, 1.2) {\textsc{seats}};
+\node at (3.5,  1.8) {$\mathcal{R}$};
 \node at (3.5,  1.2) {\textsc{students}};
 
 %% ── Preference box (top right) ──────────────────────────────────
 \node[draw, minimum width=2.8cm, minimum height=0.7cm, align=center]
-(prefbox) at (7.5, 0.2) {$c_1 \succ_{a_1} c_2 \succ_{a_1} c_n$};
+(prefbox) at (7.5, 0.2) {$C_1 \succ_{x_1} C_2 \succ_{x_1} C_n$};
 
-%% ── Helper macro: 4 coloured squares in a row ───────────────────
-\newcommand{\seats}[2]{
-  \draw[plasmaA, thick] (#1-0.45, #2-0.15) rectangle (#1-0.15, #2+0.15);
-  \draw[plasmaB, thick] (#1-0.10, #2-0.15) rectangle (#1+0.20, #2+0.15);
-  \draw[plasmaC, thick] (#1+0.25, #2-0.15) rectangle (#1+0.55, #2+0.15);
-  \draw[black,   thick] (#1+0.60, #2-0.15) rectangle (#1+0.90, #2+0.15);
+%% ── Helper macro: horizontal coloured squares ───────────────────
+\newcommand{\seats}[6]{%
+  % #1=xcenter, #2=ytop, #3=nA(row1), #4=nB(row2), #5=nC(row3), #6=nF(row4)
+  \tikzmath{
+    \sqw = 0.35;
+    \sqh = 0.35;
+    \gap = 0.05;
+    \hstep = \sqw + \gap;
+    \vstep = \sqh + \gap;
+    % Row 1: plasmaA (pink/red)
+    for \j in {1,...,#3}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[plasmaA, thick] (\xx, #2) rectangle (\xx+\sqw, #2+\sqh); };
+    };
+    % Row 2: plasmaA (blue)
+    for \j in {1,...,#4}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[plasmaB, thick] (\xx, #2-\vstep) rectangle (\xx+\sqw, #2-\vstep+\sqh); };
+    };
+    % Row 3: green
+    for \j in {1,...,#5}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[plasmaC, thick] (\xx, #2-2*\vstep) rectangle (\xx+\sqw, #2-2*\vstep+\sqh); };
+    };
+    % Row 4: black
+    for \j in {1,...,#6}{
+      \xx = #1 + (\j-1)*\hstep;
+      { \draw[black, thick] (\xx, #2-3*\vstep) rectangle (\xx+\sqw, #2-3*\vstep+\sqh); };
+    };
+  }
 }
+\newcommand{\seatsrow}[2]{\seats{#1}{#2}{2}{3}{4}{3}}
 
 %% ── Class C1 ────────────────────────────────────────────────────
-\node[classnode] (c1) at (-3, 0) {$c_1$};
-\seats{-1.5}{ 0.45}
-\seats{-1.5}{ 0.00}
-\node at (-1.2, -0.38) {$\cdots$};
-\seats{-1.5}{-0.75}
+\node[classnode] (c1) at (-3, -0.2) {$C_1$};
+\seatsrow{-2.0}{0.2}
+
 
 %% ── Class C2 ────────────────────────────────────────────────────
-\node[classnode] (c2) at (-3, -2.8) {$c_2$};
-\seats{-1.5}{-2.35}
-\seats{-1.5}{-2.80}
-\node at (-1.2, -3.18) {$\cdots$};
-\seats{-1.5}{-3.55}
+\node[classnode] (c2) at (-3, -2.6) {$C_2$};
+\seatsrow{-2.0}{-2.2}
 
-%% ── Vertical dots between C2 and Cn-1 ──────────────────────────
-\node at (-3, -4.5) {$\vdots$};
+%% ── Vertical dots ────────────────────────────────────────────────
+\node at (-3, -4.2) {$\vdots$};
 
 %% ── Class Cn-1 ──────────────────────────────────────────────────
-\node[classnode] (cn1) at (-3, -6.2) {$c_{n-1}$};
-\seats{-1.5}{-5.75}
-\seats{-1.5}{-6.20}
-\node at (-1.2, -6.58) {$\cdots$};
-\seats{-1.5}{-6.95}
+\node[classnode] (cn1) at (-3, -6) {$C_{n-1}$};
+\seatsrow{-2.0}{-5.6}
 
 %% ── Class Cn ────────────────────────────────────────────────────
-\node[classnode] (cn) at (-3, -9.0) {$c_n$};
-\seats{-1.5}{-8.55}
-\seats{-1.5}{-9.00}
-\node at (-1.2, -9.38) {$\cdots$};
-\seats{-1.5}{-9.75}
+\node[classnode] (cn) at (-3, -8.4) {$C_n$};
+\seatsrow{-2.0}{-8}
 
-%% ── Student nodes: group A ───────────────────────────────────────
-\node[studentnode, plasmaA, text=plasmaA] (a1) at (3.5,  0.45) {$a_1$};
-\node[studentnode, plasmaA, text=plasmaA] (a2) at (3.5, -0.45) {$a_2$};
+%% ── Student nodes: group X ───────────────────────────────────────
+\node[studentnode, plasmaA, text=plasmaA] (a1) at (3.5,  0.45) {$x_1$};
+\node[studentnode, plasmaA, text=plasmaA] (a2) at (3.5, -0.45) {$x_2$};
 \node at (3.5, -1.1) {$\vdots$};
-\node[studentnode, plasmaA, text=plasmaA] (ai) at (3.5, -2) {$a_i$};
+\node[studentnode, plasmaA, text=plasmaA] (ai) at (3.5, -2) {$x_i$};
 
-%% ── Student nodes: group B ───────────────────────────────────────
-\node[studentnode, plasmaB, text=plasmaB] (b1) at (3.5, -3.1) {$b_1$};
-\node[studentnode, plasmaB, text=plasmaB] (b2) at (3.5, -4) {$b_2$};
+%% ── Student nodes: group Y ───────────────────────────────────────
+\node[studentnode, plasmaB, text=plasmaB] (b1) at (3.5, -3.1) {$y_1$};
+\node[studentnode, plasmaB, text=plasmaB] (b2) at (3.5, -4) {$y_2$};
 \node at (3.5, -4.65) {$\vdots$};
-\node[studentnode, plasmaB, text=plasmaB] (bj) at (3.5, -5.65) {$b_j$};
+\node[studentnode, plasmaB, text=plasmaB] (bj) at (3.5, -5.65) {$y_j$};
 
-%% ── Student nodes: group C ───────────────────────────────────────
-\node[studentnode, plasmaC, text=plasmaC] (cc1) at (3.5, -6.85) {$c_1$};
-\node[studentnode, plasmaC, text=plasmaC] (cc2) at (3.5, -7.75) {$c_2$};
+%% ── Student nodes: group Z ───────────────────────────────────────
+\node[studentnode, plasmaC, text=plasmaC] (cc1) at (3.5, -6.85) {$z_1$};
+\node[studentnode, plasmaC, text=plasmaC] (cc2) at (3.5, -7.75) {$z_2$};
 \node at (3.5, -8.45) {$\vdots$};
-\node[studentnode, plasmaC, text=plasmaC] (ck) at (3.5, -9.35) {$c_k$};
+\node[studentnode, plasmaC, text=plasmaC] (ck) at (3.5, -9.35) {$z_k$};
 
 %% ── Curly braces for groups ──────────────────────────────────────
 \draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaA]
-  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, plasmaA] {$A$};
+  (4.2, 0.85) -- (4.2, -2.5) node[midway, right=8pt, plasmaA] {$X$};
 \draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaB]
-  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, plasmaB] {$B$};
+  (4.2, -2.8) -- (4.2, -6.15) node[midway, right=8pt, plasmaB] {$Y$};
 \draw[-, decorate, decoration={brace, amplitude=6pt}, plasmaC]
-  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, plasmaC] {$C$};
+  (4.2, -6.45) -- (4.2, -9.8) node[midway, right=8pt, plasmaC] {$Z$};
 
 %% ── Arrow from a1 to preference box ─────────────────────────────
 \draw[-, dotted] (a1.east) -- (prefbox.west);
-\node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_r(a_1)$};
+\node[above, yshift=10pt, xshift=15pt, font=\small] at ($(prefbox.west)$) {$P_r(x_1)$};
 
 %% ── Crossing edges (seats -> students) ──────────────────────────
 % From C1 seats area to students
-\draw[-] (-1.8,  0.45) -- node[weight, above] {2}(a1);
-\draw[-] (-0.75,  0) -- node[weight, below left] {1}(a1);
+\draw[-] (-1.85,  0.4) -- node[weight, above] {2}(a1);
+\draw[-] (-1.85,  -0.85) -- node[weight, above] {1}(a1);
 % From C2
-\draw[-] (-1.8, -2.35) -- node[weight, above] {2}(a1);
-\draw[-] (-0.75,  -2.35) -- node[weight, below left] {1}(a1);
+\draw[-] (-1.85, -2.05) -- node[weight, above] {2}(a1);
+\draw[-] (-1.85,  -3.25) -- node[weight, below right] {1}(a1);
 % From Cn
-\draw[-] (-1.8, -8.55) -- node[weight, above] {2}(a1);
-\draw[-] (-0.75, -8.55) -- node[weight, below left] {1}(a1);
+\draw[-] (-1.85, -7.85) -- node[weight, above left] {2}(a1);
+\draw[-] (-1.85, -9.05) -- node[weight, below right] {1}(a1);
 
 \end{tikzpicture}
 \caption{Graph illustrating weighted edges for student $a_1$.} \label{fig:weighted-example}
 \end{figure}
+
+\begin{definition}
+  \label{weighted-def}
+  Let $G = (V, E)$ be a bipartite graph where:
+  \begin{itemize}
+    \item
+          $V = S \cup C$
+    \item
+          $E = \{(t, s_c^T) \mid t \in \subset \mathcal{R}, s_c^T \in \mathcal{S}, C \in
+        \mathcal{C}, C \succ_t
+            \emptyset\}$
+    \item
+          $w : E \rightarrow \{1 , 2 \} $ is a weight function
+          defined as \[ w(t, s_c^T) = \mathbf{1}\{\text{if student $t$ prefers class
+          $C$}\} + \mathbf{1}\{\text{$s_c^T$ is reserved for $t \in T \subset
+        \mathcal{R}$}\}. \]
+  \end{itemize}
+\end{definition}
+
 Now, we have a way to compare edges to each other to allow us to find a
-solution if one exists. Based on the way we've set up our weights, we know that
-the "best" available solution (which satisfies the most constraints) will be the
-graph with the maximum possible weight when
-only one edge remains for each student. Our max-weight matching then has the
+solution if one exists. We start with multiple edges between each student and
+various reserved and free seats in classes on their list, as shown in Figure \ref{fig:weighted-example}. However, we want only
+one edge between each student and a seat in the class section they will be
+assigned to in the final matching. Based on the way we've set up our weights, we know that
+the ``best" available solution (which satisfies the most constraints) will be the
+graph with the maximum total weight when
+only one edge remains for each student. In Figure
+\ref{fig:weighted-example}, we can observe how maximizing the total weight works
+in practice: if we want to preserve just one edge for student $x_1$ when
+matching them to $C_1$, we would keep the edge weighted 2 to the reserved seat
+rather than the weight 1 edge to the free seat. Our maximized total weight matching then has the
 properties required by our F1M (Definition \ref{def:f1m}), being that students of each group
-are prioritized assignments to classes they prefer, as well as each
-group being represented fairly within each class.
+are prioritized assignments to reserved seats in classes they prefer, ensuring each
+group is represented fairly within each class.
 
 \begin{definition}
   A matching $\mu$ is a \emph{maximum-weight matching}
@@ -393,14 +444,21 @@ students themselves. That is, we can consider a matching stable if there are
 no blocking pairs \emph{between students}.
 
 \begin{definition}
-  \label{def:stability}
-  A matching $\mu$ is \emph{stable} if there exists no \textit{blocking pair} between
-  students
-  $r_1, r_2 \in R$ such that $\mu(r_2) >_{r_1} \mu(r_1)$ and $\mu(r_1) >_{r_2}
+  \label{def:blocking-pair}
+  A matching $\mu$ contains a  \textit{blocking pair} between
+  students $r_1, r_2 \in \mathcal{R}$ if $\mu(r_2) \succ_{r_1} \mu(r_1)$ and
+  $\mu(r_1) \succ_{r_2}
     \mu(r_2)$.
 \end{definition}
 
-This notion of stability proves difficult for our problem, however. If we look
+
+\begin{definition}
+  \label{def:stability}
+  A matching $\mu$ is \emph{stable} if there exists no blocking pair between any
+  two students $r_1, r_2 \in \mathcal{R}$.
+\end{definition}
+
+This notion of stability proves difficult for our problem. If we look
 back at our original definition of the HUM-assignment problem (Definition
 \ref{def:overview}) with class capacities and
 incomplete preferences, we will find that in some instances it is possible there
@@ -411,25 +469,25 @@ may not even exist a stable matching to find.
   incomplete preferences.
 \end{theorem}
 
-\newpage
-
 \begin{proof}
-  Let $C = \{ c_1, c_2\}$, where there are two groups of student
-  $A$ and $B$ such that for each $c \in C, q_c^A, q_c^B = 1$ (each class can
+  We prove by counterexample that a stable matching may not exist under quota
+  constraints and incomplete preference lists. 
+  Let $\mathcal{C} = \{ C_1, C_2\}$, where there are two groups of student
+  $X$ and $Y$ such that $q^X, q^Y = 1$ for each $C \in \mathcal{C}$ (each class can
   have at most one student of
-  each group). Let $R = \{ a_1, b_1, a_2, b_2 \}$. Let the preference lists be as
+  each group). Let $\mathcal{R} = \{ x_1, y_1, x_2, y_2 \}$. Let the preference lists be as
   follows: \[
-    \begin{array}{ll} a_1: & c_1           \\ b_1: & c_2 \\ a_2: & c_1 \succ c_2 \\
-             b_2:      & c_2 \succ c_1
+    \begin{array}{ll} x_1: & C_1           \\ y_1: & C_2 \\ x_2: & C_1 \succ C_2 \\
+             x_2:      & C_2 \succ C_1
     \end{array}
   \]
 
   In this case, regardless of the order of matching or algorithm, there is no
-  stable matching. The $A$ students will both wish to be matched to $c_1$, which
-  only has one $A$ seat, and both $B$ students wish to be matched to $c_2$
-  which only has one $B$ seat. So, when the first round of matching is done,
-  that means that there is still an open $B$ seat for $c_1$ and an open
-  $A$ seat for $c_2$, which the unhappy $A$ and $B$ students can then switch
+  stable matching. The $X$ students will both wish to be matched to $C_1$, which
+  only has one $X$ seat, and both $Y$ students wish to be matched to $C_2$
+  which only has one $Y$ seat. So, that means that in any matching, there is
+  still an open $Y$ seat in $C_1$ and an open
+  $X$ seat in $C_2$, which the unhappy $X$ and $Y$ students can then switch
   into on their own, respectively.
 \end{proof}
 
@@ -447,28 +505,22 @@ ranked system to what is known as \textit{0/1 preferences}. In 0/1 preferences,
 students give a class a 1 if they are okay with being matched to it and a 0 if
 it is not an option for them. This way,
 there cannot be a notion of stability because all preferred classes have the
-same rank. Now, for ease of notation, we
-will let $S_{res}$ be the set of reserved seats across all classes. Observe that
-this includes all seats other than the set of free seats, or formally: 
- \[
-   |S_{res}| = \sum_{\substack{c \in C \\ t \neq F}} q_c^t
-  \] 
-Notably, this simplified environment still lends itself well to the same
+same rank. Notably, this simplified environment still lends itself well to the same
 weighted graph construction from Definition \ref{weighted-def}, so we can
 continue to use a weighted graph to represent our problem.
 
 \begin{theorem}
-  \label{max-weight} A matching fills all reserved seats while only assigning students to classes they prefer if and only if it is the maximum-weight matching
-  where $w(\mu) = |R| + |S_{res}|$.
+  \label{max-weight} A matching $\mu$ fills all reserved seats while only
+  assigning students to classes they prefer if and only if $w(\mu) =
+  |\mathcal{R}| + |\mathcal{S}_{res}|$.
 \end{theorem}
 
 \begin{proof}
   First we will prove the forward direction. Let $\mu$ be a matching that
   assigns every student to a seat they
   prefer while also filling reserved seats first, such that all reserved seats
-  are filled before free seats. By construction of the weights, we can
-  determine a lower and upper bound for $w(\mu)$. 
-
+  are filled before free seats. By construction of the weights from Definition
+  \ref{weighted-def}, we can determine a lower and upper bound for $w(\mu)$. 
 
   \begin{enumerate}
     \item
@@ -476,42 +528,54 @@ continue to use a weighted graph to represent our problem.
           if the student prefers that seat, so every edge in $\mu$ contributes at
           least 1. By our assumption of characteristics of $\mu$, every student in
           $\mu$ got a seat they prefer, so summing over all students contributes at
-          least $|R|$ to $w(\mu)$. We also assumed each reserved seat was assigned to
-          a student in $\mu$, which adds an extra +1 to the weight for the edge from
-          each of those reserved seats. Summing over all reserved seats gives an
-          additional contribution of $|S_{res}|$, because the rest of the seats are still
-          1-weight edges. Therefore, we can bound $\mu$: \[ w(\mu) \geq |R| +
-            |S_{res}|.
+          least $|\mathcal{R}|$ to $w(\mu)$. We also assumed each reserved seat was assigned to
+          a student in $\mu$, which increments the weight by $+1$ for every
+          edge from each of those reserved seats. Summing over all reserved seats gives an
+          additional contribution of $|\mathcal{S}_{res}|$, because the rest of the seats are still
+          1-weight edges. Therefore, we can bound $\mu$: \[ w(\mu) \geq
+            |\mathcal{R}| +
+            |\mathcal{S}_{res}|.
           \]
 
     \item
-      \textbf{Upper bound of $\mu$:} From Definition \ref{weighted-def}, we know each edge
-          weight is at most 2. Similarly to the lower bound, we know $\mu$ has $|R|$
-          edges because each student was matched to one of their preferences.
+      \textbf{Upper bound of $\mu$:} We know the maximum edge
+          weight between each student and seat is at most 2. Similarly to the
+          lower bound, we know $\mu$ has at most $|\mathcal{R}|$
+          edges because each student was matched to one or none of their preferences.
           However, because only the reserved seats contribute an additional weight
-          to an edge, we know that the number of 2-weight edges $\leq |S_{res}|$. So,
-          the maximum summed weight of all edges must be $2|S_{res}| + |R| -
-          |S_{res}|$,
+          to an edge, we know that the number of 2-weight edges $\leq
+          |\mathcal{S}_{res}|$. So,
+          the maximum summed weight of all edges must be $2|\mathcal{S}_{res}| +
+          |\mathcal{R}| -
+          |\mathcal{S}_{res}|$,
           representing the maximum number of 2-weight edges plus all students
-          assigned to an overflow seat. Note that is equivalent to $|R| +
-          |S_{res}|$.
-          Therefore, we can bound $\mu$: \[ w(\mu) \leq |R| + |S_{res}|. \]
+          assigned to an overflow seat. Note that is equivalent to $|\mathcal{R}| +
+          |\mathcal{S}_{res}|$. 
+          Therefore, we can bound $\mu$: \[ w(\mu) \leq |\mathcal{R}| +
+          |\mathcal{S}_{res}|. \]
   \end{enumerate}
 
-  So, $\mu$ is a maximum-weight graph with a lower bound of $|R| + |S_{res}|$ and an
-  upper bound of $|R| + |S_{res}|$, so it must be that a matching that fully respects
-  student preferences and seat reservations has a weight $w(\mu) = |R| + |S_{res}|$.
+  Note that any possible matching must then have a total weight $w \leq |\mathcal{R}| +
+  |\mathcal{S}_{res}|$. Thus, if $w(\mu) = |\mathcal{R}| +
+  |\mathcal{S}_{res}|$, $\mu$ is a maximum-weight matching with a lower bound of $|\mathcal{R}| +
+  |\mathcal{S}_{res}|$ and an upper bound of $|\mathcal{R}| +
+  |\mathcal{S}_{res}|$. Therefore, it must be that a matching that fully
+  respects student preferences and seat reservations has a weight $w(\mu) =
+  |\mathcal{R}| + |\mathcal{S}_{res}|$.
 
-  Now, we prove the backwards direction. Let $\mu$ be a maximum-weight matching
-  where $w(\mu) = |R| + |S_{res}|$. The term $|R|$ implies each student was assigned
-to a class. By our construction of $G$ such that an edge between a student and a
-class only exists if the student prefers that class, the fact that each student
-is assigned to a class must mean it is on their preference list. Additionally,
-the $|S_{res}|$ term implies every reserved seat is assigned, because by our weight
-function each edge only has additional weight $+1$ if the edge is between a
-student of the same group as the seat. So, a maximum-weight matching where 
-$w(\mu) = |R| + |S_{res}|$ is a matching that fills all reserved seats while only
-assigning students to classes they prefer.
+  Now, we prove the backwards direction. Let $\mu$ be a matching
+  where $w(\mu) =  |\mathcal{R}| + |\mathcal{S}_{res}|$. Observe that $|E| \leq
+  \mathcal{R}$, as $\mathcal{R}$ makes up one side of the market, so there can
+  be at most $\mathcal{R}$ matches. The number of 2-weight edges then must be
+  greater than or equal to 
+  $|\mathcal{S}_{res}|$, because $w(\mu) - |\mathcal{R}| \leq |\mathcal{R}| +
+  |\mathcal{S}_{res}| -  |\mathcal{R}| =  |\mathcal{S}_{res}|$. However, we know
+  that there are at most $|\mathcal{S}_{res}|$ possible 2-weight edges, so in
+  fact if the number of seats matched is greater than and less than
+  $|\mathcal{S}_{res}|$, then we know exactly $|\mathcal{S}_{res}|$ seats were
+  matched. Thus, a maximum-weight matching where $w(\mu) = |R| + |S_{res}|$ is a
+  matching that fills all reserved seats while only assigning students to
+  classes they prefer.
 \end{proof}
 
 Theorem \ref{max-weight} shows us that we can identify a way to 
@@ -527,8 +591,8 @@ with another student \textit{of the same group}.
 \begin{definition} \label{def:intra}
   A matching $\mu$ is \emph{intra-group stable} if, for any two students $t_1$
   and $t_2$ for all
-  groups $T \subset R$, $\mu(t_1) >_{t_1} \mu(t_2)$  or $\mu(t_2) >_{t_2}
-    \mu(t_1)$ such that there exist no intra-group blocking pairs.
+  groups $T \subset \mathcal{R}$, $\mu(t_1) >_{t_1} \mu(t_2)$  or $\mu(t_2) >_{t_2}
+    \mu(t_1)$. In other words, there exist no intra-group blocking pairs.
 \end{definition}
 
 With our new goal of intra-group stability, we can now add to our
@@ -536,20 +600,23 @@ understanding of a viable solution to our HUM-assignment problem.
 
 \begin{definition} \label{def:ispim}
   An \emph{intra-group stable, group-fair 1-sided matching (ISF1M)} is a function $\mu :
-    R \rightarrow S$ such that
+  \mathcal{R} \rightarrow \mathcal{C}$ such that
   \begin{itemize}
     \item
           Each student is assigned to a class they prefer (the matching is full): \\
-          $\mu(r) \succ_r \emptyset \text{ for all }r \in
-            R$
+          $\mu(r) \succ_r \emptyset \text{ for all }r \in \mathcal{R}$.
     \item
-          No class exceeds its capacity:
-         $|\{r \in R : \mu(r) = s_c\}| \leq q_c$ \text{ for all } $s_c \in c \subset S$
+          No class exceeds its capacity:  
+          $|\{r \in R : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
+      \mathcal{S}$.
     \item
-          No class exceeds its capacity for each student group: \\ 
-          $|\{t \in T : \mu(t) = s_c^T\}| \leq q_c^T + q_c^F$
+          No class exceeds its capacity for each student group and free seats: \\ 
+           $|\{t \in T : \mu(t) \in C\}| \leq q^T + q^F$ and
+      $|\{r \in R : \mu(r) \in F \subset C\}| \leq q^F \\ \text{ for all } C
+      \subset \mathcal{S}$.
     \item
-          There exist no intra-group blocking pairs: \\ for all $t_1, t_2 \in T \subset R$, 
+          There exist no intra-group blocking pairs: \\ for all $t_1, t_2 \in T
+          \subset \mathcal{R}$, 
           $\mu(t_1) >_{t_1} \mu(t_2)$ or $\mu(t_2) >_{t_2} \mu(t_1)$
   \end{itemize}
 \end{definition}

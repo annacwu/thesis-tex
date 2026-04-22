@@ -10,7 +10,7 @@
 \usepackage{longtable,booktabs,setspace} \usepackage{algorithm}
 \usepackage{float} \usepackage{algpseudocode} \usepackage[hyphens]{url}
 \usepackage{subcaption} \usepackage{tikz} \usetikzlibrary{arrows.meta,
-decorations.pathreplacing, calc}
+decorations.pathreplacing, calc, math}
 \usepackage{wasysym}
 \usepackage{rotating} \usepackage[backend=biber, style=numeric, sorting=none
 ]{biblatex} \addbibresource{thesis.bib}
@@ -42,25 +42,62 @@ decorations.pathreplacing, calc}
 
 % Acknowledgements (Acceptable American spelling) are optional % So are
 % Acknowledgments (proper English spelling) 
-\chapter*{Acknowledgements} I want to thank a few people.
+\chapter*{Acknowledgements}
+% This thesis simply would not exist if not for all the people listed
+% below.
+%
+% Jason, Sarah, and Brittany at The Registrar's Office.
+%
+% Harper, my advisor. Learning together how to write a Reed thesis. 
+%
+% All the rest of the CS faculty: Adam, Greg, Erica, Charlie, Jim for spending
+% more hours a week with me in office hours than I spent with my own roommates. An additional
+% thanks to Michael for having patience with me when I walked into your office
+% hours as a stranger to ask how to do basic plots for my thesis. 
+%
+% Paddy, my first HUM 110 professor for teaching me how to be a computer scientist
+% and a writer. 
+%
+% My Ahmah and Ahgung. 
+%
+% Mom, Dad, Elise, Kaden. 
+%
+% Everyone in MAC3/T1West (family dinner crew). 
+%
+% Luka, for being my first friend at Reed.
+%
+% Jameson, for being my best friend. 
+%
+% Lyell, for being the most major computer science minor I know. 
+%
+% Tigerlily, for being the best thesis desk partner and Argentina support system
+% possible. 
+%
+% And lastly,
+%
+% Gabriella, for always reminding me to be brave ever since that first day in hip
+% hop 101. 
 
 \chapter*{List of Abbreviations} \begin{table}[h] \centering % You could
 %     remove this to move table to the left
   \begin{tabular}{ll} 
-    \textbf{HUM} & Humanities \\
-    \textbf{P}  	& Polynomial \\ 
-    \textbf{NP}  	&  Nondeterministic Polynomial \\ 
-    \textbf{DA}   & Deferred Acceptance \\
-    \textbf{1M}   & 1-sided matching \\
-    \textbf{F1M}  & Group fair 1-sided matching \\
+    \textbf{HUM}   & Humanities \\
+    \textbf{P}  	 & Polynomial \\ 
+    \textbf{NP}  	 &  Nondeterministic Polynomial \\ 
+    \textbf{DA}    & Deferred Acceptance \\
+    \textbf{1M}    & 1-sided matching \\
+    \textbf{F1M}   & Group fair 1-sided matching \\
     \textbf{ISF1M} & Intra-group stable, group fair 1-sided matching \\
-    \textbf{FCFS} & First Come, First Served \\
-    \textbf{WT} & Weighted Trading \\
+    \textbf{FCFS}  & First Come, First Served \\
+    \textbf{WT}    & Weighted Trading \\
 \end{tabular} \end{table}
 
 \tableofcontents
 
 \listoffigures
+
+\chapter*{Abstract}
+The preface pretty much says it all.
 
 \mainmatter % here the regular arabic numbering starts
 \pagestyle{fancyplain} % turns page numbering back on
