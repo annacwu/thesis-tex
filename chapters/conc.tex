@@ -26,17 +26,19 @@ cases would be a relevant extension to this project.
 
 Additionally, our experiments were performed on partially synthesized data based
 on previous years of class scheduling, where the system may have inherent biases
+(such as those mentioned in Section 4.2.1)
 that would affect the performance of the algorithm in an actual implementation
 setting. It would also usually be standard practice to test the $\phi$ value in the
 Mallows preference synthesis to evaluate how the algorithm performs on different
 levels of deviation from the central vote. We determined that due to how many other
 variables we were already testing (data sample year, preference list length,
-randomness over $\phi$ = 0.4, various algorithms), adding that as another
-variable was beyond the scope of this thesis. That being said, it would be helpful future work to
-take the algorithm and results presented here and test the performance of
-\textsc{wt} in a real setting.
+randomness over $\phi$ = 0.4, various algorithms), adding another was beyond the
+scope of this thesis. That being said, due to all these synthesis factors,
+testing \textsc{wt} in a real setting with sampled
+preferences would be helpful for confirming whether it is ready to be
+implemented as an actual mechanism at Reed.
 
-More further work can be taken in many directions due to how many different
+Further expansions on this work could take many directions due the various different
 fields of computer science and mathematics this project incorporates. The
 \textsc{wt} algorithm produces many inter-group blocking pairs in each output; one could
 investigate approximation algorithms or heuristic methods of reducing the number
@@ -52,9 +54,11 @@ cost of other entities. We do not evaluate the \textsc{wt} algorithm for
 strategy-proofness; extending this project to find a strategy-proof solution
 would also be a fruitful direction for further study.
 
-In conclusion, we hope our algorithm helps open doors for future CS seniors to
-collaborate with The Registrar or other Reed institutions to come up with
-projects that allow students to use their Reed education to make a lasting,
+In conclusion, the \textsc{wt} algorithm we've developed in this thesis could viably be
+implemented as an actual mechanism at Reed to help The Registrar's Office solve their
+HUM-assignment problem.  Additionally, we hope our project sets a precedent for future CS seniors to
+collaborate with The Registrar or other Reed institutions on projects that allow
+students to use their Reed education to make a lasting,
 tangible impact on the Reed community. We also wish all current and future Reed
 students luck in creating their class schedules for years to come.
 

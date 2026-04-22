@@ -90,7 +90,7 @@ assigned to, which will allow for some flexibility.
   For each class $C \in \mathcal{C}$ with capacity $q$, \[ |C| = q = \sum_{t \in
   \{X,Y,Z,F\}} q^t \] where $X \cup Y \cup Z \cup F \subseteq
 C$. Similarly to Definition \ref{def:student-groups}, sets of seats $X, Y, Z$ correspond to
-the three groups of students. We denote the set of all reserved seats
+the three groups of students. We denote the set of all reserved seats \\
 $\mathcal{S}_{res} = X \cup Y \cup Z$. $F$ represents the set of free seats. We
 denote a specific seat $s \in C$ reserved for group $T$ as $s_c^T$. 
 \end{definition}
@@ -103,9 +103,9 @@ denote a specific seat $s \in C$ reserved for group $T$ as $s_c^T$.
   total seats are matched for a class than its overall capacity:
   \begin{itemize}
     \item $|\{t \in T : \mu(t) \in C\}| \leq q^T + q^F$. 
-    \item $|\{r \in R : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
+    \item $|\{r \in \mathcal{R} : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
       \mathcal{S}$.
-    \item $|\{r \in R : \mu(r) \in F \subset C\}| \leq q^F \text{ for all } C
+    \item $|\{r \in \mathcal{R} : \mu(r) \in F \subset C\}| \leq q^F \text{ for all } C
       \subset \mathcal{S}$.
   \end{itemize}
 \end{definition}
@@ -382,7 +382,7 @@ our previous definition of a graph.
 \draw[-] (-1.85, -9.05) -- node[weight, below right] {1}(a1);
 
 \end{tikzpicture}
-\caption{Graph illustrating weighted edges for student $a_1$.} \label{fig:weighted-example}
+\caption{Graph illustrating weighted edges for student $x_1$.} \label{fig:weighted-example}
 \end{figure}
 
 \begin{definition}
@@ -390,7 +390,7 @@ our previous definition of a graph.
   Let $G = (V, E)$ be a bipartite graph where:
   \begin{itemize}
     \item
-          $V = S \cup C$
+           $V = \mathcal{R} \cup \mathcal{S}$
     \item
           $E = \{(t, s_c^T) \mid t \in \subset \mathcal{R}, s_c^T \in \mathcal{S}, C \in
         \mathcal{C}, C \succ_t
@@ -573,7 +573,8 @@ continue to use a weighted graph to represent our problem.
   that there are at most $|\mathcal{S}_{res}|$ possible 2-weight edges, so in
   fact if the number of seats matched is greater than and less than
   $|\mathcal{S}_{res}|$, then we know exactly $|\mathcal{S}_{res}|$ seats were
-  matched. Thus, a maximum-weight matching where $w(\mu) = |R| + |S_{res}|$ is a
+  matched. Thus, a maximum-weight matching where $w(\mu) = |\mathcal{R}| +
+  |\mathcal{S}_{res}|$ is a
   matching that fills all reserved seats while only assigning students to
   classes they prefer.
 \end{proof}
@@ -591,7 +592,8 @@ with another student \textit{of the same group}.
 \begin{definition} \label{def:intra}
   A matching $\mu$ is \emph{intra-group stable} if, for any two students $t_1$
   and $t_2$ for all
-  groups $T \subset \mathcal{R}$, $\mu(t_1) >_{t_1} \mu(t_2)$  or $\mu(t_2) >_{t_2}
+  groups $T \subset \mathcal{R}$, $\mu(t_1) \succ_{t_1} \mu(t_2)$  or $\mu(t_2)
+  \succ_{t_2}
     \mu(t_1)$. In other words, there exist no intra-group blocking pairs.
 \end{definition}
 
@@ -607,17 +609,17 @@ understanding of a viable solution to our HUM-assignment problem.
           $\mu(r) \succ_r \emptyset \text{ for all }r \in \mathcal{R}$.
     \item
           No class exceeds its capacity:  
-          $|\{r \in R : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
+          $|\{r \in \mathcal{R} : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
       \mathcal{S}$.
     \item
           No class exceeds its capacity for each student group and free seats: \\ 
            $|\{t \in T : \mu(t) \in C\}| \leq q^T + q^F$ and
-      $|\{r \in R : \mu(r) \in F \subset C\}| \leq q^F \\ \text{ for all } C
+           $|\{r \in \mathcal{R} : \mu(r) \in F \subset C\}| \leq q^F \\ \text{ for all } C
       \subset \mathcal{S}$.
     \item
           There exist no intra-group blocking pairs: \\ for all $t_1, t_2 \in T
           \subset \mathcal{R}$, 
-          $\mu(t_1) >_{t_1} \mu(t_2)$ or $\mu(t_2) >_{t_2} \mu(t_1)$
+          $\mu(t_1) \succ_{t_1} \mu(t_2)$ or $\mu(t_2) \succ_{t_2} \mu(t_1)$
   \end{itemize}
 \end{definition}
 
