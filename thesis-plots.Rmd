@@ -1,0 +1,146 @@
+---
+title: "thesis"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(viridis)
+
+mallows = read.csv("results.csv")
+sizes = read.csv("class-sizes.csv")
+balanced_sizes = read.csv("balanced-sizes.csv")
+mallows_long <- pivot_longer(data = mallows, cols = c(g_min_A, g_min_B, g_min_C), names_to = "groups", values_to = "mins")
+mallows_long_maxes <- pivot_longer(data = mallows, cols = c(g_max_A, g_max_B, g_max_C), names_to = "groups", values_to = "maxes")
+mallows$pref_length <- as.character(mallows$pref_length)
+mallows$pref_length[is.na(mallows$pref_length)] <- "Full"
+mallows_long$pref_length <- as.character(mallows_long$pref_length)
+mallows_long$pref_length[is.na(mallows_long$pref_length)] <- "Full"
+mallows_long_maxes$pref_length <- as.character(mallows_long_maxes$pref_length)
+mallows_long_maxes$pref_length[is.na(mallows_long_maxes$pref_length)] <- "Full"
+sizes$pref_length <- as.character(sizes$pref_length)
+sizes$pref_length[is.na(sizes$pref_length)] <- "Full"
+balanced_sizes$pref_length <- as.character(balanced_sizes$pref_length)
+balanced_sizes$pref_length[is.na(balanced_sizes$pref_length)] <- "Full"
+```
+```{r}
+labels <- c("FCFS", "Greedy", "WT")
+alg.labs = c("fcfs"="FCFS", "greedy"="Greedy", "weighted_trading"="WT")
+years.labels <- c("2022-2023"="Year 1", "2023-2024"="Year 2", "2024-2025"="Year 3")
+groups.labs <- c("g_min_A" = "A", "g_min_B" = "B","g_min_C" = "C")
+group_maxes.labs <- c("g_max_A" = "A", "g_max_B" = "B","g_max_C" = "C")
+```
+
+
+```{r}
+ggplot(data = mallows_long, aes(x = alg, y = mins, color = groups)) +
+  geom_jitter(width = 0.2, height = 0.2) +
+  theme_bw() + 
+  facet_grid(year ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), 
+           labeller = labeller(year = years.labels, 
+                               .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Algorithm", 
+       y = "Min # Students",
+       color = "Group") + 
+  scale_x_discrete(label = labels) + 
+  scale_color_hue(label = groups.labs) +
+  scale_color_viridis(option="C", discrete=TRUE, labels=groups.labs) 
+```
+```{r}
+ggplot(data = mallows_long_maxes, aes(x = alg, y = maxes, color = groups)) +
+  geom_jitter(width = 0.2, height = 0.2) +
+  theme_bw() + 
+  facet_grid(year ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), 
+           labeller = labeller(year = years.labels, 
+                               .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Algorithm", 
+       y = "Max # Students",
+       color = "Group") + 
+  scale_x_discrete(label = labels) + 
+  scale_color_hue(label = group_maxes.labs) +
+  scale_color_viridis(option="C", discrete=TRUE, labels=group_maxes.labs) 
+```
+```{r}
+ggplot(data = sizes, aes(x = year, y = count, fill = group, color = group)) + 
+  geom_violin(scale = "area", draw_quantiles = c(0.25, 0.5, 0.75)) +
+  theme_bw() + 
+  facet_grid(alg ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), 
+           labeller = labeller(alg=alg.labs, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Data Sample", y = "# Students", fill = "Group", color = "Group") + 
+  scale_x_discrete(label = years.labels) + 
+  scale_fill_viridis(option="C", discrete=TRUE, labels=groups.labs, alpha=0.6) +
+  scale_color_viridis(option="C", discrete=TRUE, labels=groups.labs)
+
+ggplot(data = sizes, aes(x = alg, y = count, fill = group, color = group)) + 
+  geom_violin(scale = "area", draw_quantiles = c(0.25, 0.5, 0.75)) +
+  theme_bw() + 
+  facet_grid(year ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), 
+           labeller = labeller(year=years.labels, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Algorithm", y = "# Students", fill = "Group", color = "Group") + 
+  scale_x_discrete(label = labels) + 
+  scale_fill_viridis(option="C", discrete=TRUE, labels=groups.labs, alpha=0.6) +
+  scale_color_viridis(option="C", discrete=TRUE, labels=groups.labs)
+```
+```{r}
+ggplot(data = sizes, aes(x = alg, y = size, color = alg, fill = alg)) + 
+  geom_violin(scale = "area", draw_quantiles = c(0.25, 0.5, 0.75)) +
+  theme_bw() +
+  facet_grid(year ~ factor(pref_length, levels=c('5', '10', '15', 'Full')),
+             labeller = labeller(year=years.labels, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Algorithm", 
+       y = "Class Size",
+       color = "Algorithm",
+       fill = "Algorithm") + 
+  scale_x_discrete(label = labels) + 
+  scale_fill_hue(label = labels) + 
+  scale_color_viridis(option="E", discrete=TRUE, labels=alg.labs) +
+  scale_fill_viridis(option="E", discrete=TRUE, labels=alg.labs, alpha=0.6)
+
+
+ggplot(data = balanced_sizes, aes(x = alg, y = size, color = alg, fill = alg)) + 
+  geom_violin(scale = "area", draw_quantiles = c(0.25, 0.5, 0.75)) +
+  theme_bw() +
+  facet_grid(year ~ factor(pref_length, levels=c('5', '10', '15', 'Full')),
+             labeller = labeller(year=years.labels, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Algorithm", 
+       y = "Class Size",
+       color = "Algorithm",
+       fill = "Algorithm") + 
+  scale_x_discrete(label = labels) + 
+  scale_fill_hue(label = labels) + 
+  scale_color_viridis(option="E", discrete=TRUE, labels=alg.labs) +
+  scale_fill_viridis(option="E", discrete=TRUE, labels=alg.labs, alpha=0.6)
+```
+```{r}
+ggplot(data = mallows, aes(x = unmatched, fill = year)) + 
+  geom_histogram(binwidth = 5, position = "dodge") +
+  theme_bw() + 
+  facet_grid(alg ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), labeller = labeller(alg=alg.labs, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "# Unmatched Students", 
+       y = "# Trials",
+       fill = "Sample Year") + 
+  scale_fill_hue(label = labels) +
+  scale_fill_viridis(option="D", discrete=TRUE, labels=years.labels)
+```
+```{r}
+ggplot(data = mallows, aes(x = inter_blocking, fill = year)) + 
+  geom_histogram(binwidth = 20, position = "dodge") +
+  theme_bw() + 
+  facet_grid(alg ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), labeller = labeller(alg=alg.labs, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "# Blocking Pairs", 
+       y = "# Trials",
+       fill = "Sample Year") + 
+  scale_fill_hue(label = years.labels) +
+  scale_fill_viridis(option="D", discrete=TRUE, labels=years.labels)
+```
+```{r}
+ggplot(data = mallows, aes(x = avg_rank, fill = year)) + 
+  geom_histogram(binwidth = 0.3, position = "dodge") +
+  theme_bw() + 
+  facet_grid(alg ~ factor(pref_length, levels=c('5', '10', '15', 'Full')), labeller = labeller(alg=alg.labs, .cols = function(x) paste("Pref length:", x))) + 
+  labs(x = "Avg. Rank", 
+       y = "# Trials",
+       fill = "Sample Year") + 
+  scale_fill_hue(label = labels) +
+  scale_fill_viridis(option="D", discrete=TRUE, labels=years.labels)
+```
