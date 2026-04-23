@@ -82,7 +82,7 @@ these different categories based on its worst case running time.
 Constant time, denoted $O(1)$, can be abstractly thought of as any
 operation that takes the same fixed amount of time regardless of the input size.
 Constant time is the fastest category of running time. Say our friend Alice
-chooses to eat Excellent Cuisine, her favorite restaurant, every day regardless of how many choices
+chooses to eat at Excellent Cuisine, her favorite restaurant, every day regardless of how many choices
 she is presented with. If we give her a list of 10 versus 100 restaurants, she
 won't even look at them, and will always choose to eat at Excellent Cuisine. We
 could say Alice is following a constant time algorithm, where it always takes
@@ -94,7 +94,7 @@ time, however, so our next category of time analysis is polynomial time.
 Say Bob is also choosing a restaurant, but he likes to research every restaurant
 on the list for 3 minutes before making a final decision. If we give him a list
 of 10 restaurants, it will take him 30 minutes to choose. If we give him a list
-of 100 restaurants, it will take him 300 minuts to choose. For any list of
+of 100 restaurants, it will take him 300 minutes to choose. For any list of
 restaurants of length $n$, we know it will take him $3n$ minutes to choose.
 Recall that a polynomial is a mathematical expression that combines terms of
 variables and constants using various operations (e.g. $x^4 + 2x^3 + 7$ or $x^2
@@ -109,11 +109,12 @@ every tablespoon of cookie dough, roll the dough into a ball and then sprinkle
 cinnamon on top. That is 2 actions to complete for every tablespoon of cookie
 dough. So, if we have $n$ tablespoons, we could say this step takes $O(2n) =
 O(n)$ time. If I then compared each ball of dough to every other ball to make sure
-they were all the same size, then for each of the $n$ balls I am comparing it to
-$n$ other balls. In this case, I am performing $n^2$ additional actions, which
+they were all the same size, it would mean that for each of the $n$ balls I
+have to check it against 
+$n - 1$ other balls. In this case, I am performing $n^2$ additional actions, which
 we can describe as a polynomial number of actions (which is why we say it takes
 polynomial time). So, I can say this whole process takes $O(n^2 + 2n) = O(n^2)$.
-Because $n^2$ grows much faster than $n$, we can drop the $n$ in Big-O notation
+Because $n^2$ grows much faster than $n$, we can drop the $2n$ term in Big-O notation
 to indicate $n^2$ is the relevant upper bound. 
 For our purposes, we can consider polynomial
 time to be sufficiently “efficient,” with the consideration that we would hope
@@ -232,8 +233,9 @@ Whichever choice we make first will lead to another set of moves for each of the
 and each of those moves will lead to more moves, until the game ends by either
 winning or getting stuck. If we perform all of the possible moves after we move
 card $A$ and all of them end in a stuck position, then we still don't know whether
-moving card $B$ first would lead to a win. At this point, we've done a lot of work for few
-results. This is an example of how the brute force method is often too difficult
+moving card $B$ first would lead to a win. At this point, we've done a lot of
+work for little
+result. This is an example of how the brute force method is often too difficult
 to carry out. However, if we set up our cards and then our friend said, ``I bet
 if you move card $A$, and then card $X$, and then card....you will win," we can
 follow their instructions to verify that sequence leads to a win, therefore
@@ -244,7 +246,7 @@ constant number of actions to solve the solitaire problem (if we say this is
 true for any deck of
 $n$ cards, it would be a polynomial number of actions). However, unless we all
 have a friend that can forsee the future, we cannot guarantee that we would try
-the solving sequence first. So, $NP$ is the class of problems where we can
+the winnable solving sequence first. So, $NP$ is the class of problems where we can
 confirm a given solution is correct in polynomial time, but we don't know of a
 polynomial time algorithm to find that solution ourselves. 
 
@@ -274,7 +276,7 @@ even the spread of disease (where vertices are people and edges represent an
 infection spreading from one person to another). Many graph problems involve
 finding a \textit{path}, or a sequence
 of edges that joins a sequence of distinct vertices. In Figure
-\ref{fig:simple-graph}, there are two paths from vertex a to vertex c. 
+\ref{fig:simple-graph}, there are 3 paths from vertex a to vertex c. 
 
 \begin{figure}[H] \centering
   \begin{tikzpicture}[
@@ -544,8 +546,8 @@ significantly more joy from vanilla over chocolate).
     \node at (4.4, -3.5) {\frownie};
   \end{tikzpicture}
   \caption{Cake cutting example where the left half of the cake is vanilla, the
-  right half is chocolate, $v_i$ nodes represent vanilla people, and $c_i$
-represents chocolate people. In this case, $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
+  right half is chocolate, $v$ nodes represent vanilla people, and $c$ nodes 
+represent chocolate people. In this case, $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
 \end{figure}
 
 The cake-cutting example is the canon example for what is known as

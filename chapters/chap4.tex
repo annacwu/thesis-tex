@@ -94,7 +94,7 @@ an ordering at all.
 
 For the \textsc{wt} algorithm, we represent the problem as a weighted graph of
 students to seats  (recall Figure \ref{fig:weighted-example}). Unfortunately,
-our computer cannot read a visualization of the graph in the same way a human
+most computers cannot read a visualization of the graph in the same way a human
 can. So, we need to represent our graph in code in a way the computer can
 work with. We use what is known as an \textit{adjacency matrix}, or more
 specifically, a \textit{biadjacency matrix}. We use a biadjacency matrix because
@@ -127,7 +127,7 @@ The biadjacency matrix we generate is the input to \textsc{max-weight}. In Secti
 \textit{LAPJVsp}, implemented in the SciPy library \cite{scipy}. LAPJVsp also
 performs in $O(n^3)$ time theoretically, but in practice is usually much faster
 \cite{Jonker}, which is helpful when repeatedly running trials of the algorithm
-in our experiments.
+for our experiments.
 
 The matching returned for all algorithms is a Python dictionary with student IDs as the keys, and the ID of the class they were assigned to as values.
 
@@ -251,9 +251,9 @@ Figure \ref{fig:blocking_pairs}, Figure \ref{fig:unmatched} shows that it does
 successfully match every student to a year-long HUM section in all trials. We
 can also observe that \textsc{fcfs} and \textsc{greedy} always have unmatched
 students with preference list length less than 10, and tend have at least 5
-unmatched students per match. 
+unmatched students per trial. 
 
-We can see the effects of fairness and stability relate to the average rank a student
+We can see how the effects of fairness and stability relate to the average rank a student
 gives their assignment. We calculate average rank with 0 being a student's
 top choice, 1 being their second choice, 2 being their third choice, and so on
 until the end of the list. If a student is unmatched, we give them a rank
@@ -325,7 +325,7 @@ and \textsc{wt} was the best at balancing by far across all trials. In most of t
 is size 18, giving a range of 6 for all three years of data.
 Especially in years 2 and 3, the majority of classes were size 12 or 13.
 Compared to \textsc{fcfs} and \textsc{greedy}, which both output class sizes ranging
-from 0 to 18, the \textsc{wt} output is definitively effective at balancing. 
+from 0 to 18, \textsc{wt} is definitively more effective at balancing. 
 If we compare Figure \ref{fig:balanced_size} to Figure
 \ref{fig:class_size}, we can see that class size becomes even more
 balanced when we do not consider groups for \textsc{wt}. As is guaranteed by

@@ -12,7 +12,7 @@ solution, our formulation of the problem is primarily driven by the goal of
 assigning year-long HUM sections that are balanced both in size and student
 majors, meaning we want to minimize the ability of students to swap with each
 other post-assignment so as not to disrupt the balance. If no two students
-recipricolly wish to swap with each other, then we can consider the assignment stable. This is the
+reciprocally wish to swap with each other, then we can consider the assignment stable. This is the
 framework under which we shall formalize our model.
 
 \section{The Model}
@@ -97,16 +97,16 @@ denote a specific seat $s \in C$ reserved for group $T$ as $s_c^T$.
 
 \begin{definition} \label{def:f1m}
   A \emph{group-fair 1-sided matching (F1M)} builds on Definition \ref{def:1m}
-  of a 1M by adding the constraints that no class is assigned more students of each
-  group than there are reserved and free seats for those student where no more
-  than one student is matched to each free seat, maintaining that no more
+  of a 1M by adding the constraint that no class is assigned more students of each
+  group than there are reserved and free seats for those students, where no more
+  than one student is matched to each free seat. An F1M maintains the constraint that no more
   total seats are matched for a class than its overall capacity:
   \begin{itemize}
-    \item $|\{t \in T : \mu(t) \in C\}| \leq q^T + q^F$. 
-    \item $|\{r \in \mathcal{R} : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
-      \mathcal{S}$.
+    \item $|\{t \in T : \mu(t) \in C\}| \leq q^T + q^F$.  
     \item $|\{r \in \mathcal{R} : \mu(r) \in F \subset C\}| \leq q^F \text{ for all } C
       \subset \mathcal{S}$.
+    \item $|\{r \in \mathcal{R} : \mu(r) \in C\}| \leq q$ \text{ for all } $C \subset
+      \mathcal{S}$.
   \end{itemize}
 \end{definition}
 
@@ -255,8 +255,8 @@ connecting them to a single seat in a class in a way that adheres to class capac
 we need a way to narrow down which edges lead to a viable solution. That means
 we need a way to judge edges against each other: we need to assign value to
 them. To accomplish this, we can give each edge a weight that represents how
-conducive it is to the constraints of our problem based on how well that match
-would accomplish our goals. Recall that we want to satisfy two goals: every
+conducive it is to the constraints of our problem based on how well that
+assignment would accomplish our goals. Recall that we want to satisfy two goals: every
 student is assigned to a class they prefer, and all reserved seats are filled by
 students of that reserved group. We
 call a matching \textit{full} if every student is matched to a seat they prefer. 
@@ -627,7 +627,7 @@ For now, our goal will be to develop an algorithm that finds an ISF1M to solve
 our problem. We will classify our previous definition of stability (Definition
 \ref{def:stability}) as \textit{inter-group stability} (blocking pairs involving
 students of different groups) to draw a distinction between the two notions.
-For now, we will consider an ISF1M to be a successful solution to the
+We will consider an ISF1M to be a successful solution to the
 HUM-assignment problem even though it is not inter-group stable. Though we would
 ideally guarantee stability between all students, looking at the
 problem through the lens of intra-group stability allows us to give some

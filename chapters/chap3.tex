@@ -10,8 +10,8 @@ algorithm that accomplishes those goals more effectively.
 
 \section{First Come, First Served}
 As it currently stands, the sign-up process for HUM 110 classes takes place during
-freshman class registration. The registration software, SOLAR, opens to incoming
-freshmen at a certain time, and at that time (or later) all freshmen log on to
+first-year class registration. The registration software, SOLAR, opens to incoming
+first-years at a certain time, and at that time (or later) all first-years log on to
 the platform and choose their own academic year schedule in whatever order they
 desire. This includes their HUM 110 section (or, as is the driving force behind this
 project, sections plural). Though this process may not inherently seem like an
@@ -222,10 +222,10 @@ Let's return to our conception of the HUM-assignment problem as modeled by a gra
 know by Theorem \ref{max-weight} we can use a maximum-weight matching algorithm
 to find a solution that is full and group fair. Notably, this is only one
 requirement away from being an ISF1M solution
-(see Definition \ref{def:ispim}): we just need to reintroduce intra-group
-stability to our max-weight matching. To do that, we need to
+(see Definition \ref{def:ispim}); we just need to reintroduce intra-group
+stability to our maximum weight matching. To do that, we need to
 remove all blocking pairs between students of the same group while preserving
-the weight of the max-weight matching, as the weight is how we determined that
+the weight of the matching, as the weight is how we determined that
 the matching is full and group fair. Here we define Algorithm \ref{alg:wt}, called
 the \textit{Weighted-Trading} (\textsc{wt}) algorithm.
 
