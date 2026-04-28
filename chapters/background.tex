@@ -30,8 +30,10 @@ Big-O notation is one form of \textit{asymptotic} analysis, or analysis that tak
 place as the size of the input becomes infinitely large. If we want to know how
 many resources an algorithm will require (resources can mean power, time,
 storage space, etc.), we want to know how it performs in the \textit{worst
-case} scenario, as any other case will use fewer resources. In many scenarios,
-the worst case is abstractly thought to be an infinitely large input,
+case} scenario, as any other case will use fewer resources. The worst case
+\textit{input}
+is one that makes an algorithm take the longest. For many
+algorithms, the worst case input ends up being infinitely large,
 representing how a realistically large input often requires more computational
 resources. So, worst case analysis as a facet of asymptotic analysis allows us
 to guarantee an algorithm scales well for arbitrarily large inputs. 
@@ -111,9 +113,10 @@ dough. So, if we have $n$ tablespoons, we could say this step takes $O(2n) =
 O(n)$ time. If I then compared each ball of dough to every other ball to make sure
 they were all the same size, it would mean that for each of the $n$ balls I
 have to check it against 
-$n - 1$ other balls. In this case, I am performing $n^2$ additional actions, which
+$n - 1$ other balls. In this case, I am performing approximately $n^2$ additional actions, which
 we can describe as a polynomial number of actions (which is why we say it takes
-polynomial time). So, I can say this whole process takes $O(n^2 + 2n) = O(n^2)$.
+polynomial time). So, I can say this whole process takes $O(n^2 + 2n) = O(n^2)$
+time.
 Because $n^2$ grows much faster than $n$, we can drop the $2n$ term in Big-O notation
 to indicate $n^2$ is the relevant upper bound. 
 For our purposes, we can consider polynomial
@@ -250,12 +253,11 @@ the winnable solving sequence first. So, $NP$ is the class of problems where we 
 confirm a given solution is correct in polynomial time, but we don't know of a
 polynomial time algorithm to find that solution ourselves. 
 
-Keep in mind that problems we know are in $P$ are also in $NP$, because we can
+Keep in mind that problems we know are in $P$ \textbf{are also in} $NP$, because we can
 verify that their solutions (which we can find in polynomial time) are correct
-in polynomial time. We will denote the problems that we cannot prove are or are
-not in $P$ as $NP\setminus{P}$, which means the set difference of $NP$ and $P$, or
-all problems in $NP$ that are not known to be in $P$. Generally, we consider the
-class of problems in $NP\setminus{P}$ to be very difficult to solve, as it means
+in polynomial time. When we look at $NP$, we are most interested in all the problems
+in $NP$ that are \textbf{not} known to be in $P$. Generally, we consider these
+problems to be very difficult to solve, as it means
 no one has ever discovered an algorithm that can find a correct solution in
 polynomial time. The hardest $NP$ problems are known as \textit{NP-complete}
 problems, where “complete” means the problem can be generalized to take the form
@@ -401,7 +403,7 @@ Problem is that the matching should prevent “cheating,” which occurs when a 
 and a woman who weren’t matched to each other prefer to be together over their
 assigned partners and will “elope,” leaving the other two participants alone.
 This couple would be known as a \textit{blocking pair}, because their elopement
-“blocks” the matching from being complete. Herein lies the stability aspect of
+“blocks” the matching from being stable. Herein lies the stability aspect of
 stable matching: we wish to find an algorithm that outputs a complete matching
 of couples with no blocking pairs.
 
@@ -595,7 +597,7 @@ capacity constraints (where $q$ is for quota). Lower bound quotas in something
 like the College Admissions would encode in the mechanism that schools need to
 accept at least $m$ students \cite{quotas}. Strict quotas can cause
 finding a stable matching in a bipartite setting
-to be \textit{NP-hard} \cite{santhini}, so quotas are often studied under “soft”
+to be \textit{NP-complete} \cite{santhini}, so quotas are often studied under “soft”
 constraints as well: for example, allowing a quota to be a target range rather
 than a specific number.
 
@@ -636,10 +638,10 @@ all academic groups at Reed have equal opportunity to be in all of the HUM secti
 \section{Related Work}
 
 The problem we discuss in this thesis is related to two extensively-studied
-problems: school choice and course allocation. School choice in mechanism design
-is the problem of assigning high school students to high schools such that
+problems: school choice and course allocation. ``School choice" in mechanism design
+traditionally refers to the problem of assigning high school students to high schools such that
 parents are satisfied, each student has a school to attend, and no school admits
-more students than they can accommodate. Course allocation in mechanism design
+more students than they can accommodate. ``Course allocation" in mechanism design
 is the problem of constructing a system to assign students to classes based on
 which classes they prefer to take.
 

@@ -65,20 +65,21 @@ We introduce group fairness into our algorithm with what we call a
 \textit{greedy} algorithm: one that attempts to maximize the rank a student
 gives their assignment while following the group fairness constraints. We call it \textit{greedy}
 because for each student, we still assign them their best available choice at
-the time of evaluation. However, in addition to the class capacity constraint,
-“available” also considers the group caps on the seats from Definition
-\ref{def:group-caps}. So, a class that is not yet at
+the time of evaluation.  Here, ``available” considers the group caps on the seats from Definition
+\ref{def:group-caps} in addition to overall capacity. So, a class that is not yet at
 capacity is still unavailable to a student of group $T$ if it has already
-reached its maximum number of group $T$ students. Essentially, \textsc{greedy}
-implements \textsc{fcfs} under the additional group fairness restriction.
+reached its maximum number of group $T$ students, and filled all its free seats.
+We will use ``available" in Algorithm \ref{alg:greedy} to mean the class is below
+capacity, and has enough $T$-seats or free seats left to match student $t \in T$.
+Essentially, \textsc{greedy} implements \textsc{fcfs} under the additional group
+fairness restriction.
 
 \begin{algorithm}
   \caption{Greedy}
   \label{alg:greedy}
   \begin{algorithmic}[1] \For{each student $t$ in $\mathcal{R}$} \Comment{where $t$ is a
     student of some group $T \subset \mathcal{R}$} \For{each class $C$ in $P_t$}
-    \If{\# students assigned to $C
-        < q$ and \# $T$ students assigned to $C < q^T$} \State $\mu(t) \gets C$
+    \If{$C$ is available to $t$} \State $\mu(t) \gets C$
         \State \textbf{break}  \Comment{move to next student} \EndIf \EndFor
         \EndFor
     \State \Return matching $\mu$
@@ -99,10 +100,10 @@ vanilla environment, both algorithms output a stable matching.
 \end{lemma}
 
 \begin{proof}
-  Observe that in a vanilla environment, $q^T = q$ because there are
-  no group caps. So, the second part of the \texttt{and} statement in line 3 of
-  Algorithm \ref{alg:greedy}
-  will always be true when the first part of the statement is true. Therefore,
+  Observe that in a vanilla environment, $q^T = q = |F|$ because there are
+  no group caps so every seat is essentially a free seat. So, ``available" in
+  line 3 of Algorithm \ref{alg:greedy} will always be true when the class is
+  below capacity $q$. Therefore,
   both algorithms will behave equivalently on the same ordered input of students
   in the first \texttt{for} loop, as the conditional statements check the same condition
   as line 3 of Algorithm \ref{alg:fcfs}. Thus, \textsc{fcfs} is equivalent to
@@ -154,7 +155,7 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
 \begin{theorem}
   \label{thm:greedyunstable}
   \textsc{greedy} does not always output a inter-group stable matching in a
-  general environment.
+  general environment, even when a fair, inter-group stable matching exists.
 \end{theorem}
 
 \begin{proof}
@@ -169,7 +170,7 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
     \end{array}
   \] 
 
-  Observe that an inter-group stable matching $\mu'$ does exist in this
+  Observe that a fair, inter-group stable matching $\mu'$ does exist in this
   environment: \[ 
     \begin{array}{ll}
       x_1 &\gets C_1 \\ 
@@ -179,7 +180,9 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
     \end{array}
 \]
 
-  We know $\mu'$ is stable because $x_1$ and $y_2$ both received their top
+  $\mu'$ is fair because only one student of each group is matched to each class,
+  so seat reservations are respected. Additionally, we know $\mu'$ is stable
+  because $x_1$ and $y_2$ both received their top
   choice, so neither of them wish to swap with another student. $y_1$
   wishes to swap with $x_2$, but $\mu'(x_2) \succ_{x_2} \mu'(y_1)$, so they do
   not form a blocking pair. Similar logic follows for $y_2$, who $y_1$ would
@@ -187,28 +190,52 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
   does not wish to swap with anyone. Therefore, $\mu'$ does not have any
   blocking pairs, and thus it is inter-group stable.
 
-  Now let $\mu$ denote \textsc{greedy}'s outputted matching over a set of
-  students, $\mathcal{R}$. We will prove by counter example that $\mu$ is not
-  stable. Observe that $\mu(x_1) = s_{c_1}^X$ and $\mu(y_1) = s_{c_2}^Y$:
+  Now let $\mu$ denote \textsc{greedy}'s outputted matching over $\mathcal{R}$.
+  We will prove by counter example that $\mu$ is not
+  stable. Recall that $\mathcal{R}$ is ordered, where $\{x_1, y_1, x_2, y_2\}$
+  is the order \textsc{greedy} matches the students. Observe that $\mu(x_1) =
+  s_{C_1}^X$ and $\mu(y_1) = s_{C_2}^Y$:
   because they are the first two students to be matched and their first choices
-  are different, they both receive their top choices. Next, $\mu(x_2) = s_{c_2}^X$
+  are different, they both receive their top choices. Next, $\mu(x_2) = s_{C_2}^X$
   because $C_1$ already has a student in group $X$, so $C_1$ is no longer
-  available when matching $x_2$, and similarly $\mu(y_2) = s_{c_1}^Y$ because
+  available when matching $x_2$, and similarly $\mu(y_2) = s_{C_1}^Y$ because
   $C_2$ already has a student in group $Y$. Notice that $\mu(y_2) >_{x_2}
   \mu(x_2)$ and $\mu(x_2) >_{y_2} \mu(y_2)$, which forms a blocking pair where
   $x_2$ and $y_2$ are incentivized to switch classes with each other. So, it
   must be the case that $\mu$ is not an inter-group stable matching and
-  therefore \textsc{greedy} cannot guarantee an inter-group stable matching
-  under group cap constraints, even when an inter-group stable matching exists.
+  therefore \textsc{greedy} cannot guarantee a fair, inter-group stable matching
+  under group cap constraints, even when a fair, inter-group stable matching exists.
 \end{proof}
 
 Notably, the above counterexample does exhibit intra-group stability as
 $\mu(x_1)$ is $x_1$'s top choice, so they will never want to swap with $x_2$
 (and similar for $y_1$ and $y_2$). In fact, we claim that \textsc{greedy} will
-always output an intra-group stable matching.
-At each point of evaluation for a student of some group, they are given their
-highest ranked available seat for that group. So within groups, we have a
-similar stability argument to Lemma \ref{thm:greedyvanilla}.
+always output an intra-group stable matching, as each student of each group is
+matched to their top available choice at their point of evaluation.
+
+\begin{theorem} \label{thm:greedy-intra}
+  \textsc{greedy} will always output an intra-group stable matching if one
+  exists. 
+\end{theorem}
+
+\begin{proof}
+  Let $\mu$ denote the outputted matching over an ordered set of
+  students, $\mathcal{R}$. Let $t_1, t_2 \in T \subset \mathcal{R}$, where $t_1$ comes
+  before $t_2$ in the order.
+  Assume for the sake of a contradiction that $t_1$ and $t_2$ form a blocking
+  pair, meaning $\mu(t_2) >_{t_1} \mu(t_1)$ and $\mu(t_1) >_{t_2} \mu(t_2)$.
+
+  By line 3 of Algorithm \ref{alg:greedy}, we know $\mu(t_1)$ was either $t_1$'s top
+  available choice or $t_1$ is unmatched. So, if $\mu(t_2) >_{t_1} \mu(t_1)$, then
+  $\mu(t_2)$ must not be available when $t_1$ is matched, which means there are
+  no open seats in $T_s$ and no open free seats for that class. That means $t_2$ was
+  matched first, to take the last $T_s$ or free seat. However, this is a
+  contradiction of our assumption that $t_1$
+  comes before $t_2$ in the input to the algorithm. Thus, $\mu(t_2)$ is available
+  when $t_1$ is matched, so it must be the case that $\mu(t_1) >_{t_1} \mu(t_2)$.
+  Therefore, $t_1$ and $t_2$ do not form a blocking pair, and we can conclude that
+  $\mu$ is intra-group stable.
+\end{proof}
 
 While \textsc{greedy} is intra-group stable, its primary issue is that
 it does not guarantee a full matching. Students can be left unmatched if every
@@ -245,13 +272,18 @@ the \textit{Weighted-Trading} (\textsc{wt}) algorithm.
 \end{algorithm}
 
 We can break the \textsc{wt} algorithm into two key stages: lines 1 to 9 and
-lines 10 to 15.
+lines 10 to 15. 
 
 The first stage is the \textit{weighted} part of the algorithm: it repeatedly
 runs \textsc{max-weight} until it finds a satisfying assignment. If the weight of
 the first \textsc{max-weight} run is not $|\mathcal{R}| + |\mathcal{S}_{res}|$ (as per Theorem
 \ref{max-weight}), we ``relax" our seat reservations to allow for more students
-of various groups to fill the class. This involves decrementing the number of
+of various groups to fill the class. Notably by Theorem \ref{thm:full-weight},
+it is possible to find a full maximum-weight matching that does
+not fill every reserved seat; however, using the bound from Theorem
+\ref{max-weight} was an effective way to mathematically ensure we are abiding by
+group fairness. So, if we do not have a matching with weight  $|\mathcal{R}| +
+|\mathcal{S}_{res}|$, we ``relax" seat reservations by decrementing the number of
 reserved seats per group by one and then re-running \textsc{max-weight} now that
 the set of reserved seats is smaller. If the seat reservations are relaxed to
 the point that there are no more reserved seats, it means there is no group-fair
@@ -308,7 +340,7 @@ in the weighted stage of \textsc{wt}.
   evaluate the \texttt{for} loop that compares each student of one group to each other
   student of that same group. In the \texttt{for} loop, the students swap seats if they
   both prefer each other's match in $\mu$. This means that each student still
-  prefers their new match, so the weight of the edge retains weight at least 1
+  prefers their new match, so the edge retains weight at least 1
   from that student. Then, if either student is in a seat reserved for that
   group, we replace them with a student of the same group, so the edge retains the
   additional weight of the reserved seat. Therefore, swapping any two students of
@@ -321,8 +353,8 @@ group fairness are \textit{NP-complete}  \cite{santhini}. With the \textsc{wt} a
 
 \begin{theorem}
   \label{thm:polywt}
-  The \textsc{wt} algorithm will output an intra-group stable matching in cubic time with
-  respect to the vertices in $G$.
+  The \textsc{wt} algorithm will output an intra-group stable matching in
+  polynomial time with respect to the number of seats and students.
 \end{theorem}
 
 \begin{proof}
@@ -340,24 +372,33 @@ group fairness are \textit{NP-complete}  \cite{santhini}. With the \textsc{wt} a
   This is because at most we can traverse each student's entire preference list once. If
   we terminate this loop for each group of student $T \subset \mathcal{R}$, then we must have
   intra-group stability because no more blocking pairs remain in each group.
+  Note that the sets of student groups are disjoint, so performing the loop for
+  each group of students will still sum to a total of all students in
+  $\mathcal{R}$. 
 
-  We can analyze the runtime of this algorithm. Since the \texttt{while} loop executes at
-  most $|\mathcal{C}| \times |\mathcal{R}| \times \# \text{ groups}$ times, we can bound the
-  execution of the \texttt{while} loop to $O(|\mathcal{C}| \times |\mathcal{R}| \times \# \text{
-  groups})$. Notably, $|\mathcal{C}| \leq |\mathcal{R}|$ and $\# \text{ groups }
-  \leq |\mathcal{R}|$. In practical cases there will be significantly fewer
-  student groups and class sections than there are students, so the significant
-  factor for this bound is $|\mathcal{R}|$. Therefore, the trading stage of the algorithm
-  will run with respect to the size of $\mathcal{R}$.
+  We can analyze the runtime of this algorithm. The \texttt{while} loop executes at
+  most $|\mathcal{C}| \times |\mathcal{R}| \times \# \text{ groups}$ times,
+  though we know we will only encounter each student as part of a disjoint group
+  set, so that will still sum to an overall execution of $|\mathcal{C}| \times
+  |\mathcal{R}|$. We therefore bound the execution of the \texttt{while} loop to
+  $O(|\mathcal{C}| \times |\mathcal{R}|)$. Notably, $|\mathcal{C}| \leq
+  |\mathcal{R}|$, where in practical cases there will be significantly fewer
+  class sections than there are students. The significant
+  factor for this bound is then $|\mathcal{R}|$. Therefore, the trading stage of the algorithm
+  will be cubic in the size of $\mathcal{R}$.
 
   Observe that before that, we run \textsc{max-weight} at least once, which runs in $O(V^3)$
   time where $V$ is the set of vertices \cite{hungarian}. Our vertices are
   all the students and seats, so the runtime for the weighted stage is
-  $(|\mathcal{S}| + |\mathcal{R}|)^3$. So, our total runtime for the algorithm
-  is $O((|\mathcal{S}|+ |\mathcal{R}|)^3 + (|\mathcal{C}| \times |\mathcal{R}|
-  \times \# \text{ groups}))$ = O$((|\mathcal{S}| + |\mathcal{R}|)^3)$. Therefore, the \textsc{wt}
-  algorithm outputs an intra-group stable matching in cubic time with respect to
-  the vertices in $G$.
+  $(|\mathcal{S}| + |\mathcal{R}|)^3$. By construction of the problem, it would
+  be trivial to have more seats in each class than there are students, so we cap
+  the total number of seats to be that each class can have at most one seat per
+  student. That means $|\mathcal{S}| \leq |\mathcal{C}| \times |\mathcal{R}|$.  So,
+  our total runtime for the algorithm is $O((|\mathcal{C}||\mathcal{R}|+
+  |\mathcal{R}|)^3 + (|\mathcal{C}| \times |\mathcal{R}|))$ =
+  O$((|\mathcal{C}||\mathcal{R}|+ |\mathcal{R}|)^3)$. Therefore, the
+  \textsc{wt} algorithm outputs an intra-group stable matching in polynomial time with respect to
+  the number of students and seats.
 \end{proof}
 
 By Theorem \ref{thm:polywt}, we now have an algorithm that theoretically gives

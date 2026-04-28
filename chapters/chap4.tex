@@ -125,16 +125,15 @@ The biadjacency matrix we generate is the input to \textsc{max-weight}. In Secti
 \textsc{max-weight} algorithm for computing the runtime in Theorem
 \ref{thm:polywt}. In practice, we actually use an algorithm called
 \textit{LAPJVsp}, implemented in the SciPy library \cite{scipy}. LAPJVsp also
-performs in $O(n^3)$ time theoretically, but in practice is usually much faster
-\cite{Jonker}, which is helpful when repeatedly running trials of the algorithm
-for our experiments.
+performs in $O(n^3)$ time theoretically, where $n$ is the number of vertices,
+but in practice is usually much faster \cite{Jonker}. 
 
 The matching returned for all algorithms is a Python dictionary with student IDs as the keys, and the ID of the class they were assigned to as values.
 
 \section{Results}
 
 Because there are elements of randomness in our experimental setup, as well as
-multiple variables that effect the output of the algorithms, we ran
+multiple variables that affect the output of the algorithms, we ran
 many trials to accurately evaluate the performance of each algorithm.
 Specifically, there is randomness involved in \textsc{mallows}, meaning
 \textsc{mallows} does not
@@ -144,7 +143,7 @@ the preference lists is another variable that affects whether students receive
 a class they prefer.
 
 We ran 50 trials each on preference lists of lengths at most 5, 10, and full
-(not truncated) for all three years of data per algorithm. We want to analyze
+(not truncated) for all three years of data per algorithm. We analyze
 the results against the following metrics in each trial, chosen based on our
 ISF1M construction (Definition \ref{def:ispim}) and our original motivation for the
 project:
@@ -192,10 +191,19 @@ by each algorithm are.
 \end{figure}
 
 Figures \ref{fig:min_students} and \ref{fig:max_students} illustrate how
-students are distributed within groups. Notably, in each sampled year, the set
+students are distributed within groups. Generally, for preference list length
+10 or more, we observe a clear distinction between the minimum number of the
+smallest group for \textsc{wt} compared to both other algorithms. \textsc{wt} is also
+more consistent across trials for the minimums and maximums, so we can expect
+similar fairness performance regardless of deviation in student preferences.
+However, none of this is the case for preference lists of length 5, where the
+\textsc{wt} algorithm performs more similarly (though still a bit better) than
+\textsc{fcfs} and \textsc{greedy}.
+
+Notably, in each sampled year, the set
 of all students was approximately composed of $20\%$ group A, $30\%$ group B, and
 $50\%$ group C. This distribution of
-students is reflected in the minimums and maximums. For instance, in Figure
+students is reflected in the minimums and maximums. Specfically, in Figure
 \ref{fig:max_students}, \textsc{fcfs} did not proportionally
 assign students of group C as successfully as \textsc{wt} or \textsc{greedy} in
 comparison to the other groups over all of the years and preference lengths, as
@@ -220,8 +228,13 @@ We also visualize the overall distribution of groups amidst classes in Figure
 \textsc{wt} creates a much less variable distribution of students. All of
 the classes, especially in trials with longer preference lists, have a smaller
 difference between the minimum and maximum number of students of each group than
-\textsc{fcfs} and  \textsc{greedy}. Thus, \textsc{wt} accomplishes group fairness much
+\textsc{fcfs} and  \textsc{greedy}. Figure \ref{fig:group_size} also exhibits
+that for \textsc{wt}, many more classes are close to the minimum number of
+students for each group, with only a few high outliers across trials. 
+Thus, \textsc{wt} accomplishes group fairness much
 more successfully than the other two algorithms.
+
+\newpage
 
 \subsection{Is it stable?}
 
@@ -237,21 +250,24 @@ consistent with Theorem \ref{thm:greedyunstable} and our problem framework
 for \textsc{wt} in Definition \ref{def:ispim} that disregards the presence of
 inter-group instability.
 
-
 \begin{figure}[H] 
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/blocking.png}
+  \includegraphics[width=0.75\linewidth]{figures/blocking.png}
   \caption{Comparison of inter-group blocking pairs present in each trial.}
   \label{fig:blocking_pairs}
 \end{figure}
 
 Relatedly, we check how many students remain unmatched in the final matching
-in each trial. While \textsc{wt} may produce the most blocking pairs as seen in
-Figure \ref{fig:blocking_pairs}, Figure \ref{fig:unmatched} shows that it does
-successfully match every student to a year-long HUM section in all trials. We
-can also observe that \textsc{fcfs} and \textsc{greedy} always have unmatched
+in each trial. One of our original goals when we first conceived of this problem
+with The Registrar was to match as many students as possible to a year-long HUM
+section; therefore, while we care about stability, the number of unmatched
+students is especially relevant for measuring the efficacy of our algorithm.
+That is, \textsc{wt} may produce the most blocking pairs of the three algorithms (as seen in
+Figure \ref{fig:blocking_pairs}), but Figure \ref{fig:unmatched} shows that it does
+successfully match every student to a year-long HUM section in all trials. In
+comparison, \textsc{fcfs} and \textsc{greedy} always have unmatched
 students with preference list length less than 10, and tend have at least 5
-unmatched students per trial. 
+unmatched students per trial.
 
 We can see how the effects of fairness and stability relate to the average rank a student
 gives their assignment. We calculate average rank with 0 being a student's
@@ -260,18 +276,18 @@ until the end of the list. If a student is unmatched, we give them a rank
 one more than the length of the preference list (ex. rank 6 for lists of
 length 5).
 
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/unmatched.png}
+  \includegraphics[width=0.75\linewidth]{figures/unmatched.png}
   \caption{Comparison of number of unmatched students in each trial.}
   \label{fig:unmatched}
 \end{figure}
 
-\newpage
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/rank.png}
+  \includegraphics[width=0.75\linewidth]{figures/rank.png}
   \caption{Comparison of average rank of assignment in each trial.}
   \label{fig:ranks}
 \end{figure}
@@ -283,8 +299,8 @@ less satisfied in \textsc{greedy} than \textsc{fcfs}. Additionally, when we look
 \ref{fig:blocking_pairs} as well, we can see that there is a consequence in
 \textsc{wt} for having so many more blocking pairs, in that students on average
 receive a section they rank slightly lower than their assignments in both other
-algorithms. However, \textsc{wt} does still tend to give students their second or
-third choice across all years and preference list lengths, which we deem a
+algorithms. However, \textsc{wt} does still tend to give students their second
+choice (or third choice at worst) across all years and preference list lengths, which we deem a
 worthy tradeoff for being the only algorithm that always makes a full matching.
 
 \subsection{Is it balanced?}
@@ -335,7 +351,11 @@ same as \textsc{fcfs} in the trials without student groups.
 
 As a whole, the \textsc{wt} algorithm outperformed \textsc{fcfs} and
 \textsc{greedy} on every metric we analyzed other than blocking pairs and rank,
-especially in trials with longer preference lists. Due to
-our re-framing of the problem under intra-group stability from Definition
+especially in trials with longer preference lists. Due to the number of factors
+we are attempting to optimize, a tradeoff of this sort is to be expected.
+Generally in problems where there are conflicting variables that inversely
+affect each other (such as stability versus ensuring a full matching), it
+isn't even possible to avoid this sort of tradeoff. Thus,
+under our re-framing of the problem with intra-group stability from Definition
 \ref{def:intra}, we accept this result as successful as we prioritize finding a
-full, group fair matching.
+full, group fair matching. 
