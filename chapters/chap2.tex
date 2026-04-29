@@ -605,38 +605,78 @@ continue to use a weighted graph to represent our problem.
 \end{proof}
 
 Even if a maximum-weight matching does not fill all seats, which may not always
-be possible, we can still prove that it is a full matching.  
+be possible, we can still prove that it is a full matching if a full matching
+exists.  
 
 \begin{theorem} \label{thm:full-weight}
-  Any maximum-weight matching is a full matching, where all students are assigned
-  to a seat on their preference list. 
+  A maximum-weight matching is a full matching,
+  assuming a full matching exists where all students are assigned to a seat on
+  their preference list. 
 \end{theorem}
 \begin{proof}
-  For the sake of a contradiction, assume $\mu$ is an incomplete maximum-weight
-  matching and $\mu'$ is a full matching over students $\mathcal{R}$. We will
+  For the sake of a contradiction, assume $\mu$ is a maximum-weight
+  matching that is not full and $\mu'$ is a full matching over students $\mathcal{R}$. We will
   prove by contradiction that $\mu'$ is actually a maximum-weight matching and
   $\mu$ is not.
 
-  Let $r_1$ be a student that is unmatched in $\mu$. Because $\mu'$ is full,
-  $r_1$ is necessarily matched in $\mu'$. That means there is some seat $s_{C_i}$ in
-  $\mu'$ that is filled by $r_1$, that is either unmatched or filled by
-  a different student in $\mu$. If it is unmatched, then $\mu$ is not a
-  maximum-weight matching because matching $r_1$ to $s_{C_i}$ would add at least $+1$ to
-  the total weight of $\mu$ (by Definition \ref{weighted-def}). So, it must be
-  matched to a different student, $r_2$, that gives it the same weight
-  increment. So, we know then $\mu'(r_2) \neq \mu(r_2)$, as $\mu(r_2) =
-  \mu'(r_1)$, meaning $r_2$ is matched to a different seat in $\mu'$ than in
-  $\mu$. That seat in $\mu$ must also have another distinct student matched to
-  it in or be unmatched. We
-  can now apply the same logic to determine that there is another student
-  matched to $\mu'(r_2)$ in $\mu$, and the pattern continues, creating an
-  augmenting path in the graph. However, we assumed that
-  $\mu$ is incomplete, so at some point in the path we must reach a student $r_i$ that is
-  unmatched in $\mu$, leaving an empty seat that is matched to $r_i$ in $\mu'$.
-  This is a contradiction, because then that matched seat increases $w(\mu') > w(\mu)$,
-  but we assumed $\mu$ was a maximum-weight matching. Therefore, it must be the
-  case that $\mu$ is not a maximum-weight matching, and $\mu'$ is. Thus, any
-  maximum-weight matching is a full matching. 
+  We assumed $\mu$ is not full, which means there is at least one unmatched
+  student in $\mu$. Let $r_1 \in \mathcal{R}$ be unmatched in $\mu$. Because we assumed $\mu'$
+  is full, $r_1$ is matched in $\mu'$. Let $\mu'(r_1) = s_1$, where $s_1$ is
+  either unmatched in $\mu$, or it is matched to another student.
+  If it is unmatched, then $\mu$ is not a maximum-weight matching because
+  matching $r_1$ to $s_1$ would add at least $+1$ to the total weight of $\mu$
+  (by Definition \ref{weighted-def}). So, $s_1$ must be matched to a different
+  student: say $mu(s_1) = r_2$. We also know that $r_2$ is matched in $\mu'$,
+  but not to $s_1$ because $\mu'(s_1) = r_1$. So, say $\mu'(r_2) = s_2$. 
+
+  Now, observe that the weight of the edges for $r_1$ in $\mu'$ and $r_2$ in
+  $\mu$ are equivalent. That is, $w(r_1, s_1) = w(r_2, s_1)$ because the weight
+  of the edges is determined by the seat, according to Definition
+  \ref{weighted-def}, and $r_1$ and $r_2$ are matched to the same seat in $\mu'$
+  and $\mu$. So, either $r_1$ and $r_2$ are in the same group which means both
+  edges are $+2$, or $s_1$ is a free seat where both edges are $+1$. Either way,
+  the weights of the edges are the same. 
+
+  If we return to $s_2$, which is matched to $r_2$ in $\mu'$, we know it is
+  either unmatched in $\mu$ or matched to another student. If $s_2$ is
+  unmatched, then we can flip those edges in $\mu$ to be the same as $\mu'$,
+  where we replace $\mu(r_2) = s_1$ with $\mu(r_1) = \mu'(r_1) = s_1$ and
+  $\mu(r_2) = \mu'(r_2) =
+  s_2$. Because we know $w(r_1, s_1) = w(r_2, s_1)$, this means that the total
+  weight of $\mu$ would increase by $w(r_1, s_1) + w(r_2, s_2) - w(r_2, s_1) =
+  w(r_2, s_2)$. However, we assumed $\mu$ was a maximum-weight matching, so it
+  must be the case that $s_2$ is not unmatched and therefore we cannot flip
+  those assignments. Then, $s_2$ is necessarily matched to another student in
+  $\mu$, say $r_3$. 
+
+  Similarly, $r_3$ is matched in $\mu'$ because $\mu'$ is full, so we say
+  $\mu'(r_3) = s_3$. Now, we can look at $s_3$ in $\mu$, and it is also either
+  unmatched or matched to another student. Observe that in the case where $s_3$
+  is unmatched in $\mu$, then we can create a chain from unmatched $r_1$, to $r_2$ matched
+  to $s_1$, to $r_3$ matched to $s_2$. If we flip each of their assigments to
+  be their assignments in $\mu'$, we increase the total weight of $\mu$ by
+  $w(r_3, s_3)$. Therefore, $s_3$ must also be matched in $\mu$ to another
+  student, or else $\mu$ would not be maximum-weight. 
+
+  It follows then that we can traverse this chain of matchings where any student
+  $r_i$ in $\mu$ (after the unmatched $r_1$) is matched to a seat $s_{i-1}$,
+  whereas they are matched to $s_i$ in $\mu'$. That is, $\mu(r_i) = s_{i-1} =
+  \mu'(r_{i-1})$. However, recall that $\mu$ is not a full matching. So, as
+  there is at least one unmatched student $r_1$, there must be an unmatched
+  seat. That means that eventually the chain of $r_i$ students will stop because
+  there will be a student $r_n$ where $\mu(r_n) = s_{n-1}$ and $\mu'(r_n) =
+  s_n$, meaning $s_n$ is unmatched in $\mu$. At this point, we can flip all of
+  the assignments in the chain in $\mu$ such that $\mu(r_1) = \mu'(r_1) = s_1,
+  \mu(r_2) = \mu'(r_2) = s_2, ..., \mu(r_n) = \mu'(r_n) = s_n$, so that $r_1$
+  and $s_n$ are no longer unmatched in $\mu$. Notice that the total weight of $\mu$
+  is affected by these new assignments, where \[\left(\sum_{i = 2}^{n}w(r_{i-1},
+    s_{i-1}) - w(r_i, s_{i-1})\right) + w(r_n, s_n) = w(r_n,
+  s_n) > 0\] is the amount by which
+  $w(\mu)$ increases.  However, this
+  is a contradiction with our assumption that $\mu$ is a maximum-weight
+  matching. Therefore, it must be the case that $\mu$ is not a maximum-weight
+  matching, and $\mu'$ is, meaning a maximum-weight matching is a full matching
+  if a full matching exists. 
 \end{proof}
 
 
