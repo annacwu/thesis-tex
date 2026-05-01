@@ -27,15 +27,7 @@ mathematically formalize running time with what’s known as \textit{Big-O}
 notation.
 
 Big-O notation is one form of \textit{asymptotic} analysis, or analysis that takes
-place as the size of the input becomes infinitely large. If we want to know how
-many resources an algorithm will require (resources can mean power, time,
-storage space, etc.), we want to know how it performs in the \textit{worst
-case} scenario, as any other case will use fewer resources. The worst case
-\textit{input}
-is one that makes an algorithm take the longest. For many
-algorithms, the worst case input ends up being infinitely large,
-representing how a realistically large input often requires more computational
-resources. So, worst case analysis as a facet of asymptotic analysis allows us
+place as the size of the input becomes infinitely large. Asymptotic analysis allows us
 to guarantee an algorithm scales well for arbitrarily large inputs. 
 For instance, if I am following an
 algorithm to bake cookies and the steps involve rolling out the dough, mixing,
@@ -46,6 +38,19 @@ efficient way to make that many cookies. While it may make sense when baking
 cookies to handle these two cases differently, in computer science problems
 data commonly scales to very large sizes, so it is helpful to know our
 algorithms will still be efficient in those cases.
+
+Furthermore, we want to know how many resources an algorithm will require
+(resources can mean power, time, storage space, etc.). To analyze this, we look
+at how algorithms perform in the \textit{worst case} scenario, as any other case will
+use fewer resources. In other words, analyzing the worst case allows us to bound the
+amount of resources an algorithm will use. We study the worst case based on the
+worst case \textit{input}: the input that uses the most resources for a fixed
+input size. Perhaps I am making a batch of 12 cookies, where my ingredients and baking tools are 
+inputs to the recipe. If the recipe says to mix the sugar and butter
+together, I can either choose to use a whisk by hand or an electric mixer.
+Though I am making the same number of cookies and using each tool for the same
+task, it will be significantly faster (and easier) to use the electric mixer.
+So, the whisk would be a worse input than the electric mixer. 
 
 We \textit{estimate} running time through worst case asymptotic analysis. In Big-O
 notation, we write that for some algorithm called $f$, $f(n) = O(g(n))$. This is
@@ -162,6 +167,35 @@ nondeterminism to mean that if we were told which of the $2^n$ solutions is the
 correct one, we could could \textit{verify} that it is correct in polynomial
 time. As an example, lets think about the classic 52-card game of solitaire \cite{solitaire}. 
 
+In solitaire, it is
+difficult to know whether a starting configuration of cards could lead to a win
+just by looking at it. One way we can figure out if it is a winnable
+configuration is by going through every single subsequent set of moves that
+leads to a terminating position, and seeing if that final position is a win. For
+instance in Figure \ref{fig:solitaire}, we can either start by moving card $A$
+or card $B$.
+Whichever choice we make first will lead to another set of moves for each of them,
+and each of those moves will lead to more moves, until the game ends by either
+winning or getting stuck. If we perform all of the possible moves after we move
+card $A$ and all of them end in a stuck position, then we still don't know whether
+moving card $B$ first would lead to a win. At this point, we've done a lot of
+work for little
+result. This is an example of how the brute force method is often too difficult
+to carry out. However, if we set up our cards and then our friend said, ``I bet
+if you move card $A$, and then card $X$, and then card....you will win," we can
+follow their instructions to verify that sequence leads to a win, therefore
+proving to us that the starting configuration of cards is winnable. In this
+case, we only had
+to move at most 52 cards to come to that conclusion, which means we performed a
+constant number of actions to solve the solitaire problem (if we say this is
+true for any deck of
+$n$ cards, it would be a polynomial number of actions). However, unless we all
+have a friend that can foresee the future, we cannot guarantee that we would try
+the winnable solving sequence first. So, $NP$ is the class of problems where we can
+confirm a given solution is correct in polynomial time, but we don't know of a
+polynomial time algorithm to find that solution ourselves. 
+
+
 \begin{figure} [H]
   \centering
 \begin{tikzpicture}
@@ -224,34 +258,6 @@ time. As an example, lets think about the classic 52-card game of solitaire \cit
 \end{tikzpicture}
 \caption{Example starting configuration of a solitaire game.} \label{fig:solitaire}
 \end{figure}
-
-In solitaire, it is
-difficult to know whether a starting configuration of cards will lead to a win
-just by looking at it. One way we can figure out if it is a winnable
-configuration is by going through every single subsequent set of moves that
-leads to a terminating position, and seeing if that final position is a win. For
-instance in Figure \ref{fig:solitaire}, we can either start by moving card $A$
-or card $B$.
-Whichever choice we make first will lead to another set of moves for each of them,
-and each of those moves will lead to more moves, until the game ends by either
-winning or getting stuck. If we perform all of the possible moves after we move
-card $A$ and all of them end in a stuck position, then we still don't know whether
-moving card $B$ first would lead to a win. At this point, we've done a lot of
-work for little
-result. This is an example of how the brute force method is often too difficult
-to carry out. However, if we set up our cards and then our friend said, ``I bet
-if you move card $A$, and then card $X$, and then card....you will win," we can
-follow their instructions to verify that sequence leads to a win, therefore
-proving to us that the starting configuration of cards is winnable. In this
-case, we only had
-to move at most 52 cards to come to that conclusion, which means we performed a
-constant number of actions to solve the solitaire problem (if we say this is
-true for any deck of
-$n$ cards, it would be a polynomial number of actions). However, unless we all
-have a friend that can forsee the future, we cannot guarantee that we would try
-the winnable solving sequence first. So, $NP$ is the class of problems where we can
-confirm a given solution is correct in polynomial time, but we don't know of a
-polynomial time algorithm to find that solution ourselves. 
 
 Keep in mind that problems we know are in $P$ \textbf{are also in} $NP$, because we can
 verify that their solutions (which we can find in polynomial time) are correct
@@ -352,7 +358,7 @@ weight of 6.
     \draw[thick] (5) -- node[weight, right]       {5} (6);
 
   \end{tikzpicture}
-  \caption{Directional graph from
+  \caption{Directed graph from
     Figure \ref{fig:simple-graph} with weights.} \label{fig:weighted-graph}
 \end{figure}
 
@@ -461,7 +467,7 @@ of couples with no blocking pairs.
 
   \end{tikzpicture}
   \caption{Bipartite
-    directional graph illustrating the Stable Marriage problem.}
+    directed graph illustrating the Stable Marriage problem.}
   \label{fig:stable-marriage}
 \end{figure}
 
@@ -548,8 +554,8 @@ significantly more joy from vanilla over chocolate).
     \node at (4.4, -3.5) {\frownie};
   \end{tikzpicture}
   \caption{Cake cutting example where the left half of the cake is vanilla, the
-  right half is chocolate, $v$ nodes represent vanilla people, and $c$ nodes 
-represent chocolate people. In this case, $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
+  right half is chocolate, $v$ nodes represents vanilla lovers, and $c$ nodes 
+represent chocolate lovers. In this case, $c_1$ and $v_3$ would envy each other.} \label{fig:cake-cutting}
 \end{figure}
 
 The cake-cutting example is the canon example for what is known as

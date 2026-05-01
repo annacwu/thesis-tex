@@ -42,10 +42,6 @@ those sections that students have a conflict with not being included in their ra
   no match over being matched with $C$ for all $C \in \mathcal{C}$.
 \end{definition}
 
-Note that as a slight abuse of notation, we will sometimes use $\mu(r)$ to
-represent the class student $r$ is assigned to, and sometimes the specific seat within
-that class. This greatly simplifies our notation going forward. 
-
 \begin{definition} \label{def:1m}
   A \emph{1-sided matching (1M)} of students to class sections is a function $\mu :
   \mathcal{R} \rightarrow \mathcal{C} \cup \emptyset $ such that
@@ -61,11 +57,15 @@ that class. This greatly simplifies our notation going forward.
   \end{itemize}
 \end{definition}
 
+Note that as a slight abuse of notation, we will sometimes use $\mu(r)$ to
+represent the class student $r$ is assigned to, and sometimes the specific seat within
+that class. This greatly simplifies our notation going forward. 
+
+
 Finding a 1-sided matching would solve an instance of the HUM-assignment problem
 as defined above. However, we still have to introduce the last constraint of the
-problem: \emph{group fairness}.
-
-Students can be divided into three groups based on the way Reed College divides
+problem: \emph{group fairness}. Students can be divided into three groups based
+on the way Reed College divides
 subjects: Group 1 for language, arts, and literature, Group 2 for
 social sciences, Group 3 for math and lab sciences \cite{group-reqs}. To implement the HUM
 philosophy, which is that the class provides an opportunity for students from all
@@ -626,7 +626,7 @@ exists.
   If it is unmatched, then $\mu$ is not a maximum-weight matching because
   matching $r_1$ to $s_1$ would add at least $+1$ to the total weight of $\mu$
   (by Definition \ref{weighted-def}). So, $s_1$ must be matched to a different
-  student: say $mu(s_1) = r_2$. We also know that $r_2$ is matched in $\mu'$,
+  student: say $\mu(s_1) = r_2$. We also know that $r_2$ is matched in $\mu'$,
   but not to $s_1$ because $\mu'(s_1) = r_1$. So, say $\mu'(r_2) = s_2$. 
 
   Now, observe that the weight of the edges for $r_1$ in $\mu'$ and $r_2$ in
@@ -661,10 +661,11 @@ exists.
   It follows then that we can traverse this chain of matchings where any student
   $r_i$ in $\mu$ (after the unmatched $r_1$) is matched to a seat $s_{i-1}$,
   whereas they are matched to $s_i$ in $\mu'$. That is, $\mu(r_i) = s_{i-1} =
-  \mu'(r_{i-1})$. However, recall that $\mu$ is not a full matching. So, as
-  there is at least one unmatched student $r_1$, there must be an unmatched
-  seat. That means that eventually the chain of $r_i$ students will stop because
-  there will be a student $r_n$ where $\mu(r_n) = s_{n-1}$ and $\mu'(r_n) =
+  \mu'(r_{i-1})$. Notice that this chaining process is finite, as there are a finite
+  number of students and seats. Either it will stop on a student that $\mu'$ doesn't
+  match, or it will stop on a seat that $\mu$ doesn't match. However, we assumed
+  $\mu'$ is full, so therefore it must only be able to stop on an unmatched seat in $\mu$. 
+  That means that eventually there will be a student $r_n$ where $\mu(r_n) = s_{n-1}$ and $\mu'(r_n) =
   s_n$, meaning $s_n$ is unmatched in $\mu$. At this point, we can flip all of
   the assignments in the chain in $\mu$ such that $\mu(r_1) = \mu'(r_1) = s_1,
   \mu(r_2) = \mu'(r_2) = s_2, ..., \mu(r_n) = \mu'(r_n) = s_n$, so that $r_1$
@@ -675,7 +676,7 @@ exists.
   $w(\mu)$ increases.  However, this
   is a contradiction with our assumption that $\mu$ is a maximum-weight
   matching. Therefore, it must be the case that $\mu$ is not a maximum-weight
-  matching, and $\mu'$ is, meaning a maximum-weight matching is a full matching
+  matching and $\mu'$ is, meaning a maximum-weight matching is a full matching
   if a full matching exists. 
 \end{proof}
 
@@ -731,7 +732,7 @@ our problem. We will classify our previous definition of stability (Definition
 \ref{def:stability}) as \textit{inter-group stability} (blocking pairs involving
 students of different groups) to draw a distinction between the two notions.
 We will consider an ISF1M to be a successful solution to the
-HUM-assignment problem even though it is not inter-group stable. Though we would
+HUM-assignment problem even if it is not inter-group stable. Though we would
 ideally guarantee stability between all students, looking at the
 problem through the lens of intra-group stability allows us to give some
 theoretical guarantees about minimizing the amount of swapping that will occur
