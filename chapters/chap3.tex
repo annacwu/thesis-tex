@@ -162,11 +162,12 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
   Let $\mathcal{R} = X \cup Y$ where there are two groups of students, group $X$
   and group $Y$. Let  $\mathcal{C} = \{ C_1, C_2, C_3 \mid q^X = 1, q^Y =
   1$\}, meaning each $C \in \mathcal{C}$ can have at most one student from each
-  group. Let $\mathcal{R} = \{x_1, y_1, x_2, y_2\}$ be ordered where students $x_1, x_2 \in X$ and
-  $y_1, y_2 \in Y$. Let the preference lists of the students be as follows: \[
+  group. Let $\mathcal{R} = \{x_1, y_1, x_2, y_2, y_3\}$ be ordered where students $x_1, x_2 \in X$ and
+  $y_1, y_2, y_3 \in Y$. Let the preference lists of the students be as follows: \[
     \begin{array}{ll} x_1: & C_1 \succ C_3 \\ y_1: &
              C_2 \succ C_3             \\ x_2: & C_1 \succ C_2\\ y_2: & C_2 \succ
-                C_1.
+                C_1 \\ y_3: & C_1.
+
     \end{array}
   \] 
 
@@ -176,30 +177,32 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
       x_1 &\gets C_1 \\ 
       y_1 &\gets C_3 \\
       x_2 &\gets C_2 \\
-      y_2 &\gets C_2. 
+      y_2 &\gets C_2 \\
+      y_3 &\gets C_1.
     \end{array}
 \]
 
   $\mu'$ is fair because only one student of each group is matched to each class,
   so seat reservations are respected. Additionally, we know $\mu'$ is stable
-  because $x_1$ and $y_2$ both received their top
-  choice, so neither of them wish to swap with another student. $y_1$
+  because $x_1$, $y_2$, and $y_3$ all received their top
+  choice, so none of them wish to swap with another student. $y_1$
   wishes to swap with $x_2$, but $\mu'(x_2) \succ_{x_2} \mu'(y_1)$, so they do
   not form a blocking pair. Similar logic follows for $y_2$, who $y_1$ would
-  also want to swap with. $x_2$ wants to swap with $x_1$, who we already know
-  does not wish to swap with anyone. Therefore, $\mu'$ does not have any
+  also want to swap with. $x_2$ wants to swap with $x_1$ or $y_3$, who we
+  already know both do not wish to swap with anyone. Therefore, $\mu'$ does not have any
   blocking pairs, and thus it is inter-group stable.
 
   Now let $\mu$ denote \textsc{greedy}'s outputted matching over $\mathcal{R}$.
   We will prove by counter example that $\mu$ is not
-  stable. Recall that $\mathcal{R}$ is ordered, where $\{x_1, y_1, x_2, y_2\}$
+  stable. Recall that $\mathcal{R}$ is ordered, where $\{x_1, y_1, x_2, y_2, y_3\}$
   is the order \textsc{greedy} matches the students. Observe that $\mu(x_1) =
   s_{C_1}^X$ and $\mu(y_1) = s_{C_2}^Y$:
   because they are the first two students to be matched and their first choices
   are different, they both receive their top choices. Next, $\mu(x_2) = s_{C_2}^X$
   because $C_1$ already has a student in group $X$, so $C_1$ is no longer
   available when matching $x_2$, and similarly $\mu(y_2) = s_{C_1}^Y$ because
-  $C_2$ already has a student in group $Y$. Notice that $\mu(y_2) >_{x_2}
+  $C_2$ already has a student in group $Y$. $y_3$ remains unmatched, as there
+  are no more seats in $C_1$. Notice that $\mu(y_2) >_{x_2}
   \mu(x_2)$ and $\mu(x_2) >_{y_2} \mu(y_2)$, which forms a blocking pair where
   $x_2$ and $y_2$ are incentivized to switch classes with each other. So, it
   must be the case that $\mu$ is not an inter-group stable matching and
@@ -209,7 +212,7 @@ exist an inter-group stable matching, \textsc{greedy} is still not guaranteed to
 
 Notably, the above counterexample does exhibit intra-group stability as
 $\mu(x_1)$ is $x_1$'s top choice, so they will never want to swap with $x_2$
-(and similar for $y_1$ and $y_2$). In fact, we claim that \textsc{greedy} will
+(and similar for $y_1$, $y_2$, and $y_3$). In fact, we claim that \textsc{greedy} will
 always output an intra-group stable matching, as each student of each group is
 matched to their top available choice at their point of evaluation.
 
@@ -237,9 +240,11 @@ matched to their top available choice at their point of evaluation.
   $\mu$ is intra-group stable.
 \end{proof}
 
-While \textsc{greedy} is intra-group stable, its primary issue is that
+While \textsc{greedy} is intra-group stable, its primary issue in the scope of
+our project is that
 it does not guarantee a full matching. Students can be left unmatched if every
-class section on their preference list is already at capacity for their gorup.
+class section on their preference list is already at capacity for their group,
+as occurs with $y_3$ in the proof for Theorem \ref{thm:greedyunstable}.
 We need to come up with an algorithm that makes use of our
 helpful graph framework from Definition \ref{weighted-def} if we want to get
 closer to creating ISF1M solutions.
@@ -272,7 +277,7 @@ the \textit{Weighted-Trading} (\textsc{wt}) algorithm.
 \end{algorithm}
 
 We can break the \textsc{wt} algorithm into two key stages: lines 1 to 9 and
-lines 10 to 15. 
+lines 10 to 14. 
 
 The first stage is the \textit{weighted} part of the algorithm: it repeatedly
 runs \textsc{max-weight} until it finds a satisfying assignment. If the weight of
@@ -348,7 +353,7 @@ in the weighted stage of \textsc{wt}.
 \end{proof}
 
 While it would be nice to guarantee inter-group stability, recall that the only
-known algorithms for assignment problems that consider inter-group stability and
+similar assignment problems that consider both inter-group stability and
 group fairness are \textit{NP-complete}  \cite{santhini}. With the \textsc{wt} algorithm, we can guarantee that if an ISF1M exists, we can find it in an efficient amount of time.
 
 \begin{theorem}
@@ -367,7 +372,7 @@ group fairness are \textit{NP-complete}  \cite{santhini}. With the \textsc{wt} a
   students will eventually reach their highest possible preference and no longer
   be able to form blocking pairs. The maximum length of a preference list is
   equivalent to the number of classes, $|\mathcal{C}|$. So, the maximum number of times
-  the \texttt{while} loop can execute per \texttt{for} loop is as follows: \[
+  the \texttt{while} loop (line 11) can execute per \texttt{for} loop (line 10) is as follows: \[
   |\mathcal{C}| \times |\mathcal{R}|.\]
   This is because at most we can traverse each student's entire preference list once. If
   we terminate this loop for each group of student $T \subset \mathcal{R}$, then we must have
@@ -376,36 +381,45 @@ group fairness are \textit{NP-complete}  \cite{santhini}. With the \textsc{wt} a
   each group of students will still sum to a total of all students in
   $\mathcal{R}$. 
 
-  We can analyze the runtime of this algorithm. The \texttt{while} loop executes at
+  We can analyze the runtime of this algorithm. As stated above, the \texttt{while} loop on line
+  11 executes at
   most $|\mathcal{C}| \times |\mathcal{R}| \times \# \text{ groups}$ times,
   though we know we will only encounter each student as part of a disjoint group
   set, so that will still sum to an overall execution of $|\mathcal{C}| \times
   |\mathcal{R}|$. We therefore bound the execution of the \texttt{while} loop to
   $O(|\mathcal{C}| \times |\mathcal{R}|)$. Notably, $|\mathcal{C}| \leq
-  |\mathcal{R}|$, where in practical cases there will be significantly fewer
+  |\mathcal{R}|$, and in practical cases there will be significantly fewer
   class sections than there are students. The significant
-  factor for this bound is then $|\mathcal{R}|$. Therefore, the trading stage of the algorithm
-  will be cubic in the size of $\mathcal{R}$.
+  factor for this bound is then $|\mathcal{R}|$. 
 
-  Observe that before that, we run \textsc{max-weight} at least once, which runs in $O(V^3)$
+  Observe that before that, within the \texttt{while} loop on line 2, we run
+  \textsc{max-weight} at least once, which runs in $O(V^3)$
   time where $V$ is the set of vertices \cite{hungarian}. Our vertices are
   all the students and seats, so the runtime for the weighted stage is
   $(|\mathcal{S}| + |\mathcal{R}|)^3$. By construction of the problem, it would
-  be trivial to have more seats in each class than there are students, so we cap
-  the total number of seats to be that each class can have at most one seat per
-  student. That means $|\mathcal{S}| \leq |\mathcal{C}| \times |\mathcal{R}|$.  So,
-  our total runtime for the algorithm is $O((|\mathcal{C}||\mathcal{R}|+
-  |\mathcal{R}|)^3 + (|\mathcal{C}| \times |\mathcal{R}|))$ =
-  O$((|\mathcal{C}||\mathcal{R}|+ |\mathcal{R}|)^3)$. Therefore, the
+  be trivial to have more seats in each class than there are students, so we
+  impose a cap on
+  the total number of seats where each class can have at most one seat per
+  student. That means $|\mathcal{S}| \leq |\mathcal{C}| \times |\mathcal{R}|$,
+  so \textsc{max-weight} will run in $(|\mathcal{C}||\mathcal{R}|+
+  |\mathcal{R}|)^3$ time each iteration. The number of times \textsc{max-weight}
+  can be called is bounded by the greatest number of reserved seats for the
+  smallest group. That is, $\frac{q}{\# groups}$, or the class capacity
+  divided by the number of groups, as that is the largest number of seats that the
+  smallest group can have. So,
+  our total runtime for the algorithm is \[O((\frac{q}{\# groups}\times(|\mathcal{C}||\mathcal{R}|+
+  |\mathcal{R}|)^3) + (|\mathcal{C}| \times |\mathcal{R}|)) =
+O(\frac{q}{\# groups}\times(|\mathcal{C}||\mathcal{R}|)^3)\]. Therefore, the
   \textsc{wt} algorithm outputs an intra-group stable matching in polynomial time with respect to
   the number of students and seats.
 \end{proof}
 
 By Theorem \ref{thm:polywt}, we now have an algorithm that theoretically gives
 us a group-fair, intra-group stable matching. Note that the matching is also
-full, as every student is matched to a class in the \textsc{max-weight} section
-if such a matching is possible. Thus, the \textsc{wt} algorithm we've developed
-outputs an ISF1M solution to the HUM-assignment problem when one exists.
-The next step is to evaluate it against \textsc{fcfs} and \textsc{greedy} to
+full, as every student is matched to a class by \textsc{max-weight} if such a
+matching is possible (Theorem \ref{thm:full-weight}). Thus, the \textsc{wt}
+algorithm we've developed
+outputs an ISF1M solution to the HUM-assignment problem when such a solution exists.
+The next step is to evaluate \textsc{wt} against \textsc{fcfs} and \textsc{greedy} to
 determine whether it performs well in practice.
 

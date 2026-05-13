@@ -63,8 +63,8 @@ choice, though there are approximately 35\% of students who have a longer TTh
 class as their top choice.
 
 In $\texttt{synthesize\_preferences}$, we iterate through each student’s schedule and find
-all of the HUM sections that do not conflict with their other chosen classes
-(including the HUM they actually chose that year). Then, we turn those available
+all of the HUM sections that do not conflict with their other chosen classes. We
+also mark the HUM section they did choose as available. Then, we turn those available
 sections into a central vote by weighting them by their time and class period
 length, where later and shorter sections are weighted higher. We run that vote through
 \textsc{mallows} to generate the student’s preferences over every section that doesn't
@@ -93,7 +93,7 @@ random ordering. This does not apply to \textsc{wt}, as \textsc{wt} does not use
 an ordering at all. 
 
 For the \textsc{wt} algorithm, we represent the problem as a weighted graph of
-students to seats  (recall Figure \ref{fig:weighted-example}). Unfortunately,
+students to seats  (see Figure \ref{fig:weighted-example}). Unfortunately,
 most computers cannot read a visualization of the graph in the same way a human
 can. So, we need to represent our graph in code in a way the computer can
 work with. We use what is known as an \textit{adjacency matrix}, or more
@@ -201,13 +201,13 @@ However, none of this is the case for preference lists of length 5, where the
 \textsc{fcfs} and \textsc{greedy}.
 
 Notably, in each sampled year, the set
-of all students was approximately composed of $20\%$ group A, $30\%$ group B, and
-$50\%$ group C. This distribution of
+of all students was approximately composed of $20\%$ group X, $30\%$ group Y, and
+$50\%$ group Z. This distribution of
 students is reflected in the minimums and maximums. Specfically, in Figure
 \ref{fig:max_students}, \textsc{fcfs} did not proportionally
-assign students of group C as successfully as \textsc{wt} or \textsc{greedy} in
+assign students of group Z as successfully as \textsc{wt} or \textsc{greedy} in
 comparison to the other groups over all of the years and preference lengths, as
-there is a noticeably higher maximum number of group C students shown in each
+there is a noticeably higher maximum number of group Z students shown in each
 plot. It is also important that in Figure \ref{fig:min_students}, \textsc{fcfs} and
 \textsc{greedy} frequently distributed
 students such that almost every trial had sections with 0 students of some
